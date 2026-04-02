@@ -1,0 +1,97 @@
+{
+  "_comment": "Ed25519 signing test vectors — single source of truth for both golden code and server CI",
+  "algorithm": "Ed25519",
+  "canonical_string_format": "METHOD\\nPATH\\nQUERY\\nTIMESTAMP\\nNONCE\\nBODY",
+  "key_pair": {
+    "private_key_seed_hex": "9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d",
+    "public_key_hex": "40b0f498a16f2b943d74dc4f9d4acc05d0de9c935dd569ae831cf8fcdd4e3feb",
+    "_note": "The private key seed is the raw 32-byte Ed25519 seed. Import it as PKCS8 or use a library that accepts raw seeds."
+  },
+  "vectors": [
+    {
+      "name": "Basic POST with JSON body",
+      "description": "Standard POST request with a JSON body, no query parameters",
+      "inputs": {
+        "method": "POST",
+        "path": "/api/v1/payments",
+        "query": "",
+        "timestamp": "1700000000",
+        "nonce": "550e8400-e29b-41d4-a716-446655440000",
+        "body": "{\"amount\":100,\"currency\":\"SGD\"}",
+        "private_key_seed_hex": "9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d"
+      },
+      "expected_output": {
+        "canonical_string": "POST\n/api/v1/payments\n\n1700000000\n550e8400-e29b-41d4-a716-446655440000\n{\"amount\":100,\"currency\":\"SGD\"}",
+        "signature_base64": "dxICdll8y40wpOfVSNqn8ow6xnDKZ3u2UaWl/ca45DGi8+qWsfGygGCOLqpU7ON/z8qvL47RBVVFfBsfjz5uAw=="
+      }
+    },
+    {
+      "name": "GET with sorted query params",
+      "description": "GET request with multiple query parameters pre-sorted alphabetically",
+      "inputs": {
+        "method": "GET",
+        "path": "/api/v1/transactions",
+        "query": "currency=SGD&limit=10&offset=0&status=completed",
+        "timestamp": "1700000001",
+        "nonce": "550e8400-e29b-41d4-a716-446655440001",
+        "body": "",
+        "private_key_seed_hex": "9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d"
+      },
+      "expected_output": {
+        "canonical_string": "GET\n/api/v1/transactions\ncurrency=SGD&limit=10&offset=0&status=completed\n1700000001\n550e8400-e29b-41d4-a716-446655440001\n",
+        "signature_base64": "eYqP3PbtSMeje+MEa0k51qpyIqNS4KIXysnWbl3UsR+0UIGXhZq079B3JNNMe9cjZsU5Z8LRI5Vs75QXTmn5Cw=="
+      }
+    },
+    {
+      "name": "DELETE with empty body",
+      "description": "DELETE request with no body and no query parameters",
+      "inputs": {
+        "method": "DELETE",
+        "path": "/api/v1/webhooks/wh_abc123",
+        "query": "",
+        "timestamp": "1700000002",
+        "nonce": "550e8400-e29b-41d4-a716-446655440002",
+        "body": "",
+        "private_key_seed_hex": "9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d"
+      },
+      "expected_output": {
+        "canonical_string": "DELETE\n/api/v1/webhooks/wh_abc123\n\n1700000002\n550e8400-e29b-41d4-a716-446655440002\n",
+        "signature_base64": "unHuprm0nOh9mHPmoHaXEN26Krhxqp3cS3xHaf3mdrig+IKyh5ufBDpkyxcTNGd87EjJcX0Ec+eMHpfDkXUEBw=="
+      }
+    },
+    {
+      "name": "POST with special characters in path",
+      "description": "POST request where the path contains URL-encoded special characters (@ sign)",
+      "inputs": {
+        "method": "POST",
+        "path": "/api/v1/users/user%40example.com/transfers",
+        "query": "",
+        "timestamp": "1700000003",
+        "nonce": "550e8400-e29b-41d4-a716-446655440003",
+        "body": "{\"to\":\"recipient@test.com\",\"amount\":50}",
+        "private_key_seed_hex": "9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d"
+      },
+      "expected_output": {
+        "canonical_string": "POST\n/api/v1/users/user%40example.com/transfers\n\n1700000003\n550e8400-e29b-41d4-a716-446655440003\n{\"to\":\"recipient@test.com\",\"amount\":50}",
+        "signature_base64": "WzSLAz3rVP8DRl0Mi5dV0RwuSyOGNreNUb+KpYYLqt/wNLWAYtKmd0kYUqmsSOMWYzPuCYAFglUuR1Q8xeT5Dg=="
+      }
+    },
+    {
+      "name": "GET with URL-encoded query params",
+      "description": "GET request with URL-encoded query parameters sorted by their encoded form",
+      "inputs": {
+        "method": "GET",
+        "path": "/api/v1/search",
+        "query": "filter%5Bstatus%5D=active&filter%5Btype%5D=payout&q=hello%20world",
+        "timestamp": "1700000004",
+        "nonce": "550e8400-e29b-41d4-a716-446655440004",
+        "body": "",
+        "private_key_seed_hex": "9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d9d"
+      },
+      "expected_output": {
+        "canonical_string": "GET\n/api/v1/search\nfilter%5Bstatus%5D=active&filter%5Btype%5D=payout&q=hello%20world\n1700000004\n550e8400-e29b-41d4-a716-446655440004\n",
+        "signature_base64": "eYtEmJcW502QY4xvhfHgJjgj0eiD5D1wEbFvX1WxTvMsP0sqswbLacJxT+qpFIrW5mPhUviKad2M2vyAmOe7DA=="
+      }
+    }
+  ]
+}
