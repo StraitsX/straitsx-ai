@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.2.0] - 2026-04-08
+
+### Changed
+- Updated OpenAPI spec to cover all public API endpoints (91 paths, 113 endpoints)
+- Added production server URL alongside sandbox
+
+### Added
+- First Party Payouts — create, get, list
+- Third Party Payouts — create, get, list + payout recipients (CRUD)
+- Regular Payouts — create, get, list + payout recipients (CRUD)
+- CP/CP+ Bank Accounts — create, update, delete, list
+- Customer Profile Payments — get payment, list payments (v1 & v2)
+- Transaction Limits — get, update, get update requests
+- Webhooks — get, update, resend callback (single + batch)
+- RFI APIs — get list, get single, submit
+- Blockchain — get supported blockchains, deposit addresses (get list, create)
+- Virtual Account deletion endpoints
+- User Bank Accounts — create, get, update, delete
+- FX endpoints — create/get/execute FX quotes, list/get FX transactions
+- Personal Customer Profile (non-plus) — create, update
+- Outbound transfers — list
+- Additional sandbox mock/simulation endpoints
+
 ## [0.1.0] - 2026-04-02
 
 ### Added
