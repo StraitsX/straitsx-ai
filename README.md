@@ -67,6 +67,7 @@ Upload `public_key.pem` to the StraitsX Dashboard.
 | `straitsx-auth-setup` | Credential configuration — API key only or API key + signing |
 | `straitsx-request-signing` | Ed25519 request signing — golden code, canonical string format, test vectors |
 | `straitsx-webhook-verification` | Webhook signature verification — golden code for Python and JavaScript |
+| `straitsx-sandbox-testing` | End-to-end sandbox walkthrough — generates runnable code for first-party, third-party, or regular integration flows |
 
 Once installed, just ask your AI assistant naturally:
 
@@ -76,6 +77,7 @@ Once installed, just ask your AI assistant naturally:
 | "How do I authenticate?" | `straitsx-auth-setup` |
 | "How do I sign requests?" | `straitsx-request-signing` |
 | "How do I verify webhooks?" | `straitsx-webhook-verification` |
+| "Walk me through sandbox testing" | `straitsx-sandbox-testing` |
 
 ## Project Structure
 
@@ -91,6 +93,8 @@ straitsx-ai/
 │   ├── straitsx-request-signing/
 │   │   ├── SKILL.md
 │   │   └── references/
+│   ├── straitsx-sandbox-testing/
+│   │   └── SKILL.md
 │   └── straitsx-webhook-verification/
 │       ├── SKILL.md
 │       └── references/

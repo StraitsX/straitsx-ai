@@ -9,6 +9,7 @@
 
 ### Added
 - Concept map (`references/concept-map.md`) — maps business terms (first-party payout, virtual bank account, swap, etc.) to their API endpoints
+- `straitsx-sandbox-testing` skill — end-to-end sandbox walkthrough that generates runnable code for first-party, third-party, or regular integration flows
 - First Party Payouts — create, get, list
 - Third Party Payouts — create, get, list + payout recipients (CRUD)
 - Regular Payouts — create, get, list + payout recipients (CRUD)

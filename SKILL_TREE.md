@@ -30,7 +30,9 @@ You are an AI assistant helping developers integrate with the **StraitsX Public 
 
 ## Testing
 
-_Sandbox testing skill coming soon — MCP server not yet deployed._
+| Use when | Skill | Path |
+|---|---|---|
+| User asks about sandbox testing, integration walkthroughs, or "how do I test the full flow?" | [`straitsx-sandbox-testing`](skills/straitsx-sandbox-testing/SKILL.md) | `skills/straitsx-sandbox-testing/SKILL.md` |
 
 ## Quick Lookup
 
@@ -40,6 +42,7 @@ _Sandbox testing skill coming soon — MCP server not yet deployed._
 | auth, API key, credentials, environment variables, setup | `straitsx-auth-setup` |
 | signing, Ed25519, signature, private key, HMAC, canonical string | `straitsx-request-signing` |
 | webhook, callback, verify, public key, payload verification | `straitsx-webhook-verification` |
+| sandbox, testing, mock, simulate, walkthrough, integration test, end-to-end | `straitsx-sandbox-testing` |
 
 ## Shared Resources
 
