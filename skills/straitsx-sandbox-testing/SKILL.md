@@ -199,7 +199,7 @@ Ask the user if they want to include webhook/callback testing in their sandbox f
 
 ### 3a. Configure Webhook URLs
 
-Before running the flow, register callback URLs for the events relevant to the chosen integration model:
+Before running the flow, register your webhook.site URL for the events relevant to the chosen integration model using `PATCH /webhooks`. The API auto-creates the webhook config if one doesn't exist yet, so this works for first-time setup too.
 
 ```
 PATCH /webhooks
@@ -207,14 +207,16 @@ Body:
 {
   "data": {
     "attributes": {
-      "paymentStatusUpdated": "<callback_url>",
-      "payoutStatusUpdated": "<callback_url>",
-      "cpVerificationStatusUpdated": "<callback_url>",
-      "cpbaVerificationStatusUpdated": "<callback_url>"
+      "paymentStatusUpdated": "https://webhook.site/<your-unique-id>",
+      "payoutStatusUpdated": "https://webhook.site/<your-unique-id>",
+      "cpVerificationStatusUpdated": "https://webhook.site/<your-unique-id>",
+      "cpbaVerificationStatusUpdated": "https://webhook.site/<your-unique-id>"
     }
   }
 }
 ```
+
+Alternatively, webhook URLs can also be configured via the StraitsX Dashboard under Developer Tools → API Key Management.
 
 Which events to configure per integration model:
 
@@ -232,7 +234,7 @@ Use [webhook.site](https://webhook.site) as the callback receiver — no code or
 
 1. Open https://webhook.site — a unique URL is generated automatically (e.g., `https://webhook.site/abc-123-...`)
 2. Copy the unique URL
-3. Use it as the `<callback_url>` in the `PATCH /webhooks` call from step 3a
+3. Use it in the `PATCH /webhooks` call from step 3a (or paste it into the Dashboard under Developer Tools → API Key Management)
 4. After running the flow, check webhook.site to inspect incoming callback payloads, headers (`Xfers-Signature`), and timing
 
 ### 3c. Callback Events During the Flow
