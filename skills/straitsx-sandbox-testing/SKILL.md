@@ -1,6 +1,6 @@
 ---
 name: straitsx-sandbox-testing
-description: Walk through a complete StraitsX sandbox integration flow. Generates working code for end-to-end testing — from customer profile creation to payment collection and payout. Use when the user asks about sandbox testing, integration walkthroughs, or "how do I test the full flow?"
+description: Walk through a complete StraitsX sandbox integration flow. Generates working code for end-to-end testing — from customer profile creation to payment collection, payout, and webhook/callback integration. Use when the user asks about sandbox testing, integration walkthroughs, webhook testing, or "how do I test the full flow?"
 category: setup
 parent: straitsx-api
 ---
@@ -13,11 +13,14 @@ parent: straitsx-api
 - User wants to try the API end-to-end in sandbox
 - User asks about mock payments, simulating bank transfers, or testing payouts
 - User is new to StraitsX and wants a working example
+- User asks about testing webhooks/callbacks in sandbox
+- User wants to verify callback signatures during sandbox testing
 
 ## Prerequisites
 
 - Sandbox API key configured (see the `straitsx-auth-setup` skill)
 - `X_XFERS_APP_API_KEY` environment variable set with a sandbox key
+- (For webhook testing) `STRAITSX_SIGNING_SECRET` environment variable set with the signing secret from Dashboard
 
 ## Step 1: Ask the User's Integration Model
 
@@ -190,6 +193,93 @@ sequenceDiagram
    Body: { "data": { "attributes": { "status": "completed" } } }
 ```
 
+## Step 3: Webhook Integration (Optional but Recommended)
+
+Ask the user if they want to include webhook/callback testing in their sandbox flow. In production, callbacks are the primary way to know when a transaction status changes — so testing them in sandbox is strongly recommended.
+
+### 3a. Configure Webhook URLs
+
+Before running the flow, register callback URLs for the events relevant to the chosen integration model:
+
+```
+PATCH /webhooks
+Body:
+{
+  "data": {
+    "attributes": {
+      "paymentStatusUpdated": "<callback_url>",
+      "payoutStatusUpdated": "<callback_url>",
+      "cpVerificationStatusUpdated": "<callback_url>",
+      "cpbaVerificationStatusUpdated": "<callback_url>"
+    }
+  }
+}
+```
+
+Which events to configure per integration model:
+
+| Event | First-Party | Third-Party | Regular | Description |
+|---|---|---|---|---|
+| `paymentStatusUpdated` | ✅ | ✅ | ✅ | Fires when a VBA/PayNow payment status changes |
+| `payoutStatusUpdated` | ✅ | ✅ | ✅ | Fires when a payout/withdrawal status changes |
+| `cpVerificationStatusUpdated` | ✅ | ✅ | — | Fires when a customer profile verification status changes |
+| `cpbaVerificationStatusUpdated` | ✅ | ✅ | — | Fires when a CP bank account verification status changes |
+| `virtualAccountStatusUpdated` | ✅ | ✅ | ✅ | Fires when a VBA is enabled/disabled |
+
+### 3b. Set Up a Callback Receiver via webhook.site
+
+Use [webhook.site](https://webhook.site) as the callback receiver — no code or infrastructure needed:
+
+1. Open https://webhook.site — a unique URL is generated automatically (e.g., `https://webhook.site/abc-123-...`)
+2. Copy the unique URL
+3. Use it as the `<callback_url>` in the `PATCH /webhooks` call from step 3a
+4. After running the flow, check webhook.site to inspect incoming callback payloads, headers (`Xfers-Signature`), and timing
+
+### 3c. Callback Events During the Flow
+
+When the sandbox flow runs, these callbacks fire at each step:
+
+**First-Party / Third-Party Flow:**
+
+| Flow step | Callback event fired |
+|---|---|
+| Verify customer profile (sandbox) | `cpVerificationStatusUpdated` |
+| Verify bank account (sandbox) | `cpbaVerificationStatusUpdated` |
+| Complete mock payment (sandbox) | `paymentStatusUpdated` |
+| Complete mock payout (sandbox) | `payoutStatusUpdated` |
+
+**Regular Flow:**
+
+| Flow step | Callback event fired |
+|---|---|
+| Complete mock payment (sandbox) | `paymentStatusUpdated` |
+| Complete mock payout (sandbox) | `payoutStatusUpdated` |
+
+### 3d. Verify Callback Signatures
+
+Every callback includes an `Xfers-Signature` header (HMAC-SHA256 hex digest). The generated code should verify it using the signing secret from the Dashboard.
+
+For signature verification logic, defer to the `straitsx-webhook-verification` skill — do not generate cryptographic code from scratch.
+
+**Required environment variable:** `STRAITSX_SIGNING_SECRET` (from Dashboard > Platform Tools > Callback URLs > Signing Key Section)
+
+### 3e. Resend Callbacks
+
+If a callback was missed or the listener wasn't running, use the resend endpoint:
+
+```
+POST /webhooks/{contractId}/resend
+```
+
+Or for multiple contracts at once:
+
+```
+POST /webhooks/resend
+Body: { "data": { "attributes": { "contractIds": ["contract_...", "contract_..."] } } }
+```
+
+Note: Resend is primarily a production feature but useful to mention for completeness.
+
 ## Code Generation Rules
 
 1. **Always look up the endpoint** in the OpenAPI spec (`references/openapi-spec.json` in the `straitsx-api-overview` skill) for the exact request body schema, required fields, and parameter formats.
@@ -200,6 +290,8 @@ sequenceDiagram
 6. **Use realistic test data**: Generate plausible names, registration IDs, addresses — not placeholder strings.
 7. **Add comments**: Explain what each step does and what to expect.
 8. **Print a summary**: At the end, print a summary of all created resources with their IDs.
+9. **Webhook setup (if requested)**: Prepend the flow with a `PATCH /webhooks` call to register the user's webhook.site URL for the relevant events.
+10. **Callback verification**: When the user wants to verify signatures locally (beyond webhook.site inspection), defer to the `straitsx-webhook-verification` skill's golden code. Never roll custom crypto.
 
 ## Sandbox-Specific Notes
 
@@ -210,6 +302,8 @@ sequenceDiagram
 | Verification | In sandbox, you manually set verification status via sandbox endpoints. In production, StraitsX handles verification. |
 | Balance | In sandbox, collect a payment first (via VBA or PayNow mock) to get balance in your business account before testing payouts. |
 | Callbacks | Sandbox sends real callbacks to your configured webhook URL. Use a tool like ngrok if testing locally. |
+| Signing secret | Required for callback verification. Get it from Dashboard > Platform Tools > Callback URLs > Signing Key Section. Store as `STRAITSX_SIGNING_SECRET` env var. |
+| Callback retries | Failed callbacks retry every 5 minutes, up to 20 times. Return `200 OK` from your listener to acknowledge receipt. |
 
 ## Troubleshooting
 
