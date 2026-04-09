@@ -16,8 +16,9 @@ parent: straitsx-api
 
 ## Spec Reference
 
-- **OpenAPI Spec**: [`references/openapi-spec.json`](references/openapi-spec.json) — the StraitsX sandbox OpenAPI spec (v1.4.0, OpenAPI 3.1.0, JSON format). Load this file when you need to look up endpoints, schemas, or parameters.
+- **OpenAPI Spec**: [`references/openapi-spec.json`](references/openapi-spec.json) — the StraitsX OpenAPI spec (v1.4.0, OpenAPI 3.1.0, JSON format). Load this file when you need to look up endpoints, schemas, or parameters.
 - **API Version**: 1.4.0
+- **Servers**: Sandbox (`https://api-sandbox.straitsx.com/v1`), Production (`https://api.straitsx.com/v1`)
 
 ## How to Answer Questions
 
