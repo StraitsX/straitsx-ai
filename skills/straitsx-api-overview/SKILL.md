@@ -24,6 +24,7 @@ parent: straitsx-api
 
 | Question type | What to do |
 |---|---|
+| Concept questions ("How do I do a first-party payout?") | Load [`references/concept-map.md`](references/concept-map.md) to find the endpoint, then look up the endpoint details in the OpenAPI spec. |
 | Endpoint questions ("How do I create a payment?") | Look up the endpoint in the OpenAPI spec. Return path, HTTP method, description, parameters, request body schema, and response schema. Include example payloads where available. |
 | Parameter questions ("What params does transfer accept?") | Return the full parameter list with names, types, locations (path/query/header/body), required/optional status, and descriptions. |
 | Schema questions ("What does the payment response look like?") | Return the response schema with field names, types, and descriptions. |
@@ -53,6 +54,7 @@ Load these on demand when the user's question requires deeper detail:
 
 | File | When to load |
 |---|---|
+| [`references/concept-map.md`](references/concept-map.md) | **Load first** when the user mentions a business concept (e.g., "first-party payout", "virtual bank account", "swap") — maps concepts to endpoint paths |
 | [`references/openapi-spec.json`](references/openapi-spec.json) | User asks about endpoints, parameters, schemas, or you need to generate code for an API call |
 | [`references/error-codes.md`](references/error-codes.md) | User asks about error handling, error codes, or debugging API responses |
 | [`references/transaction-safety.md`](references/transaction-safety.md) | User asks about idempotency, transaction status, retries, or safe payout handling |

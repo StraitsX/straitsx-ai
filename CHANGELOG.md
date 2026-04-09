@@ -5,8 +5,10 @@
 ### Changed
 - Updated OpenAPI spec to cover all public API endpoints (91 paths, 113 endpoints)
 - Added production server URL alongside sandbox
+- Updated `straitsx-api-overview` skill to load concept map first for business concept questions
 
 ### Added
+- Concept map (`references/concept-map.md`) — maps business terms (first-party payout, virtual bank account, swap, etc.) to their API endpoints
 - First Party Payouts — create, get, list
 - Third Party Payouts — create, get, list + payout recipients (CRUD)
 - Regular Payouts — create, get, list + payout recipients (CRUD)
