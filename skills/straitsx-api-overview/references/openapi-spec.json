@@ -391,8 +391,8 @@
         }
       },
       "post": {
-        "summary": "Create a business customer profile+ API",
-        "description": "[Available in Sandbox/Production environment] Create a business CP+ profile on our platform.",
+        "summary": "Create a customer profile",
+        "description": "Create a customer profile on the StraitsX platform. Supports four profile types: Personal CP, Business CP, Personal CP+, and Business CP+. Required fields vary by type — see the oneOf schemas.",
         "operationId": "create-a-customer-profile-api",
         "parameters": [
           {
@@ -445,542 +445,84 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "required": [
-                  "customerName",
-                  "registrationType",
-                  "registrationIdType",
-                  "registrationId",
-                  "entityLegalForm",
-                  "businessContact",
-                  "countryOfIncorporation",
-                  "dateOfIncorporation",
-                  "address",
-                  "operatingAddress",
-                  "natureOfBusiness",
-                  "usOwnership",
-                  "intermediaries",
-                  "monthlyTransactionVolume",
-                  "sourceOfFunds",
-                  "directors",
-                  "beneficialOwners",
-                  "trader",
-                  "documents",
-                  "purposeOfAccount"
-                ],
-                "properties": {
-                  "customerName": {
-                    "type": "string",
-                    "description": "Customer's full name (50 alphanumeric with spaces)<br>Regex: `/^(?=.{1,50}$)[a-zA-Z0-9 ]+$/`"
-                  },
-                  "customerNativeName": {
-                    "type": "string",
-                    "description": "Regex: `/^\\s*.{1,191}\\s*$/`"
-                  },
-                  "merchantRef": {
-                    "type": "string",
-                    "description": "Regex: `/^\\s*.{1,191}\\s*$/`"
-                  },
-                  "registrationType": {
-                    "type": "string",
-                    "description": "`Business`"
-                  },
-                  "registrationIdType": {
-                    "type": "string",
-                    "description": "<code>business_reg_no<code>"
-                  },
-                  "registrationId": {
-                    "type": "string",
-                    "description": "Business Registration Number of the customer.<br>4-35 alphanumeric chars.<br>Regex: `/\\A[a-zA-Z0-9\\- ]{4,35}\\z/`"
-                  },
-                  "entityLegalForm": {
-                    "type": "string",
-                    "description": "Accepted values: `PRIVATE_COMPANY`or`PUBLIC_COMPANY`"
-                  },
-                  "businessContact": {
-                    "type": "string",
-                    "description": "Provide the string in a valid format.<br>Regex: `^\\+?[1-9]\\d{0,3}[\\s\\-]?\\(?\\d{1,4}\\)?[\\s\\-]?\\d{1,4}[\\s\\-]?\\d{1,4}[\\s\\-]?\\d{0,4}$`"
-                  },
-                  "website": {
-                    "type": "string",
-                    "description": "Provide a valid URL.<br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                  },
-                  "countryOfIncorporation": {
-                    "type": "string",
-                    "description": "Customer's country of incorporation.<br>2 digit ISO country code - https://www.iban.com/country-codes<br><br>List of accepted countries, Refer to Other Info > Accepted Countries"
-                  },
-                  "dateOfIncorporation": {
-                    "type": "string",
-                    "description": "`yyyy-MM-dd` format"
-                  },
-                  "address": {
+                "oneOf": [
+                  {
                     "type": "object",
-                    "description": "Customer's registered address.",
                     "required": [
-                      "state",
-                      "country",
-                      "street",
-                      "city"
-                    ],
-                    "properties": {
-                      "street": {
-                        "type": "string",
-                        "description": "Regex: `/^(?=.{1,180}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
-                      },
-                      "city": {
-                        "type": "string",
-                        "description": "Regex: `/^(?=.{1,20}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
-                      },
-                      "postalCode": {
-                        "type": "string",
-                        "description": "Regex: `/^[A-Za-z0-9\\- ]{2,20}$/`"
-                      },
-                      "state": {
-                        "type": "string",
-                        "description": "Regex: `/^(?=.{1,15}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
-                      },
-                      "country": {
-                        "type": "string",
-                        "description": "2 or 3 digit ISO country code or ISO short name - https://www.iban.com/country-codes <br>Will be standardized to 2 digit ISO country code before storing."
-                      }
-                    }
-                  },
-                  "operatingAddress": {
-                    "type": "object",
-                    "description": "Customer’s business operating address.",
-                    "required": [
-                      "city",
-                      "state",
-                      "country",
-                      "street"
-                    ],
-                    "properties": {
-                      "street": {
-                        "type": "string",
-                        "description": "Regex: `/^(?=.{1,180}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
-                      },
-                      "city": {
-                        "type": "string",
-                        "description": "Regex: `/^(?=.{1,20}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
-                      },
-                      "postalCode": {
-                        "type": "string",
-                        "description": "Regex: `/^[A-Za-z0-9\\- ]{2,20}$/`"
-                      },
-                      "state": {
-                        "type": "string",
-                        "description": "Regex: `/^(?=.{1,15}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
-                      },
-                      "country": {
-                        "type": "string",
-                        "description": "2 or 3 digit ISO country code or ISO short name - https://www.iban.com/country-codes <br>Will be standardized to 2 digit ISO country code before storing."
-                      }
-                    }
-                  },
-                  "natureOfBusiness": {
-                    "type": "string",
-                    "description": "Accepted Values:<br>`PERSONAL_INVESTMENT_COMPANIES`<br> `SUPERANNUATION_FUND`<br> `CRYPTO_MINING`<br> `PROPRIETARY_TRADING`<br> `ALGORITHM_CRYPTO_TRADERS`<br> `P2P_MERCHANTS`<br> `OTHER_WEB3_SERVICES_NON_VASP`<br> `ACCOMMODATION_AND_FOOD_SERVICES`<br> `WASTE_MANAGEMENT_AND_REMEDIATION_SERVICES`<br> `AGRICULTURE_FORESTRY_FISHING_AND_HUNTING`<br> `ARTS_ENTERTAINMENT_AND_RECREATION`<br> `EDUCATIONAL_SERVICES`<br> `GAMING`<br> `HEALTHCARE_AND_SOCIAL_ASSISTANCE`<br> `INFORMATION`<br> `GENERAL_MANUFACTURING`<br> `PROFESSIONAL_SERVICES`<br> `SCIENTIFIC_AND_TECHNICAL_SERVICES`<br> `RETAIL_ELECTRONICS`<br> `RETAIL_FOOD_AND_BEVERAGE`<br> `RETAIL_JEWELRY`<br> `RETAIL_OTHERS`<br> `SALE_OF_DRUGS_AND_PHARMACEUTICAL_PRODUCTS`<br> `TRANSPORTATION_AND_WAREHOUSING`<br> `FAMILY_OFFICE`<br> `SOVEREIGN_WEALTH_FUND`<br> `INVESTMENT_FUNDS`<br> `CRYPTO_EXCHANGE_BROKER`<br> `CRYPTO_ATM`<br> `OTHER_DIGITAL_ASSET_SERVICE_PROVIDERS_VASP`<br> `BANK`<br> `NON_BANK_FINANCIAL_INSTITUTION`<br> `MONEY_SERVICES_BUSINESS_PAYMENT_SERVICE_PROVIDERS`<br> `CONSTRUCTION`<br> `GENERAL_WHOLESALERS`<br> `MANAGEMENT_OF_COMPANIES`<br> `PRECIOUS_STONES_METALS_DEALERS`<br> `CRUDE_OIL_NATURAL_GAS_DEALERS`<br> `PAWN_SHOPS`<br> `PUBLIC_ADMINISTRATION`<br> `REAL_ESTATE_RENTAL_LEASING`<br> `UTILITIES`<br> `OTHERS`<br>"
-                  },
-                  "otherNatureOfBusiness": {
-                    "type": "string",
-                    "description": "*Required field if `natureOfBusiness` is `OTHERS`<br>Format: Free text"
-                  },
-                  "usOwnership": {
-                    "type": "boolean",
-                    "description": "`true` / `false`"
-                  },
-                  "intermediaries": {
-                    "type": "boolean",
-                    "description": "`true` / `false` - Refers to this onboarding question: “Is your company owned by any intermediary companies/legal arrangement (at least 10% or more)?"
-                  },
-                  "intermediariesDocuments": {
-                    "type": "array",
-                    "description": "*Required field if `intermediaries` is `true`",
-                    "items": {
-                      "properties": {
-                        "certificateOfIncorporation": {
-                          "type": "string",
-                          "description": "Required field if `intermediaries` is `true`<br><br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                        },
-                        "memorandum": {
-                          "type": "string",
-                          "description": "Required field if `intermediaries` is `true`<br><br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                        },
-                        "registerOfMembers": {
-                          "type": "string",
-                          "description": "Required field if `intermediaries` is `true`<br><br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                        },
-                        "certificateOfIncumbency": {
-                          "type": "string",
-                          "description": "Required field if `intermediaries` is `true`<br><br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                        }
-                      },
-                      "type": "object"
-                    }
-                  },
-                  "monthlyTransactionVolume": {
-                    "type": "string",
-                    "description": "In USD.<br>Accepted Values: `0_TO_100000`, `100001_TO_500000`, `500001_TO_1000000`, `100001_TO_10000000`, `GT_10000000`"
-                  },
-                  "sourceOfWealth": {
-                    "type": "object",
-                    "description": "*Required if entity is deemed High Risk by StraitsX or if require higher daily limits (Refer to Other Info > Transaction Limit Tiers)",
-                    "properties": {
-                      "loanFromParentCompany": {
-                        "type": "object",
-                        "properties": {
-                          "document": {
-                            "type": "string",
-                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                          }
-                        }
-                      },
-                      "loanFromDirectorsShareholders": {
-                        "type": "object",
-                        "properties": {
-                          "document": {
-                            "type": "string",
-                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                          }
-                        }
-                      },
-                      "investorFunds": {
-                        "type": "object",
-                        "properties": {
-                          "document": {
-                            "type": "string",
-                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                          }
-                        }
-                      },
-                      "businessLoans": {
-                        "type": "object",
-                        "properties": {
-                          "document": {
-                            "type": "string",
-                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                          }
-                        }
-                      },
-                      "businessRevenue": {
-                        "type": "object",
-                        "properties": {
-                          "document": {
-                            "type": "string",
-                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                          }
-                        }
-                      },
-                      "customerFundsForInvestment": {
-                        "type": "object",
-                        "properties": {
-                          "document": {
-                            "type": "string",
-                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                          }
-                        }
-                      },
-                      "arbitrageTrading": {
-                        "type": "object",
-                        "properties": {
-                          "document": {
-                            "type": "string",
-                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                          }
-                        }
-                      },
-                      "others": {
-                        "type": "object",
-                        "properties": {
-                          "document": {
-                            "type": "string",
-                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                          },
-                          "details": {
-                            "type": "string",
-                            "description": "Max 255 chars.<br>Regex: `/^\\s*.{1,255}\\s*$/`"
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "sourceOfFunds": {
-                    "type": "array",
-                    "description": "Accepted Values:<br>`LOAN_FROM_PARENT_COMPANY`<br> `LOAN_FROM_DIRECTORS_SHAREHOLDERS`<br> `INVESTOR_FUNDS`<br> `BUSINESS_LOANS`<br> `BUSINESS_REVENUE`<br> `CUSTOMER_FUNDS_FOR_INVESTMENT`<br> `ARBITRAGE_TRADING`<br> `EMPLOYMENT_INCOME`<br> `BUSINESS_OWNERSHIP_INCOME`<br> `PROPERTY_OWNERSHIP`<br> `INVESTMENT_HOLDINGS_RETURNS`<br> `GIFTS_INHERITANCE`<br> `CASH_SAVINGS`<br> `OTHERS`",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "otherSourceOfFunds": {
-                    "type": "string",
-                    "description": "*Required field if `sourceOfFunds` includes `OTHERS`<br>Free text."
-                  },
-                  "directors": {
-                    "type": "array",
-                    "items": {
-                      "properties": {
-                        "firstName": {
-                          "type": "string",
-                          "description": "Max 191 chars.<br>Regex: `/^\\s*.{1,191}\\s*$/`"
-                        },
-                        "middleName": {
-                          "type": "string",
-                          "description": "Max 191 chars.<br>Regex: `/^\\s*.{1,191}\\s*$/`"
-                        },
-                        "lastName": {
-                          "type": "string",
-                          "description": "Max 191 chars.<br>Regex: `/^\\s*.{1,191}\\s*$/`"
-                        },
-                        "nativeName": {
-                          "type": "string",
-                          "description": "Regex: `/^\\s*.{1,191}\\s*$/`"
-                        },
-                        "dateOfBirth": {
-                          "type": "string",
-                          "description": "Director’s date of birth in `yyyy-MM-dd` format."
-                        },
-                        "registrationId": {
-                          "type": "string",
-                          "description": "4-20 alphanumeric chars.<br>Regex: `/\\A[a-zA-Z0-9]{4,20}\\z/`"
-                        },
-                        "registrationIdType": {
-                          "type": "string",
-                          "description": "`passport` / `identity_card`"
-                        },
-                        "registrationIdCountry": {
-                          "type": "string",
-                          "description": "2 digit ISO country code - https://www.iban.com/country-codes"
-                        },
-                        "identityDocuments": {
-                          "type": "object",
-                          "description": "ID or Passport - Coloured, contains nationality, not expired",
-                          "properties": {
-                            "passport": {
-                              "type": "string",
-                              "description": "Required field if `directors.[].registrationIdType` is `passport`<br><br>File link Passport(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                            },
-                            "idFront": {
-                              "type": "string",
-                              "description": "Required field if `directors.[].registrationIdType` is `identity_card`<br><br>File link ID(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                            },
-                            "idBack": {
-                              "type": "string",
-                              "description": "Required field if `directors.[].registrationIdType` is `identity_card`<br><br>File link ID(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                            }
-                          }
-                        },
-                        "nationality": {
-                          "type": "string",
-                          "description": "2 digit ISO country code - https://www.iban.com/country-codes"
-                        },
-                        "countryOfResidence": {
-                          "type": "string",
-                          "description": "2 digit ISO country code - https://www.iban.com/country-codes <br>Cannot be in the list of countries not accepted, Refer to Other Info > Countries Not Accepted"
-                        }
-                      },
-                      "required": [
-                        "firstName",
-                        "lastName",
-                        "dateOfBirth",
-                        "registrationId",
-                        "registrationIdType",
-                        "registrationIdCountry",
-                        "nationality",
-                        "countryOfResidence"
-                      ],
-                      "type": "object"
-                    }
-                  },
-                  "beneficialOwners": {
-                    "type": "array",
-                    "description": "Pass in all beneficial owners for the business",
-                    "items": {
-                      "properties": {
-                        "firstName": {
-                          "type": "string",
-                          "description": "Max 191 chars.<br>Regex: `/^\\s*.{1,191}\\s*$/`"
-                        },
-                        "middleName": {
-                          "type": "string",
-                          "description": "Max 191 chars.<br>Regex: `/^\\s*.{1,191}\\s*$/`"
-                        },
-                        "lastName": {
-                          "type": "string",
-                          "description": "Max 191 chars.<br>Regex: `/^\\s*.{1,191}\\s*$/`"
-                        },
-                        "nativeName": {
-                          "type": "string",
-                          "description": "Regex: `/^\\s*.{1,191}\\s*$/`"
-                        },
-                        "dateOfBirth": {
-                          "type": "string",
-                          "description": "BO’s date of birth `yyyy-MM-dd` format"
-                        },
-                        "registrationId": {
-                          "type": "string",
-                          "description": "4-20 alphanumeric chars.<br>Regex: `/\\A[a-zA-Z0-9]{4,20}\\z/`"
-                        },
-                        "registrationIdType": {
-                          "type": "string",
-                          "description": "`passport` / `identity_card`"
-                        },
-                        "registrationIdCountry": {
-                          "type": "string",
-                          "description": "2 digit ISO country code - https://www.iban.com/country-codes <br>Cannot be in the list of countries not accepted, Refer to Other Info > Countries Not Accepted"
-                        },
-                        "identityDocuments": {
-                          "type": "object",
-                          "description": "ID or Passport - Coloured, contains nationality, not expired",
-                          "properties": {
-                            "passport": {
-                              "type": "string",
-                              "description": "Required field if `directors.[].registrationIdType` is `passport`<br><br>File link Passport(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                            },
-                            "idFront": {
-                              "type": "string",
-                              "description": "Required field if `directors.[].registrationIdType` is `identity_card`<br><br>File link ID(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                            },
-                            "idBack": {
-                              "type": "string",
-                              "description": "Required field if `directors.[].registrationIdType` is `identity_card`<br><br>File link ID(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                            }
-                          }
-                        },
-                        "address": {
-                          "type": "object",
-                          "description": "Wrap `street`, `city`, `country` etc",
-                          "required": [
-                            "street",
-                            "city",
-                            "state",
-                            "country"
-                          ],
-                          "properties": {
-                            "street": {
-                              "type": "string",
-                              "description": "Regex: `/^(?=.{1,180}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
-                            },
-                            "city": {
-                              "type": "string",
-                              "description": "Regex: `/^(?=.{1,20}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
-                            },
-                            "postalCode": {
-                              "type": "string",
-                              "description": "Regex: `/^[A-Za-z0-9\\- ]{2,20}$/`"
-                            },
-                            "state": {
-                              "type": "string",
-                              "description": "Regex: `/^(?=.{1,15}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
-                            },
-                            "country": {
-                              "type": "string",
-                              "description": "2 or 3 digit ISO country code or ISO short name - https://www.iban.com/country-codes <br>Will be standardized to 2 digit ISO country code before storing."
-                            }
-                          }
-                        },
-                        "proofOfAddress": {
-                          "type": "string",
-                          "description": "File link for ID(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`<br><br>Proof of Address - Not dated more than 6 months (examples include utility bill, bank statement, government-issued document), if so, acceptable to provide an updated document within 30 business days after account opening."
-                        },
-                        "nationality": {
-                          "type": "string",
-                          "description": "2 digit ISO country code - https://www.iban.com/country-codes <br>Cannot be in the list of countries not accepted, Refer to Other Info > Countries Not Accepted"
-                        },
-                        "countryOfResidence": {
-                          "type": "string",
-                          "description": "2 digit ISO country code - https://www.iban.com/country-codes <br>Cannot be in the list of countries not accepted, Refer to Other Info > Countries Not Accepted"
-                        }
-                      },
-                      "required": [
-                        "firstName",
-                        "lastName",
-                        "dateOfBirth",
-                        "registrationId",
-                        "registrationIdType",
-                        "registrationIdCountry",
-                        "proofOfAddress",
-                        "nationality",
-                        "countryOfResidence"
-                      ],
-                      "type": "object"
-                    }
-                  },
-                  "trader": {
-                    "type": "object",
-                    "description": "Pass in the main trader’s information.",
-                    "required": [
-                      "firstName",
-                      "lastName",
-                      "dateOfBirth",
-                      "registrationId",
+                      "customerName",
+                      "registrationType",
                       "registrationIdType",
-                      "registrationIdCountry",
-                      "proofOfAddress",
-                      "selfie",
-                      "livenessSnapshot",
-                      "livenessResult",
-                      "nationality",
-                      "countryOfResidence"
+                      "registrationId",
+                      "entityLegalForm",
+                      "businessContact",
+                      "countryOfIncorporation",
+                      "dateOfIncorporation",
+                      "address",
+                      "operatingAddress",
+                      "natureOfBusiness",
+                      "usOwnership",
+                      "intermediaries",
+                      "monthlyTransactionVolume",
+                      "sourceOfFunds",
+                      "directors",
+                      "beneficialOwners",
+                      "trader",
+                      "documents",
+                      "purposeOfAccount"
                     ],
                     "properties": {
-                      "firstName": {
+                      "customerName": {
                         "type": "string",
-                        "description": "Max 191 chars.<br>Regex: `/^\\s*.{1,191}\\s*$/`"
+                        "description": "Customer's full name (50 alphanumeric with spaces)<br>Regex: `/^(?=.{1,50}$)[a-zA-Z0-9 ]+$/`"
                       },
-                      "middleName": {
-                        "type": "string",
-                        "description": "Max 191 chars.<br>Regex: `/^\\s*.{1,191}\\s*$/`"
-                      },
-                      "lastName": {
-                        "type": "string",
-                        "description": "Max 191 chars.<br>Regex: `/^\\s*.{1,191}\\s*$/`"
-                      },
-                      "nativeName": {
+                      "customerNativeName": {
                         "type": "string",
                         "description": "Regex: `/^\\s*.{1,191}\\s*$/`"
                       },
-                      "dateOfBirth": {
+                      "merchantRef": {
                         "type": "string",
-                        "description": "Main trader’s date of birth in `yyyy-MM-dd` format."
+                        "description": "Regex: `/^\\s*.{1,191}\\s*$/`"
                       },
-                      "registrationId": {
+                      "registrationType": {
                         "type": "string",
-                        "description": "4-20 alphanumeric chars.<br>Regex: `/\\A[a-zA-Z0-9]{4,20}\\z/`"
+                        "description": "`Business`"
                       },
                       "registrationIdType": {
                         "type": "string",
-                        "description": "`passport` / `identity_card`"
+                        "description": "<code>business_reg_no<code>"
                       },
-                      "registrationIdCountry": {
+                      "registrationId": {
                         "type": "string",
-                        "description": "2 digit ISO country code - https://www.iban.com/country-codes"
+                        "description": "Business Registration Number of the customer.<br>4-35 alphanumeric chars.<br>Regex: `/\\A[a-zA-Z0-9\\- ]{4,35}\\z/`"
                       },
-                      "identityDocuments": {
-                        "type": "object",
-                        "description": "ID or Passport - Coloured, contains nationality, not expired.",
-                        "properties": {
-                          "passport": {
-                            "type": "string",
-                            "description": "Required field if `directors.[].registrationIdType` is `passport`<br><br>File link Passport(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                          },
-                          "idFront": {
-                            "type": "string",
-                            "description": "Required field if `directors.[].registrationIdType` is `identity_card`<br><br>File link ID(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                          },
-                          "idBack": {
-                            "type": "string",
-                            "description": "Required field if `directors.[].registrationIdType` is `identity_card`<br><br>File link ID(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
-                          }
-                        }
+                      "entityLegalForm": {
+                        "type": "string",
+                        "description": "Accepted values: `PRIVATE_COMPANY`or`PUBLIC_COMPANY`"
+                      },
+                      "businessContact": {
+                        "type": "string",
+                        "description": "Provide the string in a valid format.<br>Regex: `^\\+?[1-9]\\d{0,3}[\\s\\-]?\\(?\\d{1,4}\\)?[\\s\\-]?\\d{1,4}[\\s\\-]?\\d{1,4}[\\s\\-]?\\d{0,4}$`"
+                      },
+                      "website": {
+                        "type": "string",
+                        "description": "Provide a valid URL.<br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                      },
+                      "countryOfIncorporation": {
+                        "type": "string",
+                        "description": "Customer's country of incorporation.<br>2 digit ISO country code - https://www.iban.com/country-codes<br><br>List of accepted countries, Refer to Other Info > Accepted Countries"
+                      },
+                      "dateOfIncorporation": {
+                        "type": "string",
+                        "description": "`yyyy-MM-dd` format"
                       },
                       "address": {
                         "type": "object",
-                        "description": "Wrap `street`, `city`, `country` etc.",
+                        "description": "Customer's registered address.",
                         "required": [
-                          "street",
-                          "city",
                           "state",
-                          "country"
+                          "country",
+                          "street",
+                          "city"
                         ],
                         "properties": {
                           "street": {
@@ -1001,105 +543,1043 @@
                           },
                           "country": {
                             "type": "string",
-                            "description": "2 or 3 digit ISO country code or ISO short name - https://www.iban.com/country-codes <br><br>Will be standardized to 2 digit ISO country code before storing<br><br>Cannot be in the list of countries not accepted, Refer to Other Info > Countries Not Accepted"
+                            "description": "2 or 3 digit ISO country code or ISO short name - https://www.iban.com/country-codes <br>Will be standardized to 2 digit ISO country code before storing."
                           }
                         }
                       },
-                      "proofOfAddress": {
-                        "type": "string",
-                        "description": "File link for ID(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                      "operatingAddress": {
+                        "type": "object",
+                        "description": "Customer’s business operating address.",
+                        "required": [
+                          "city",
+                          "state",
+                          "country",
+                          "street"
+                        ],
+                        "properties": {
+                          "street": {
+                            "type": "string",
+                            "description": "Regex: `/^(?=.{1,180}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
+                          },
+                          "city": {
+                            "type": "string",
+                            "description": "Regex: `/^(?=.{1,20}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
+                          },
+                          "postalCode": {
+                            "type": "string",
+                            "description": "Regex: `/^[A-Za-z0-9\\- ]{2,20}$/`"
+                          },
+                          "state": {
+                            "type": "string",
+                            "description": "Regex: `/^(?=.{1,15}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
+                          },
+                          "country": {
+                            "type": "string",
+                            "description": "2 or 3 digit ISO country code or ISO short name - https://www.iban.com/country-codes <br>Will be standardized to 2 digit ISO country code before storing."
+                          }
+                        }
                       },
-                      "selfie": {
+                      "natureOfBusiness": {
                         "type": "string",
-                        "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                        "description": "Accepted Values:<br>`PERSONAL_INVESTMENT_COMPANIES`<br> `SUPERANNUATION_FUND`<br> `CRYPTO_MINING`<br> `PROPRIETARY_TRADING`<br> `ALGORITHM_CRYPTO_TRADERS`<br> `P2P_MERCHANTS`<br> `OTHER_WEB3_SERVICES_NON_VASP`<br> `ACCOMMODATION_AND_FOOD_SERVICES`<br> `WASTE_MANAGEMENT_AND_REMEDIATION_SERVICES`<br> `AGRICULTURE_FORESTRY_FISHING_AND_HUNTING`<br> `ARTS_ENTERTAINMENT_AND_RECREATION`<br> `EDUCATIONAL_SERVICES`<br> `GAMING`<br> `HEALTHCARE_AND_SOCIAL_ASSISTANCE`<br> `INFORMATION`<br> `GENERAL_MANUFACTURING`<br> `PROFESSIONAL_SERVICES`<br> `SCIENTIFIC_AND_TECHNICAL_SERVICES`<br> `RETAIL_ELECTRONICS`<br> `RETAIL_FOOD_AND_BEVERAGE`<br> `RETAIL_JEWELRY`<br> `RETAIL_OTHERS`<br> `SALE_OF_DRUGS_AND_PHARMACEUTICAL_PRODUCTS`<br> `TRANSPORTATION_AND_WAREHOUSING`<br> `FAMILY_OFFICE`<br> `SOVEREIGN_WEALTH_FUND`<br> `INVESTMENT_FUNDS`<br> `CRYPTO_EXCHANGE_BROKER`<br> `CRYPTO_ATM`<br> `OTHER_DIGITAL_ASSET_SERVICE_PROVIDERS_VASP`<br> `BANK`<br> `NON_BANK_FINANCIAL_INSTITUTION`<br> `MONEY_SERVICES_BUSINESS_PAYMENT_SERVICE_PROVIDERS`<br> `CONSTRUCTION`<br> `GENERAL_WHOLESALERS`<br> `MANAGEMENT_OF_COMPANIES`<br> `PRECIOUS_STONES_METALS_DEALERS`<br> `CRUDE_OIL_NATURAL_GAS_DEALERS`<br> `PAWN_SHOPS`<br> `PUBLIC_ADMINISTRATION`<br> `REAL_ESTATE_RENTAL_LEASING`<br> `UTILITIES`<br> `OTHERS`<br>"
                       },
-                      "livenessSnapshot": {
+                      "otherNatureOfBusiness": {
                         "type": "string",
-                        "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                        "description": "*Required field if `natureOfBusiness` is `OTHERS`<br>Format: Free text"
                       },
-                      "livenessResult": {
+                      "usOwnership": {
                         "type": "boolean",
                         "description": "`true` / `false`"
                       },
+                      "intermediaries": {
+                        "type": "boolean",
+                        "description": "`true` / `false` - Refers to this onboarding question: “Is your company owned by any intermediary companies/legal arrangement (at least 10% or more)?"
+                      },
+                      "intermediariesDocuments": {
+                        "type": "array",
+                        "description": "*Required field if `intermediaries` is `true`",
+                        "items": {
+                          "properties": {
+                            "certificateOfIncorporation": {
+                              "type": "string",
+                              "description": "Required field if `intermediaries` is `true`<br><br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                            },
+                            "memorandum": {
+                              "type": "string",
+                              "description": "Required field if `intermediaries` is `true`<br><br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                            },
+                            "registerOfMembers": {
+                              "type": "string",
+                              "description": "Required field if `intermediaries` is `true`<br><br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                            },
+                            "certificateOfIncumbency": {
+                              "type": "string",
+                              "description": "Required field if `intermediaries` is `true`<br><br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                            }
+                          },
+                          "type": "object"
+                        }
+                      },
+                      "monthlyTransactionVolume": {
+                        "type": "string",
+                        "description": "In USD.<br>Accepted Values: `0_TO_100000`, `100001_TO_500000`, `500001_TO_1000000`, `100001_TO_10000000`, `GT_10000000`"
+                      },
+                      "sourceOfWealth": {
+                        "type": "object",
+                        "description": "*Required if entity is deemed High Risk by StraitsX or if require higher daily limits (Refer to Other Info > Transaction Limit Tiers)",
+                        "properties": {
+                          "loanFromParentCompany": {
+                            "type": "object",
+                            "properties": {
+                              "document": {
+                                "type": "string",
+                                "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                              }
+                            }
+                          },
+                          "loanFromDirectorsShareholders": {
+                            "type": "object",
+                            "properties": {
+                              "document": {
+                                "type": "string",
+                                "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                              }
+                            }
+                          },
+                          "investorFunds": {
+                            "type": "object",
+                            "properties": {
+                              "document": {
+                                "type": "string",
+                                "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                              }
+                            }
+                          },
+                          "businessLoans": {
+                            "type": "object",
+                            "properties": {
+                              "document": {
+                                "type": "string",
+                                "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                              }
+                            }
+                          },
+                          "businessRevenue": {
+                            "type": "object",
+                            "properties": {
+                              "document": {
+                                "type": "string",
+                                "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                              }
+                            }
+                          },
+                          "customerFundsForInvestment": {
+                            "type": "object",
+                            "properties": {
+                              "document": {
+                                "type": "string",
+                                "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                              }
+                            }
+                          },
+                          "arbitrageTrading": {
+                            "type": "object",
+                            "properties": {
+                              "document": {
+                                "type": "string",
+                                "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                              }
+                            }
+                          },
+                          "others": {
+                            "type": "object",
+                            "properties": {
+                              "document": {
+                                "type": "string",
+                                "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                              },
+                              "details": {
+                                "type": "string",
+                                "description": "Max 255 chars.<br>Regex: `/^\\s*.{1,255}\\s*$/`"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "sourceOfFunds": {
+                        "type": "array",
+                        "description": "Accepted Values:<br>`LOAN_FROM_PARENT_COMPANY`<br> `LOAN_FROM_DIRECTORS_SHAREHOLDERS`<br> `INVESTOR_FUNDS`<br> `BUSINESS_LOANS`<br> `BUSINESS_REVENUE`<br> `CUSTOMER_FUNDS_FOR_INVESTMENT`<br> `ARBITRAGE_TRADING`<br> `EMPLOYMENT_INCOME`<br> `BUSINESS_OWNERSHIP_INCOME`<br> `PROPERTY_OWNERSHIP`<br> `INVESTMENT_HOLDINGS_RETURNS`<br> `GIFTS_INHERITANCE`<br> `CASH_SAVINGS`<br> `OTHERS`",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "otherSourceOfFunds": {
+                        "type": "string",
+                        "description": "*Required field if `sourceOfFunds` includes `OTHERS`<br>Free text."
+                      },
+                      "directors": {
+                        "type": "array",
+                        "items": {
+                          "properties": {
+                            "firstName": {
+                              "type": "string",
+                              "description": "Max 191 chars.<br>Regex: `/^\\s*.{1,191}\\s*$/`"
+                            },
+                            "middleName": {
+                              "type": "string",
+                              "description": "Max 191 chars.<br>Regex: `/^\\s*.{1,191}\\s*$/`"
+                            },
+                            "lastName": {
+                              "type": "string",
+                              "description": "Max 191 chars.<br>Regex: `/^\\s*.{1,191}\\s*$/`"
+                            },
+                            "nativeName": {
+                              "type": "string",
+                              "description": "Regex: `/^\\s*.{1,191}\\s*$/`"
+                            },
+                            "dateOfBirth": {
+                              "type": "string",
+                              "description": "Director’s date of birth in `yyyy-MM-dd` format."
+                            },
+                            "registrationId": {
+                              "type": "string",
+                              "description": "4-20 alphanumeric chars.<br>Regex: `/\\A[a-zA-Z0-9]{4,20}\\z/`"
+                            },
+                            "registrationIdType": {
+                              "type": "string",
+                              "description": "`passport` / `identity_card`"
+                            },
+                            "registrationIdCountry": {
+                              "type": "string",
+                              "description": "2 digit ISO country code - https://www.iban.com/country-codes"
+                            },
+                            "identityDocuments": {
+                              "type": "object",
+                              "description": "ID or Passport - Coloured, contains nationality, not expired",
+                              "properties": {
+                                "passport": {
+                                  "type": "string",
+                                  "description": "Required field if `directors.[].registrationIdType` is `passport`<br><br>File link Passport(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                                },
+                                "idFront": {
+                                  "type": "string",
+                                  "description": "Required field if `directors.[].registrationIdType` is `identity_card`<br><br>File link ID(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                                },
+                                "idBack": {
+                                  "type": "string",
+                                  "description": "Required field if `directors.[].registrationIdType` is `identity_card`<br><br>File link ID(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                                }
+                              }
+                            },
+                            "nationality": {
+                              "type": "string",
+                              "description": "2 digit ISO country code - https://www.iban.com/country-codes"
+                            },
+                            "countryOfResidence": {
+                              "type": "string",
+                              "description": "2 digit ISO country code - https://www.iban.com/country-codes <br>Cannot be in the list of countries not accepted, Refer to Other Info > Countries Not Accepted"
+                            }
+                          },
+                          "required": [
+                            "firstName",
+                            "lastName",
+                            "dateOfBirth",
+                            "registrationId",
+                            "registrationIdType",
+                            "registrationIdCountry",
+                            "nationality",
+                            "countryOfResidence"
+                          ],
+                          "type": "object"
+                        }
+                      },
+                      "beneficialOwners": {
+                        "type": "array",
+                        "description": "Pass in all beneficial owners for the business",
+                        "items": {
+                          "properties": {
+                            "firstName": {
+                              "type": "string",
+                              "description": "Max 191 chars.<br>Regex: `/^\\s*.{1,191}\\s*$/`"
+                            },
+                            "middleName": {
+                              "type": "string",
+                              "description": "Max 191 chars.<br>Regex: `/^\\s*.{1,191}\\s*$/`"
+                            },
+                            "lastName": {
+                              "type": "string",
+                              "description": "Max 191 chars.<br>Regex: `/^\\s*.{1,191}\\s*$/`"
+                            },
+                            "nativeName": {
+                              "type": "string",
+                              "description": "Regex: `/^\\s*.{1,191}\\s*$/`"
+                            },
+                            "dateOfBirth": {
+                              "type": "string",
+                              "description": "BO’s date of birth `yyyy-MM-dd` format"
+                            },
+                            "registrationId": {
+                              "type": "string",
+                              "description": "4-20 alphanumeric chars.<br>Regex: `/\\A[a-zA-Z0-9]{4,20}\\z/`"
+                            },
+                            "registrationIdType": {
+                              "type": "string",
+                              "description": "`passport` / `identity_card`"
+                            },
+                            "registrationIdCountry": {
+                              "type": "string",
+                              "description": "2 digit ISO country code - https://www.iban.com/country-codes <br>Cannot be in the list of countries not accepted, Refer to Other Info > Countries Not Accepted"
+                            },
+                            "identityDocuments": {
+                              "type": "object",
+                              "description": "ID or Passport - Coloured, contains nationality, not expired",
+                              "properties": {
+                                "passport": {
+                                  "type": "string",
+                                  "description": "Required field if `directors.[].registrationIdType` is `passport`<br><br>File link Passport(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                                },
+                                "idFront": {
+                                  "type": "string",
+                                  "description": "Required field if `directors.[].registrationIdType` is `identity_card`<br><br>File link ID(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                                },
+                                "idBack": {
+                                  "type": "string",
+                                  "description": "Required field if `directors.[].registrationIdType` is `identity_card`<br><br>File link ID(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                                }
+                              }
+                            },
+                            "address": {
+                              "type": "object",
+                              "description": "Wrap `street`, `city`, `country` etc",
+                              "required": [
+                                "street",
+                                "city",
+                                "state",
+                                "country"
+                              ],
+                              "properties": {
+                                "street": {
+                                  "type": "string",
+                                  "description": "Regex: `/^(?=.{1,180}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
+                                },
+                                "city": {
+                                  "type": "string",
+                                  "description": "Regex: `/^(?=.{1,20}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
+                                },
+                                "postalCode": {
+                                  "type": "string",
+                                  "description": "Regex: `/^[A-Za-z0-9\\- ]{2,20}$/`"
+                                },
+                                "state": {
+                                  "type": "string",
+                                  "description": "Regex: `/^(?=.{1,15}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
+                                },
+                                "country": {
+                                  "type": "string",
+                                  "description": "2 or 3 digit ISO country code or ISO short name - https://www.iban.com/country-codes <br>Will be standardized to 2 digit ISO country code before storing."
+                                }
+                              }
+                            },
+                            "proofOfAddress": {
+                              "type": "string",
+                              "description": "File link for ID(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`<br><br>Proof of Address - Not dated more than 6 months (examples include utility bill, bank statement, government-issued document), if so, acceptable to provide an updated document within 30 business days after account opening."
+                            },
+                            "nationality": {
+                              "type": "string",
+                              "description": "2 digit ISO country code - https://www.iban.com/country-codes <br>Cannot be in the list of countries not accepted, Refer to Other Info > Countries Not Accepted"
+                            },
+                            "countryOfResidence": {
+                              "type": "string",
+                              "description": "2 digit ISO country code - https://www.iban.com/country-codes <br>Cannot be in the list of countries not accepted, Refer to Other Info > Countries Not Accepted"
+                            }
+                          },
+                          "required": [
+                            "firstName",
+                            "lastName",
+                            "dateOfBirth",
+                            "registrationId",
+                            "registrationIdType",
+                            "registrationIdCountry",
+                            "proofOfAddress",
+                            "nationality",
+                            "countryOfResidence"
+                          ],
+                          "type": "object"
+                        }
+                      },
+                      "trader": {
+                        "type": "object",
+                        "description": "Pass in the main trader’s information.",
+                        "required": [
+                          "firstName",
+                          "lastName",
+                          "dateOfBirth",
+                          "registrationId",
+                          "registrationIdType",
+                          "registrationIdCountry",
+                          "proofOfAddress",
+                          "selfie",
+                          "livenessSnapshot",
+                          "livenessResult",
+                          "nationality",
+                          "countryOfResidence"
+                        ],
+                        "properties": {
+                          "firstName": {
+                            "type": "string",
+                            "description": "Max 191 chars.<br>Regex: `/^\\s*.{1,191}\\s*$/`"
+                          },
+                          "middleName": {
+                            "type": "string",
+                            "description": "Max 191 chars.<br>Regex: `/^\\s*.{1,191}\\s*$/`"
+                          },
+                          "lastName": {
+                            "type": "string",
+                            "description": "Max 191 chars.<br>Regex: `/^\\s*.{1,191}\\s*$/`"
+                          },
+                          "nativeName": {
+                            "type": "string",
+                            "description": "Regex: `/^\\s*.{1,191}\\s*$/`"
+                          },
+                          "dateOfBirth": {
+                            "type": "string",
+                            "description": "Main trader’s date of birth in `yyyy-MM-dd` format."
+                          },
+                          "registrationId": {
+                            "type": "string",
+                            "description": "4-20 alphanumeric chars.<br>Regex: `/\\A[a-zA-Z0-9]{4,20}\\z/`"
+                          },
+                          "registrationIdType": {
+                            "type": "string",
+                            "description": "`passport` / `identity_card`"
+                          },
+                          "registrationIdCountry": {
+                            "type": "string",
+                            "description": "2 digit ISO country code - https://www.iban.com/country-codes"
+                          },
+                          "identityDocuments": {
+                            "type": "object",
+                            "description": "ID or Passport - Coloured, contains nationality, not expired.",
+                            "properties": {
+                              "passport": {
+                                "type": "string",
+                                "description": "Required field if `directors.[].registrationIdType` is `passport`<br><br>File link Passport(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                              },
+                              "idFront": {
+                                "type": "string",
+                                "description": "Required field if `directors.[].registrationIdType` is `identity_card`<br><br>File link ID(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                              },
+                              "idBack": {
+                                "type": "string",
+                                "description": "Required field if `directors.[].registrationIdType` is `identity_card`<br><br>File link ID(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                              }
+                            }
+                          },
+                          "address": {
+                            "type": "object",
+                            "description": "Wrap `street`, `city`, `country` etc.",
+                            "required": [
+                              "street",
+                              "city",
+                              "state",
+                              "country"
+                            ],
+                            "properties": {
+                              "street": {
+                                "type": "string",
+                                "description": "Regex: `/^(?=.{1,180}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
+                              },
+                              "city": {
+                                "type": "string",
+                                "description": "Regex: `/^(?=.{1,20}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
+                              },
+                              "postalCode": {
+                                "type": "string",
+                                "description": "Regex: `/^[A-Za-z0-9\\- ]{2,20}$/`"
+                              },
+                              "state": {
+                                "type": "string",
+                                "description": "Regex: `/^(?=.{1,15}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
+                              },
+                              "country": {
+                                "type": "string",
+                                "description": "2 or 3 digit ISO country code or ISO short name - https://www.iban.com/country-codes <br><br>Will be standardized to 2 digit ISO country code before storing<br><br>Cannot be in the list of countries not accepted, Refer to Other Info > Countries Not Accepted"
+                              }
+                            }
+                          },
+                          "proofOfAddress": {
+                            "type": "string",
+                            "description": "File link for ID(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                          },
+                          "selfie": {
+                            "type": "string",
+                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                          },
+                          "livenessSnapshot": {
+                            "type": "string",
+                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                          },
+                          "livenessResult": {
+                            "type": "boolean",
+                            "description": "`true` / `false`"
+                          },
+                          "nationality": {
+                            "type": "string",
+                            "description": "2 digit ISO country code - https://www.iban.com/country-codes"
+                          },
+                          "countryOfResidence": {
+                            "type": "string",
+                            "description": "2 digit ISO country code - https://www.iban.com/country-codes <br><br>Cannot be in the list of countries not accepted, Refer to Other Info > Countries Not Accepted"
+                          }
+                        }
+                      },
+                      "documents": {
+                        "type": "object",
+                        "required": [
+                          "certificateOfIncorporation",
+                          "memorandum",
+                          "registerOfDirectors",
+                          "registerOfMembers",
+                          "proofOfAddress",
+                          "boardResolution"
+                        ],
+                        "properties": {
+                          "certificateOfIncorporation": {
+                            "type": "string",
+                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                          },
+                          "memorandum": {
+                            "type": "string",
+                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                          },
+                          "registerOfDirectors": {
+                            "type": "string",
+                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                          },
+                          "registerOfMembers": {
+                            "type": "string",
+                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                          },
+                          "amlQuestionnaire": {
+                            "type": "string",
+                            "description": "If entity operates licensable activities (e.g. licensed financial institutions), AML Questionnaire is required.<br><br>If inputs tend to be vague or do not clearly explain sufficient AML policies in adherence to international/Singapore regulations, we will need to clarify.<br><br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                          },
+                          "sanctionQuestionnaire": {
+                            "type": "string",
+                            "description": "If entity operates in sanctioned countries, we would require % revenue generation to understand the exposure to the sanctioned countries. If below 10%, it will be acceptable.<br><br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                          },
+                          "operatingLicense": {
+                            "type": "string",
+                            "description": "If entity operates licensable activities (e.g. licensed financial institutions), proof of license/ exemption is required.<br><br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                          },
+                          "proofOfAddress": {
+                            "type": "string",
+                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                          },
+                          "boardResolution": {
+                            "type": "string",
+                            "description": "Must be signed off by Director.<br><br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                          },
+                          "declaration": {
+                            "type": "string",
+                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                          }
+                        }
+                      },
+                      "licensingStatus": {
+                        "type": "string",
+                        "description": "Accepts: `FULLY_LICENSED`, `EXEMPT_FROM_LICENSING`, `IN_PRINCIPLE_APPROVAL_GRANTED`, `LICENSE_APPLICATION_IN_PROGRESS`, `NOT_SUBJECTED_TO_LICENSING_REQUIREMENTS`<br><br>`documents.operatingLicense` field becomes mandatory if any option is selected apart from `NOT_SUBJECTED_TO_LICENSING_REQUIREMENTS` "
+                      },
+                      "purposeOfAccount": {
+                        "type": "string",
+                        "description": "Declared purpose of the account.<br>Accepts only `INVESTMENT`, `TRADING`, `REMITTANCES`, `TREASURY MANAGEMENT`, `BUSINESS USAGE` and `OTHERS`"
+                      },
+                      "otherPurposeOfAccount": {
+                        "type": "string",
+                        "description": "Required if `OTHERS` is selected for purposeOfAccount field."
+                      }
+                    },
+                    "title": "Business CP+",
+                    "description": "Schema for creating a Business CP+ profile."
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "customerName",
+                      "registrationType",
+                      "registrationId",
+                      "registrationIdType",
+                      "registrationIdCountry",
+                      "dateOfBirth",
+                      "nationality",
+                      "address"
+                    ],
+                    "properties": {
+                      "customerName": {
+                        "type": "string",
+                        "description": "Customer's full name (50 alphanumeric with spaces)<br>Regex: `/^(?=.{1,50}$)[a-zA-Z0-9 ]+$/`"
+                      },
+                      "registrationType": {
+                        "type": "string",
+                        "description": "Customer's registration type<br>Please input `personal` only"
+                      },
+                      "registrationIdCountry": {
+                        "type": "string",
+                        "description": "The country that issues the ID (2 digit ISO country code) from https://www.iban.com/country-codes <br>Regex: `/^[A-Z]{2}$/`"
+                      },
+                      "registrationIdType": {
+                        "type": "string",
+                        "description": "Customer's registration ID type<br>Accepts either `passport` or `identity_card`"
+                      },
+                      "registrationId": {
+                        "type": "string",
+                        "description": "NRIC/Passport No. (4 to 35 alphanumeric)<br>Regex: `%r{\\A[a-zA-Z0-9/\\-?:().,'+ ]{4,35}\\z}`"
+                      },
+                      "dateOfBirth": {
+                        "type": "string",
+                        "description": "Customer's date of birth (YYYY-MM-DD)<br>Regex: `/^\\d{4}-\\d{2}-\\d{2}$/`",
+                        "format": "date"
+                      },
                       "nationality": {
                         "type": "string",
-                        "description": "2 digit ISO country code - https://www.iban.com/country-codes"
+                        "description": "Customer's nationality (Country Name or 2/3 digit ISO country code) from https://www.iban.com/country-codes <br>Regex: `/^\\s*.{1,191}\\s*$/`"
+                      },
+                      "gender": {
+                        "type": "string",
+                        "description": "Customer's gender. Must be either `MALE` or `FEMALE`."
+                      },
+                      "email": {
+                        "type": "string",
+                        "description": "Customer's email address<br>Regex: `` %r{^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-z0-9-]+\\.)+[a-z]{2,24}$}i ``"
+                      },
+                      "phoneNo": {
+                        "type": "string",
+                        "description": "Customer's phone number<br>Regex: `/^\\+?[1-9]\\d{0,3}[\\s\\-]?\\(?\\d{1,4}\\)?[\\s\\-]?\\d{1,4}[\\s\\-]?\\d{1,4}[\\s\\-]?\\d{0,4}$/`"
+                      },
+                      "address": {
+                        "type": "object",
+                        "description": "Customer's residency address",
+                        "properties": {
+                          "street": {
+                            "type": "string",
+                            "description": "Regex: `/^(?=.{1,180}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
+                          },
+                          "city": {
+                            "type": "string",
+                            "description": "Regex: `/^(?=.{1,20}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
+                          },
+                          "postalCode": {
+                            "type": "string",
+                            "description": "Regex: `/^[A-Za-z0-9\\- ]{2,20}$/`"
+                          },
+                          "state": {
+                            "type": "string",
+                            "description": "Regex: `/^(?=.{1,15}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
+                          },
+                          "country": {
+                            "type": "string",
+                            "description": "Must be an alpha-2 country code. Please refer to the following document for the accepted values: https://www.iban.com/country-codes<br>Regex: `/^[A-Z]{2}$/`"
+                          }
+                        },
+                        "required": [
+                          "street",
+                          "country",
+                          "city"
+                        ]
+                      },
+                      "customerNativeName": {
+                        "type": "string",
+                        "description": "Must be within 191 characters <br>Regex: `/^\\s*.{1,191}\\s*$/`"
+                      }
+                    },
+                    "title": "Personal CP",
+                    "description": "Schema for creating a Personal CP profile."
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "customerFirstName",
+                      "customerLastName",
+                      "address",
+                      "countryOfResidence",
+                      "dateOfBirth",
+                      "email",
+                      "gender",
+                      "nationality",
+                      "registrationId",
+                      "registrationType",
+                      "registrationIdCountry",
+                      "registrationIdType",
+                      "businessIndustry",
+                      "occupation",
+                      "expectedAnnualTransactionAmount",
+                      "expectedTransactionSize",
+                      "expectedTransactionFrequency",
+                      "annualIncome",
+                      "identityDocuments",
+                      "totalWealth",
+                      "ipAddresses",
+                      "purposeOfAccount"
+                    ],
+                    "properties": {
+                      "customerName": {
+                        "type": "string",
+                        "description": "Customer's full name (50 alphanumeric with spaces)<br>Regex: `/^(?=.{1,50}$)[a-zA-Z0-9 ]+$/`"
+                      },
+                      "customerFirstName": {
+                        "type": "string",
+                        "description": "Customer's first name(Must be within 191 characters)<br>Regex: `/^\\s*.{1,191}\\s*$/`"
+                      },
+                      "customerLastName": {
+                        "type": "string",
+                        "description": "Customer's last name(Must be within 191 characters)<br>Regex: `/^\\s*.{1,191}\\s*$/`"
+                      },
+                      "customerNativeName": {
+                        "type": "string",
+                        "description": "Must be within 191 characters<br>Regex: `/^\\s*.{1,191}\\s*$/`"
+                      },
+                      "phoneNo": {
+                        "type": "string",
+                        "description": "Must follow international format with country code<br>Regex: `/^\\+?[1-9]\\d{0,3}[\\s\\-]?\\(?\\d{1,4}\\)?[\\s\\-]?\\d{1,4}[\\s\\-]?\\d{1,4}[\\s\\-]?\\d{0,4}$/`"
+                      },
+                      "address": {
+                        "type": "object",
+                        "description": "Customer's residency address",
+                        "required": [
+                          "country",
+                          "city",
+                          "street"
+                        ],
+                        "properties": {
+                          "street": {
+                            "type": "string",
+                            "description": "Regex: `/^\\s*.{1,180}\\s*$/`"
+                          },
+                          "city": {
+                            "type": "string",
+                            "description": "Regex: `/\\A[a-zA-ZÀ-ÿ'.,\\-\\s()]{1,100}\\z/`"
+                          },
+                          "postalCode": {
+                            "type": "string",
+                            "description": "Regex: `/^[A-Za-z0-9\\- ]{2,20}$/`"
+                          },
+                          "state": {
+                            "type": "string",
+                            "description": "Regex: `%r{^(?=.{1,15}$)[a-zA-Z0-9/\\-?:().,' +]+$}`"
+                          },
+                          "country": {
+                            "type": "string",
+                            "description": "Must be an alpha-2 country code. Please refer to the following document for the accepted values: https://www.iban.com/country-codes <br>Regex: `/^[A-Z]{2}$/`"
+                          }
+                        }
                       },
                       "countryOfResidence": {
                         "type": "string",
-                        "description": "2 digit ISO country code - https://www.iban.com/country-codes <br><br>Cannot be in the list of countries not accepted, Refer to Other Info > Countries Not Accepted"
+                        "description": "Customer's country of residence reflected in ID(Country Name or 2/3 digit ISO country code) from https://www.iban.com/country-codes <br>Regex: `/^[A-Z]{2}$/`"
+                      },
+                      "dateOfBirth": {
+                        "type": "string",
+                        "description": "Customer's date of birth (YYYY-MM-DD) Regex: `/^\\d{4}-\\d{2}-\\d{2}$/`",
+                        "format": "date"
+                      },
+                      "email": {
+                        "type": "string",
+                        "description": "Customer's email address Regex: `` %r{^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-z0-9-]+\\.)+[a-z]{2,24}$}i ``"
+                      },
+                      "gender": {
+                        "type": "string",
+                        "description": "Customer's gender. Must be either `MALE` or `FEMALE`."
+                      },
+                      "nationality": {
+                        "type": "string",
+                        "description": "Customer's nationality (Country Name or 2/3 digit ISO country code) from https://www.iban.com/country-codes <br>Regex: `/^\\s*.{1,191}\\s*$/`"
+                      },
+                      "registrationId": {
+                        "type": "string",
+                        "description": "Must be within 4-35 characters<br>Regex: `%r{\\A[a-zA-Z0-9/\\-?:().,'+ ]{4,35}\\z}`"
+                      },
+                      "registrationType": {
+                        "type": "string",
+                        "description": "Please input `personal` only"
+                      },
+                      "registrationIdCountry": {
+                        "type": "string",
+                        "description": "Customer's registration ID country (2 digit ISO country code) from https://www.iban.com/country-codes <br>Regex: `/^[A-Z]{2}$/`"
+                      },
+                      "registrationIdType": {
+                        "type": "string",
+                        "description": "Accepts either `passport` or `identity_card`"
+                      },
+                      "registrationIdExpiryDate": {
+                        "type": "string",
+                        "description": "Must be in 'yyyy-MM-dd' format<br>Regex: `/^\\d{4}-\\d{2}-\\d{2}$/`",
+                        "format": "date"
+                      },
+                      "businessIndustry": {
+                        "type": "string",
+                        "description": "Please input 1 value only<br>Refer to \"Business Industry Accepted Values\" code block for the list of accepted values"
+                      },
+                      "occupation": {
+                        "type": "string",
+                        "description": "Please input 1 value only<br>Refer to \"Occupation Accepted Values\" code block for the list of accepted values"
+                      },
+                      "expectedAnnualTransactionAmount": {
+                        "type": "string",
+                        "description": "Please input 1 value only<br>Accepted values: `0_TO_1000`, `1001_TO_5000`, `5001_TO_10000`, `10001_TO_30000`, `GT_30000`"
+                      },
+                      "expectedTransactionSize": {
+                        "type": "string",
+                        "description": "Please input 1 value only<br>Accepted values: `0_TO_1000`, `1001_TO_5000`, `5001_TO_10000`, `10001_TO_20000`, `GT_20000`"
+                      },
+                      "expectedTransactionFrequency": {
+                        "type": "string",
+                        "description": "Please input 1 value only<br>Accepted values: `AT_LEAST_ONCE_EVERY_2_WEEKS`, `AT_LEAST_ONCE_A_MONTH`, `AT_LEAST_ONCE_EVERY_6_MONTHS`, `AT_LEAST_ONCE_A_YEAR`"
+                      },
+                      "annualIncome": {
+                        "type": "string",
+                        "description": "Please input 1 value only<br>Accepted values: `0_TO_30000`, `30001_TO_50000`, `50001_TO_100000`, `100001_TO_500000`, `GT_500000`"
+                      },
+                      "identityDocuments": {
+                        "type": "object",
+                        "required": [
+                          "proofOfAddress",
+                          "livenessSnapshot",
+                          "livenessResult"
+                        ],
+                        "properties": {
+                          "selfie": {
+                            "type": "string",
+                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                          },
+                          "proofOfAddress": {
+                            "type": "string",
+                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                          },
+                          "passport": {
+                            "type": "string",
+                            "description": "Required if `registrationIdType` is `passport`<br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                          },
+                          "idFront": {
+                            "type": "string",
+                            "description": "Required if `registrationIdType` is `identity_card`<br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                          },
+                          "idBack": {
+                            "type": "string",
+                            "description": "Required if `registrationIdType` is `identity_card`<br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                          },
+                          "livenessSnapshot": {
+                            "type": "string",
+                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                          },
+                          "livenessResult": {
+                            "type": "boolean",
+                            "description": "`true` or `false` only<br>Regex: `/^(true|false|1|0)$/i`"
+                          }
+                        }
+                      },
+                      "totalWealth": {
+                        "type": "string",
+                        "description": "Accepted values: `0_TO_500000`, `500001_TO_2000000`, `2000001_TO_5000000`, `5000001_TO_10000000`, `GT_10000000`"
+                      },
+                      "sourceOfWealth": {
+                        "type": "object",
+                        "properties": {
+                          "businessOwnership": {
+                            "type": "object",
+                            "properties": {
+                              "document": {
+                                "type": "string",
+                                "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                              }
+                            }
+                          },
+                          "employmentIncome": {
+                            "type": "object",
+                            "properties": {
+                              "document": {
+                                "type": "string",
+                                "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                              }
+                            }
+                          },
+                          "propertyOwnership": {
+                            "type": "object",
+                            "properties": {
+                              "document": {
+                                "type": "string",
+                                "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                              }
+                            }
+                          },
+                          "investmentReturns": {
+                            "type": "object",
+                            "properties": {
+                              "document": {
+                                "type": "string",
+                                "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                              }
+                            }
+                          },
+                          "lotteryWinnings": {
+                            "type": "object",
+                            "properties": {
+                              "document": {
+                                "type": "string",
+                                "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                              }
+                            }
+                          },
+                          "inheritanceGifts": {
+                            "type": "object",
+                            "properties": {
+                              "document": {
+                                "type": "string",
+                                "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                              }
+                            }
+                          },
+                          "cashSavings": {
+                            "type": "object",
+                            "properties": {
+                              "document": {
+                                "type": "string",
+                                "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                              }
+                            }
+                          },
+                          "others": {
+                            "type": "object",
+                            "properties": {
+                              "details": {
+                                "type": "string",
+                                "description": "Required if others object is used<br>Must be between 1 and 255 characters<br>Regex: `/^\\s*.{1,255}\\s*$/`"
+                              },
+                              "document": {
+                                "type": "string",
+                                "description": "Required if others object is used<br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "ipAddresses": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "Example: [\"8.8.8.8\"]"
+                      },
+                      "purposeOfAccount": {
+                        "type": "string",
+                        "description": "Accepts only `INVESTMENT`, `TRADING`, `REMITTANCES` and `OTHERS`"
+                      },
+                      "otherPurposeOfAccount": {
+                        "type": "string",
+                        "description": "Required if `OTHERS` is selected for purposeOfAccount field."
                       }
-                    }
+                    },
+                    "title": "Personal CP+",
+                    "description": "Schema for creating a Personal CP+ profile."
                   },
-                  "documents": {
+                  {
                     "type": "object",
                     "required": [
-                      "certificateOfIncorporation",
-                      "memorandum",
-                      "registerOfDirectors",
-                      "registerOfMembers",
-                      "proofOfAddress",
-                      "boardResolution"
+                      "customerName",
+                      "registrationType",
+                      "registrationId",
+                      "registrationIdCountry",
+                      "registrationIdType",
+                      "placeOfBiz",
+                      "placeOfBizCountry",
+                      "countryOfIncorporation",
+                      "dateOfIncorporation",
+                      "address"
                     ],
                     "properties": {
-                      "certificateOfIncorporation": {
+                      "customerName": {
                         "type": "string",
-                        "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                        "description": "Customer's full name (50 alphanumeric with spaces)<br>Regex: `/^(?=.{1,50}$)[a-zA-Z0-9 ]+$/`"
                       },
-                      "memorandum": {
+                      "registrationType": {
                         "type": "string",
-                        "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                        "description": "Customer's registration type<br>Please input `business` only"
                       },
-                      "registerOfDirectors": {
+                      "registrationIdCountry": {
                         "type": "string",
-                        "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                        "description": "The country that issues the ID(2 digit ISO country code) from https://www.iban.com/country-codes <br>Regex: `/^[A-Z]{2}$/`"
                       },
-                      "registerOfMembers": {
+                      "registrationIdType": {
                         "type": "string",
-                        "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                        "description": "Customer's registration ID type<br>Only accepts `business_reg_no`"
                       },
-                      "amlQuestionnaire": {
+                      "registrationId": {
                         "type": "string",
-                        "description": "If entity operates licensable activities (e.g. licensed financial institutions), AML Questionnaire is required.<br><br>If inputs tend to be vague or do not clearly explain sufficient AML policies in adherence to international/Singapore regulations, we will need to clarify.<br><br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                        "description": "UEN (4 to 35 alphanumeric)<br>Regex: `%r{\\A[a-zA-Z0-9/\\-?:().,'+ ]{4,35}\\z}`"
                       },
-                      "sanctionQuestionnaire": {
+                      "placeOfBiz": {
                         "type": "string",
-                        "description": "If entity operates in sanctioned countries, we would require % revenue generation to understand the exposure to the sanctioned countries. If below 10%, it will be acceptable.<br><br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                        "description": "Customer's principal place of business if it is different from registered address. Otherwise, provide registered address.<br>Regex: `/^(?=.{1,255}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
                       },
-                      "operatingLicense": {
+                      "placeOfBizCountry": {
                         "type": "string",
-                        "description": "If entity operates licensable activities (e.g. licensed financial institutions), proof of license/ exemption is required.<br><br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                        "description": "Customer's principal place of business country (2 digit ISO country code) from https://www.iban.com/country-codes <br>Please provide if this is different from registered address<br>Regex: `/^[A-Z]{2}$/`"
                       },
-                      "proofOfAddress": {
+                      "countryOfIncorporation": {
                         "type": "string",
-                        "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                        "description": "This is the country that incorporates the business (2 digit ISO country code) from https://www.iban.com/country-codes <br>Regex: `/^[A-Z]{2}$/`"
                       },
-                      "boardResolution": {
+                      "dateOfIncorporation": {
                         "type": "string",
-                        "description": "Must be signed off by Director.<br><br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                        "description": "Date must be in 'YYYY-MM-DD' format<br>Regex: `/^\\d{4}-\\d{2}-\\d{2}$/`",
+                        "format": "date"
                       },
-                      "declaration": {
-                        "type": "string",
-                        "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br><br>Regex: `/^(https?:\\/\\/)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}0-9]{1,256}\\.)+[-\\p{L}]{2,6}))(:[0-9]+)?([\\/?].*)?$/i`"
+                      "address": {
+                        "type": "object",
+                        "description": "Customer's operating address",
+                        "properties": {
+                          "street": {
+                            "type": "string",
+                            "description": "Regex: `/^(?=.{1,180}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
+                          },
+                          "city": {
+                            "type": "string",
+                            "description": "Regex: `/^(?=.{1,20}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
+                          },
+                          "postalCode": {
+                            "type": "string",
+                            "description": "Regex: `/^[A-Za-z0-9\\- ]{2,20}$/`"
+                          },
+                          "state": {
+                            "type": "string",
+                            "description": "Regex: `/^(?=.{1,15}$)[a-zA-Z0-9\\-?:().,' +]+$/`"
+                          },
+                          "country": {
+                            "type": "string",
+                            "description": "Must be an alpha-2 country code. Please refer to the following document for the accepted values: https://www.iban.com/country-codes <br>Regex: `/^[A-Z]{2}$/`"
+                          }
+                        },
+                        "required": [
+                          "country",
+                          "city",
+                          "street"
+                        ]
                       }
-                    }
-                  },
-                  "licensingStatus": {
-                    "type": "string",
-                    "description": "Accepts: `FULLY_LICENSED`, `EXEMPT_FROM_LICENSING`, `IN_PRINCIPLE_APPROVAL_GRANTED`, `LICENSE_APPLICATION_IN_PROGRESS`, `NOT_SUBJECTED_TO_LICENSING_REQUIREMENTS`<br><br>`documents.operatingLicense` field becomes mandatory if any option is selected apart from `NOT_SUBJECTED_TO_LICENSING_REQUIREMENTS` "
-                  },
-                  "purposeOfAccount": {
-                    "type": "string",
-                    "description": "Declared purpose of the account.<br>Accepts only `INVESTMENT`, `TRADING`, `REMITTANCES`, `TREASURY MANAGEMENT`, `BUSINESS USAGE` and `OTHERS`"
-                  },
-                  "otherPurposeOfAccount": {
-                    "type": "string",
-                    "description": "Required if `OTHERS` is selected for purposeOfAccount field."
+                    },
+                    "title": "Business CP",
+                    "description": "Schema for creating a Business CP profile."
                   }
-                }
+                ],
+                "discriminator": {
+                  "propertyName": "registrationType",
+                  "mapping": {
+                    "personal": "#/components/schemas/PersonalCP",
+                    "business": "#/components/schemas/BusinessCP"
+                  }
+                },
+                "description": "Create a customer profile. The schema varies by profile type (Personal CP, Business CP, Personal CP+, Business CP+). The registrationType field determines whether this is a personal or business profile. The set of required fields determines whether it is CP or CP+."
               },
               "examples": {
-                "Sample Request": {
+                "Business CP+ - Sample Request": {
                   "value": {
                     "customerName": "ABC Pte Ltd",
                     "registrationType": "business",
@@ -1266,7 +1746,121 @@
                       "proofOfAddress": "https://xys.com/download-link"
                     }
                   },
-                  "summary": "Sample Request"
+                  "summary": "Business CP+"
+                },
+                "Personal CP - Sample Request": {
+                  "value": {
+                    "customerName": "Jane Doe",
+                    "registrationType": "personal",
+                    "registrationIdType": "identity_card",
+                    "registrationIdCountry": "SG",
+                    "registrationId": "S1234567A",
+                    "countryOfResidence": "SG",
+                    "dateOfBirth": "1990-01-21",
+                    "nationality": "SINGAPOREAN",
+                    "customerNativeName": "Jane",
+                    "gender": "FEMALE",
+                    "email": "jane.doe.test@example.com",
+                    "phoneNo": "6591234567",
+                    "address": {
+                      "street": "100 Orchard Road, Unit #01-01",
+                      "city": "Singapore",
+                      "postalCode": "238840",
+                      "state": "Singapore",
+                      "country": "SG"
+                    }
+                  },
+                  "summary": "Personal CP"
+                },
+                "Personal CP+ - Sample Request": {
+                  "summary": "Personal CP+",
+                  "value": {
+                    "customerName": "MINGMING ZHOU",
+                    "customerFirstName": "MINGMING",
+                    "customerLastName": "ZHOU",
+                    "email": "zhou@gmail.com",
+                    "address": {
+                      "street": "ROOM 503, NO. 3, GUYAN ERLI XIANG 'AN DISTRICT",
+                      "city": "XIAMEN",
+                      "postalCode": "100020",
+                      "state": "XIAMEN",
+                      "country": "CN"
+                    },
+                    "countryOfResidence": "CN",
+                    "dateOfBirth": "1987-07-30",
+                    "gender": "MALE",
+                    "nationality": "CN",
+                    "registrationId": "EK42900532",
+                    "registrationType": "personal",
+                    "registrationIdCountry": "CN",
+                    "registrationIdType": "passport",
+                    "registrationIdExpiryDate": "2033-05-09",
+                    "businessIndustry": "IT_RELATED",
+                    "occupation": "SENIOR_ASSOCIATE_OR_SENIOR_EXECUTIVE",
+                    "expectedAnnualTransactionAmount": "5001_TO_10000",
+                    "expectedTransactionSize": "1001_TO_5000",
+                    "expectedTransactionFrequency": "AT_LEAST_ONCE_EVERY_2_WEEKS",
+                    "annualIncome": "30001_TO_50000",
+                    "totalWealth": "500001_TO_2000000",
+                    "sourceOfWealth": {
+                      "businessOwnership": {
+                        "document": "https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg"
+                      },
+                      "employmentIncome": {
+                        "document": "https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg"
+                      },
+                      "propertyOwnership": {
+                        "document": "https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg"
+                      },
+                      "investmentReturns": {
+                        "document": "https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg"
+                      },
+                      "lotteryWinnings": {
+                        "document": "https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg"
+                      },
+                      "inheritanceGifts": {
+                        "document": "https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg"
+                      },
+                      "cashSavings": {
+                        "document": "https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg"
+                      },
+                      "others": {
+                        "details": "test",
+                        "document": "https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg"
+                      }
+                    },
+                    "identityDocuments": {
+                      "selfie": "https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg",
+                      "proofOfAddress": "https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg",
+                      "passport": "https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg",
+                      "idFront": "https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg",
+                      "idBack": "https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg",
+                      "livenessSnapshot": "https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg",
+                      "livenessResult": true
+                    },
+                    "ipAddresses": []
+                  }
+                },
+                "Business CP - Sample Request": {
+                  "summary": "Business CP",
+                  "value": {
+                    "customerName": "Acme Fintech Pte Ltd",
+                    "registrationType": "business",
+                    "registrationId": "201411660R",
+                    "registrationIdType": "business_reg_no",
+                    "countryOfIncorporation": "SG",
+                    "dateOfIncorporation": "2014-06-05",
+                    "registrationIdCountry": "SG",
+                    "placeOfBiz": "100 Industry Drive, Singapore 123456",
+                    "placeOfBizCountry": "SG",
+                    "address": {
+                      "street": "100 Industry Drive, #01-01",
+                      "city": "Singapore",
+                      "postalCode": "123456",
+                      "state": "Singapore",
+                      "country": "SG"
+                    }
+                  }
                 }
               }
             }
@@ -1278,7 +1872,7 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "Customer Profile Returned": {
+                  "Business CP+ - Customer Profile Returned": {
                     "value": {
                       "data": {
                         "id": "customer_profile_91689f61-ab6f-4126-af18-35a906046d72",
@@ -1453,7 +2047,20 @@
                           "updatedAt": "2025-01-16T09:52:52Z"
                         }
                       }
-                    }
+                    },
+                    "summary": "Business CP+"
+                  },
+                  "Personal CP - Personal Customer Profile Created": {
+                    "value": "{\n  \"data\": {\n    \"id\": \"customer_profile_08d5ffe5-8a02-4dc2-aabb-9057b8ab3c65\",\n    \"type\": \"customer_profile\",\n    \"attributes\": {\n      \"customerName\": \"John Ng\",\n      \"registrationType\": \"personal\",\n      \"registrationIdType\": \"identity_card\",\n      \"registrationIdCountry\": \"SG\",\n      \"registrationId\": \"S1234567J\",\n      \"address\": {\n        \"street\": \"10 Albert Street\",\n        \"city\": \"Singapore\",\n        \"postalCode\": \"000000\",\n        \"state\": \"Singapore\",\n        \"country\": \"SG\"\n      },\n      \"verificationStatus\": \"verified\",\n      \"dateOfBirth\": \"1983-11-14T00:00:00.000Z\",\n      \"gender\": \"MALE\",\n      \"nationality\": \"SINGAPOREAN\",\n      \"email\": \"test@gmail.com\",\n      \"phoneNo\": 6587654321\n    }\n  }",
+                    "summary": "Personal CP"
+                  },
+                  "Personal CP+ - Result": {
+                    "value": "{\n  \"data\": {\n    \"id\": \"customer_profile_74afd98b-7d3d-4289-86a6-b57b4d3ea68f\",\n    \"type\": \"customer_profile\",\n    \"attributes\": {\n      \"customerName\": \"John Doe\",\n      \"registrationType\": \"personal\",\n      \"registrationId\": \"S120056A\",\n      \"countryOfResidence\": \"SG\",\n      \"verificationStatus\": \"pending\",\n      \"dateOfBirth\": \"2001-12-27\",\n      \"gender\": \"male\",\n      \"nationality\": \"SG\",\n      \"email\": \"john.doe@gmail.com\",\n      \"phoneNo\": \"90000000\",\n      \"address\": {\n        \"street\": \"88 STREET\",\n        \"country\": \"SG\",\n        \"city\": \"Singapore\",\n        \"postalCode\": \"4511235\",\n        \"state\": \"Singapore\"\n      },\n      \"registrationIdCountry\": \"SG\",\n      \"registrationIdExpiryDate\": \"2029-01-01\",\n      \"purposeOfAccount\": \"OTHERS\",\n\t\t\t\"otherPurposeOfAccount\": \"TEST\",\n      \"businessIndustry\": \"ADVERTISING_FIRM\",\n      \"occupation\": \"ASSOCIATE_OR_ANALYST_OR_EXECUTIVE\",\n      \"expectedAnnualTransactionAmount\": \"0_TO_1000\",\n      \"expectedTransactionSize\": \"0_TO_1000\",\n      \"expectedTransactionFrequency\": \"AT_LEAST_ONCE_EVERY_2_WEEKS\",\n      \"annualIncome\": \"30001_TO_50000\",\n      \"identityDocuments\": {\n        \"selfie\": \"https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg\",\n        \"idFront\": \"https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg\",\n        \"idBack\": \"https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg\",\n        \"passport\": \"https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg\",\n        \"proofOfAddress\": \"https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg\"\n      },\n      \"totalWealth\": \"0_TO_500000\",\n      \"ipAddresses\": [\n        \"8.8.8.8\"\n      ],\n      \"customerFirstName\": \"John\",\n      \"customerLastName\": \"Doe\",\n      \"sourceOfWealth\": {\n        \"businessOwnership\": {\n          \"document\": \"https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg\"\n        },\n        \"employmentIncome\": {\n          \"document\": \"https://previews.123rf.com/images/donets/donets1803/donets180300015/96834130-international-passport-template-with-biometric-data-identification-and-sample-of-photo-signature-and.jpg\"\n        }\n      },\n      \"createdAt\": \"2025-06-13T10:32:53Z\",\n      \"updatedAt\": \"2025-06-13T10:32:53Z\"\n    }\n  }\n",
+                    "summary": "Personal CP+"
+                  },
+                  "Business CP - Business Customer Profile Created": {
+                    "value": "{\n  \"data\": {\n    \"id\": \"customer_profile_8bcef957-74a5-4c07-bcaa-0b377c02ca13\",\n    \"type\": \"customer_profile\",\n    \"attributes\": {\n      \"customerName\": \"Xfers Pte. Ltd.\",\n      \"registrationType\": \"business\",\n      \"registrationIdType\": \"business_reg_no\",\n      \"registrationIdCountry\": \"SG\",\n      \"registrationId\": \"201411660R\",\n      \"address\": {\n        \"street\": \"10 Albert Street\",\n        \"city\": \"Singapore\",\n        \"postalCode\": \"000000\",\n        \"state\": \"Singapore\",\n        \"country\": \"SG\"\n      },\n      \"placeOfBiz\": \"10 Albert Street, 000000 Singapore\",\n      \"placeOfBizCountry\": \"SG\",\n      \"countryOfIncorporation\": \"SG\",\n      \"dateOfIncorporation\": \"2020-11-14T00:00:00.000Z\",\n      \"verificationStatus\": \"verified\"\n    }\n  }\n}",
+                    "summary": "Business CP"
                   }
                 },
                 "schema": {
@@ -1967,11 +2574,21 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "Missing Mandatory Fields": {
-                    "value": "{\n  \"error\": \"natureOfBusiness is missing\",\n  \"error_code\": \"XFE15\",\n  \"error_handling\": \"Make sure you entered the correct required parameter.\"\n}"
+                  "Business CP+ - Missing Mandatory Fields": {
+                    "value": "{\n  \"error\": \"natureOfBusiness is missing\",\n  \"error_code\": \"XFE15\",\n  \"error_handling\": \"Make sure you entered the correct required parameter.\"\n}",
+                    "summary": "Business CP+"
                   },
-                  "Invalid Parameters": {
-                    "value": "{\n  \"error\": \"Invalid nationality. Please refer to the following document for the accepted values: https://www.iban.com/country-codes\",\n  \"error_code\": \"XFE12\",\n  \"error_handling\": \"Make sure you entered the correct parameters.\"\n}\n\n---\n\n{\n    \"error\": \"Invalid monthlyTransactionVolume `1`. Must be in [\\\"0_TO_100000\\\", \\\"100001_TO_500000\\\", \\\"500001_TO_1000000\\\", \\\"100001_TO_10000000\\\", \\\"GT_10000000\\\"]\",\n    \"error_code\": \"XFE12\",\n    \"error_handling\": \"Make sure you entered the correct parameters.\"\n}"
+                  "Business CP+ - Invalid Parameters": {
+                    "value": "{\n  \"error\": \"Invalid nationality. Please refer to the following document for the accepted values: https://www.iban.com/country-codes\",\n  \"error_code\": \"XFE12\",\n  \"error_handling\": \"Make sure you entered the correct parameters.\"\n}\n\n---\n\n{\n    \"error\": \"Invalid monthlyTransactionVolume `1`. Must be in [\\\"0_TO_100000\\\", \\\"100001_TO_500000\\\", \\\"500001_TO_1000000\\\", \\\"100001_TO_10000000\\\", \\\"GT_10000000\\\"]\",\n    \"error_code\": \"XFE12\",\n    \"error_handling\": \"Make sure you entered the correct parameters.\"\n}",
+                    "summary": "Business CP+"
+                  },
+                  "Personal CP - Invalid RegistrationType": {
+                    "value": "{\n  \"error\": \"registrationType must be either business or personal\",\n  \"error_code\": \"XFE12\",\n  \"error_handling\": \"Make sure you entered the correct parameters.\"\n}",
+                    "summary": "Personal CP"
+                  },
+                  "Business CP - Invalid RegistrationType": {
+                    "value": "{\n  \"error\": \"registrationType must be either business or personal\",\n  \"error_code\": \"XFE12\",\n  \"error_handling\": \"Make sure you entered the correct parameters.\"\n}",
+                    "summary": "Business CP"
                   }
                 },
                 "schema": {
@@ -2000,8 +2617,8 @@
     },
     "/kyc/customer_profiles/{customer_profile_id}": {
       "patch": {
-        "summary": "Update a personal customer profile",
-        "description": "[Available in Sandbox/Production environment] Update a personal customer profile on our platform.",
+        "summary": "Update a customer profile",
+        "description": "Update an existing customer profile. Supported fields depend on the profile type (personal or business, CP or CP+).",
         "operationId": "update-a-customer-profile-1",
         "parameters": [
           {
@@ -2131,11 +2748,192 @@
                         "description": "Must be an alpha-2 country code. Please refer to the following document for the accepted values: https://www.iban.com/country-codes <br>Regex: `/^[A-Z]{2}$/`"
                       }
                     }
+                  },
+                  "placeOfBiz": {
+                    "type": "string",
+                    "description": "Customer's principal place of business if it is different from registered address. Otherwise, provide registered address. <br>Regex: `/^\\s*.{1,255}\\s*$/`"
+                  },
+                  "placeOfBizCountry": {
+                    "type": "string",
+                    "description": "Customer's principal place of business country (2 digit ISO country code) from https://www.iban.com/country-codes <br>Regex: `/^[A-Z]{2}$/`"
+                  },
+                  "countryOfIncorporation": {
+                    "type": "string",
+                    "description": "Customer's country of incorporation (2 digit ISO country code) from https://www.iban.com/country-codes <br>Regex: `/^[A-Z]{2}$/`"
+                  },
+                  "dateOfIncorporation": {
+                    "type": "string",
+                    "description": "Date must be in 'YYYY-MM-DD' format<br>Regex: `/^\\d{4}-\\d{2}-\\d{2}$/`",
+                    "format": "date"
+                  },
+                  "customerFirstName": {
+                    "type": "string",
+                    "description": "Customer's first name (50 SWIFT characters)<br>Regex: `/^(?=.{1,50}$)[a-zA-Z0-9 ]+$/`"
+                  },
+                  "customerLastName": {
+                    "type": "string",
+                    "description": "Customer's last name (50 SWIFT characters)<br>Regex: `/^(?=.{1,50}$)[a-zA-Z0-9 ]+$/`"
+                  },
+                  "customerNativeName": {
+                    "type": "string",
+                    "description": "Must be within 191 characters<br>Regex: `/^\\s*.{1,191}\\s*$/`"
+                  },
+                  "registrationIdExpiryDate": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Must be in 'yyyy-MM-dd' format <br>Regex: `/^\\d{4}-\\d{2}-\\d{2}$/`"
+                  },
+                  "businessIndustry": {
+                    "type": "string",
+                    "description": "Please input 1 value only <br>Refer to \"Business Industry Accepted Values\" code block for the list of accepted values"
+                  },
+                  "occupation": {
+                    "type": "string",
+                    "description": "Please input 1 value only <br>Refer to \"Occupation Accepted Values\" code block for the list of accepted values"
+                  },
+                  "expectedAnnualTransactionAmount": {
+                    "type": "string",
+                    "description": "Please input 1 value only<br>Accepted values: `0_TO_1000`, `1001_TO_5000`, `5001_TO_10000`, `10001_TO_30000`, `GT_30000`"
+                  },
+                  "expectedTransactionSize": {
+                    "type": "string",
+                    "description": "Please input 1 value only<br>Accepted values: `0_TO_1000`, `1001_TO_5000`, `5001_TO_10000`, `10001_TO_20000`, `GT_20000`"
+                  },
+                  "expectedTransactionFrequency": {
+                    "type": "string",
+                    "description": "Please input 1 value only<br>Accepted values: `AT_LEAST_ONCE_EVERY_2_WEEKS`, `AT_LEAST_ONCE_A_MONTH`, `AT_LEAST_ONCE_EVERY_6_MONTHS`, `AT_LEAST_ONCE_A_YEAR`"
+                  },
+                  "annualIncome": {
+                    "type": "string",
+                    "description": "Please input 1 value only<br>Accepted values: `0_TO_30000`, `30001_TO_50000`, `50001_TO_100000`, `100001_TO_500000`, `GT_500000`"
+                  },
+                  "identityDocuments": {
+                    "type": "object",
+                    "properties": {
+                      "selfie": {
+                        "type": "string",
+                        "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                      },
+                      "proofOfAddress": {
+                        "type": "string",
+                        "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                      },
+                      "passport": {
+                        "type": "string",
+                        "description": "Required if `registrationIdType` is `passport` <br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                      },
+                      "idFront": {
+                        "type": "string",
+                        "description": "Required if `registrationIdType` is `identity_card` <br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                      },
+                      "idBack": {
+                        "type": "string",
+                        "description": "Required if `registrationIdType` is `identity_card`<br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                      },
+                      "livenessSnapshot": {
+                        "type": "string",
+                        "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                      },
+                      "livenessResult": {
+                        "type": "string",
+                        "description": "`true` or `false` only<br>Regex: `/^(true|false|1|0)$/i`"
+                      }
+                    }
+                  },
+                  "totalWealth": {
+                    "type": "string",
+                    "description": "Accepted values: `0_TO_500000`, `500001_TO_2000000`, `2000001_TO_5000000`, `5000001_TO_10000000`, `GT_10000000`"
+                  },
+                  "sourceOfWealth": {
+                    "type": "object",
+                    "description": "",
+                    "properties": {
+                      "businessOwnership": {
+                        "type": "object",
+                        "properties": {
+                          "document": {
+                            "type": "string",
+                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                          }
+                        }
+                      },
+                      "employmentIncome": {
+                        "type": "object",
+                        "properties": {
+                          "document": {
+                            "type": "string",
+                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                          }
+                        }
+                      },
+                      "propertyOwnership": {
+                        "type": "object",
+                        "properties": {
+                          "document": {
+                            "type": "string",
+                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                          }
+                        }
+                      },
+                      "investmentReturns": {
+                        "type": "object",
+                        "properties": {
+                          "document": {
+                            "type": "string",
+                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                          }
+                        }
+                      },
+                      "lotteryWinnings": {
+                        "type": "object",
+                        "properties": {
+                          "document": {
+                            "type": "string",
+                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                          }
+                        }
+                      },
+                      "inheritanceGifts": {
+                        "type": "object",
+                        "properties": {
+                          "document": {
+                            "type": "string",
+                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                          }
+                        }
+                      },
+                      "cashSavings": {
+                        "type": "object",
+                        "properties": {
+                          "document": {
+                            "type": "string",
+                            "description": "File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                          }
+                        }
+                      },
+                      "others": {
+                        "type": "object",
+                        "properties": {
+                          "details": {
+                            "type": "string",
+                            "description": "Required if others object is used<br>Must be between 1 and 255 characters<br>Regex: `/^\\s*.{1,255}\\s*$/`"
+                          },
+                          "document": {
+                            "type": "string",
+                            "description": "Required if others object is used<br>File link(Valid URL), accepts png/jpg/jpeg/pdf.<br>Regex: `%r{^(https?://)?(([0-9]{1,3}(\\.[0-9]{1,3}){3,5})|(([-\\p{L}_0-9]{1,256}\\.)+[-\\p{L}_]{2,6}))(:[0-9]+)?([/?].*)?$}i`"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "ipAddresses": {
+                    "type": "string",
+                    "description": "Example: [\"8.8.8.8\"]"
                   }
                 }
               },
               "examples": {
-                "Sample Request": {
+                "Personal CP+ - Sample Request": {
                   "value": {
                     "customerName": "Jane Doe",
                     "registrationType": "personal",
@@ -2157,7 +2955,28 @@
                       "country": "SG"
                     }
                   },
-                  "summary": "Sample Request"
+                  "summary": "Personal CP+"
+                },
+                "Business CP - Sample Request": {
+                  "summary": "Business CP",
+                  "value": {
+                    "customerName": "Acme Fintech Pte Ltd",
+                    "registrationType": "business",
+                    "registrationId": "201411660R",
+                    "registrationIdType": "business_reg_no",
+                    "countryOfIncorporation": "SG",
+                    "dateOfIncorporation": "2014-06-05",
+                    "registrationIdCountry": "SG",
+                    "placeOfBiz": "100 Industry Drive, Singapore 123456",
+                    "placeOfBizCountry": "SG",
+                    "address": {
+                      "street": "100 Industry Drive, #01-01",
+                      "city": "Singapore",
+                      "postalCode": "123456",
+                      "state": "Singapore",
+                      "country": "SG"
+                    }
+                  }
                 }
               }
             }
@@ -2171,6 +2990,64 @@
                 "examples": {
                   "Result": {
                     "value": "{\n  \"data\": {\n    \"id\": \"customer_profile_08d5ffe5-8a02-4dc2-aabb-9057b8ab3c65\",\n    \"type\": \"customer_profile\",\n    \"attributes\": {\n      \"customerName\": \"John Ng\",\n      \"registrationType\": \"personal\",\n      \"registrationIdType\": \"identity_card\",\n      \"registrationIdCountry\": \"SG\",\n      \"registrationId\": \"S1234567J\",\n      \"countryOfResidence\": \"Singapore\",\n      \"address\": {\n        \"street\": \"10 Albert Street\",\n        \"city\": \"Singapore\",\n        \"postalCode\": \"000000\",\n        \"state\": \"Singapore\",\n        \"country\": \"SG\"\n      },\n      \"verificationStatus\": \"verified\",\n      \"dateOfBirth\": \"1983-11-14T00:00:00.000Z\",\n      \"gender\": \"MALE\",\n      \"nationality\": \"SINGAPOREAN\",\n      \"email\": \"test@gmail.com\",\n      \"phoneNo\": 6587654321\n    }\n  }\n}"
+                  },
+                  "Business CP - Result": {
+                    "value": "{\n  \"data\": {\n    \"id\": \"customer_profile_8bcef957-74a5-4c07-bcaa-0b377c02ca13\",\n    \"type\": \"customer_profile\",\n    \"attributes\": {\n      \"customerName\": \"Xfers Pte. Ltd.\",\n      \"registrationType\": \"business\",\n      \"registrationIdType\": \"business_reg_no\",\n      \"registrationIdCountry\": \"SG\",\n      \"registrationId\": \"201411660R\",\n      \"address\": {\n        \"street\": \"10 Albert Street\",\n        \"city\": \"Singapore\",\n        \"postalCode\": \"000000\",\n        \"state\": \"Singapore\",\n        \"country\": \"SG\"\n      },\n      \"placeOfBiz\": \"10 Albert Street, 000000 Singapore\",\n      \"placeOfBizCountry\": \"SG\",\n      \"countryOfIncorporation\": \"SG\",\n      \"dateOfIncorporation\": \"2020-11-14T00:00:00.000Z\",\n      \"verificationStatus\": \"verified\"\n    }\n  }\n}",
+                    "summary": "Business CP"
+                  },
+                  "Personal CP+ - Success": {
+                    "summary": "Personal CP+",
+                    "value": {
+                      "data": {
+                        "id": "customer_profile_2eeb5db4-ceaf-4f1f-9cf9-7222ca635be2",
+                        "type": "customer_profile",
+                        "attributes": {
+                          "customerName": "STRAITSX PATCH",
+                          "registrationType": "personal",
+                          "registrationId": "S9823457DEU",
+                          "countryOfResidence": "ID",
+                          "verificationStatus": "verified",
+                          "dateOfBirth": "2000-02-14",
+                          "gender": "MALE",
+                          "nationality": "ID",
+                          "email": "nastiti-patch@gmail.com",
+                          "phoneNo": "659510921700",
+                          "address": {
+                            "city": "SINGAPORE",
+                            "state": "SINGAPORE",
+                            "street": "NORTH 17TH",
+                            "country": "SINGAPORE",
+                            "postalCode": "18555"
+                          },
+                          "registrationIdCountry": "SG",
+                          "registrationIdType": "passport",
+                          "registrationIdExpiryDate": "2050-12-30",
+                          "businessIndustry": "PERSONAL_SERVICES",
+                          "occupation": "SELF_EMPLOYED",
+                          "expectedAnnualTransactionAmount": "GT_30000",
+                          "expectedTransactionSize": "GT_20000",
+                          "expectedTransactionFrequency": "AT_LEAST_ONCE_EVERY_6_MONTHS",
+                          "annualIncome": "GT_500000",
+                          "identityDocuments": {
+                            "livenessResult": true
+                          },
+                          "totalWealth": "GT_10000000",
+                          "ipAddresses": [
+                            "10.0.1.2",
+                            "10.0.1.3"
+                          ],
+                          "customerNativeName": "铁集团",
+                          "customerFirstName": "LEON",
+                          "customerLastName": "KENNEDY",
+                          "createdAt": "2025-07-10T10:23:06Z",
+                          "updatedAt": "2025-07-10T11:02:28Z",
+                          "riskRating": {
+                            "status": "verified",
+                            "rejection_reason": ""
+                          }
+                        }
+                      }
+                    }
                   }
                 },
                 "schema": {
@@ -2304,8 +3181,8 @@
         }
       },
       "get": {
-        "summary": "Get a customer profile+",
-        "description": "",
+        "summary": "Get a customer profile",
+        "description": "Retrieve a customer profile by ID. Response format varies by profile type (CP or CP+, personal or business).",
         "operationId": "get-a-customer-profile-1",
         "parameters": [
           {
@@ -2369,7 +3246,7 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "Get Business Customer Profile+": {
+                  "CP+ - Get Business Customer Profile+": {
                     "value": {
                       "data": {
                         "id": "customer_profile_989407bb-1cc8-4e9b-a73b-864a4d1ba1c0",
@@ -2491,7 +3368,39 @@
                         }
                       }
                     },
-                    "summary": "Get Business Customer Profile+"
+                    "summary": "CP+"
+                  },
+                  "CP - Personal CP ": {
+                    "summary": "CP",
+                    "value": "{\n  \"data\": {\n    \"id\": \"customer_profile_08d5ffe5-8a02-4dc2-aabb-9057b8ab3c65\",\n    \"type\": \"customer_profile\",\n    \"attributes\": {\n      \"customerName\": \"John Ng\",\n      \"registrationType\": \"personal\",\n      \"registrationIdType\": \"identity_card\",\n      \"registrationIdCountry\": \"SG\",\n      \"registrationId\": \"S1234567J\",\n      \"address\": {\n        \"street\": \"10 Albert Street\",\n        \"city\": \"Singapore\",\n        \"postalCode\": \"000000\",\n        \"state\": \"Singapore\",\n        \"country\": \"SG\"\n      },\n      \"verificationStatus\": \"verified\",\n      \"dateOfBirth\": \"1983-11-14T00:00:00.000Z\",\n      \"gender\": \"MALE\",\n      \"nationality\": \"SINGAPOREAN\",\n      \"email\": \"test@gmail.com\",\n      \"phoneNo\": 6587654321\n    }\n  }"
+                  },
+                  "CP - Business CP": {
+                    "summary": "CP",
+                    "value": {
+                      "data": {
+                        "id": "customer_profile_8bcef957-74a5-4c07-bcaa-0b377c02ca13",
+                        "type": "customer_profile",
+                        "attributes": {
+                          "customerName": "Xfers Pte. Ltd.",
+                          "registrationType": "business",
+                          "registrationIdType": "business_reg_no",
+                          "registrationIdCountry": "SG",
+                          "registrationId": "201411660R",
+                          "address": {
+                            "street": "10 Albert Street",
+                            "city": "Singapore",
+                            "postalCode": "000000",
+                            "state": "Singapore",
+                            "country": "SG"
+                          },
+                          "placeOfBiz": "10 Albert Street, 000000 Singapore",
+                          "placeOfBizCountry": "SG",
+                          "countryOfIncorporation": "SG",
+                          "dateOfIncorporation": "2020-11-14T00:00:00.000Z",
+                          "verificationStatus": "verified"
+                        }
+                      }
+                    }
                   }
                 },
                 "schema": {
@@ -2783,8 +3692,9 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "Customer profile not found": {
-                    "value": "{\n    \"error\": \"Customer profile not found\",\n    \"error_code\": \"XFE13\",\n    \"error_handling\": \"Please check that you provided the correct API Key and the correct parameters.\"\n}"
+                  "CP+ - Customer profile not found": {
+                    "value": "{\n    \"error\": \"Customer profile not found\",\n    \"error_code\": \"XFE13\",\n    \"error_handling\": \"Please check that you provided the correct API Key and the correct parameters.\"\n}",
+                    "summary": "CP+"
                   }
                 },
                 "schema": {
