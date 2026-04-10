@@ -21,6 +21,7 @@ parent: straitsx-api
 - Sandbox API key configured (see the `straitsx-auth-setup` skill)
 - `X_XFERS_APP_API_KEY` environment variable set with a sandbox key
 - (For webhook testing) `STRAITSX_SIGNING_SECRET` environment variable set with the signing secret from Dashboard
+- **Required permissions**: Your sandbox API key must have the necessary endpoint scopes enabled. If you receive `XFE6` (403 Access Denied) on any endpoint, contact StraitsX support at https://support.straitsx.com/hc/en-us/requests/new to request access. Sandbox keys may need explicit scope grants just like production keys.
 
 ## Step 1: Ask the User's Integration Model
 
@@ -76,6 +77,11 @@ sequenceDiagram
 ```
 1. Create a personal customer profile
    POST /kyc/customer_profiles
+   Body is FLAT (not nested under data.attributes). Required fields include:
+   customerName, registrationType ("personal"), registrationIdType, registrationIdCountry,
+   registrationId, countryOfResidence, dateOfBirth, nationality (ISO alpha-2 code, e.g. "SG"),
+   address (object with street, city, postalCode, state, country).
+   Note: address.street only allows letters, numbers, spaces, and / - ? : ( ) . , ' + (no # character).
 
 2. [Sandbox] Verify the customer profile
    PUT /sandbox/kyc/customer_profiles/{customer_profile_id}
@@ -83,17 +89,22 @@ sequenceDiagram
 
 3. Create a customer profile bank account
    POST /customer_profile/{customer_profile_id}/bank_accounts
+   Body is FLAT. Required fields: account_holder_name, bank (e.g. "DBS"), account_no,
+   bank_account_proof (object with fileUrl — use a direct image URL, e.g. "https://xfers-public.s3.amazonaws.com/sample-bank-statement.png").
+   Note: fileUrl must point to a directly accessible image (png/jpg/jpeg/pdf) without query parameters.
 
 4. [Sandbox] Verify the bank account
-   PUT /sandbox/customer_profile/{customer_profile_id}/bank_accounts/{bank_account_id}
-   Body: { "data": { "attributes": { "status": "verified" } } }
+   PUT /sandbox/customer_profile/{customer_profile_id}/bank_accounts/{bank_account_id}?verification_status=verified
+   This endpoint uses a query parameter, NOT a request body. No body needed.
 
 5. Create a virtual bank account (VBA) for the customer profile
    POST /payment_methods/virtual_bank_accounts
+   Body uses data.attributes + data.relationships (nested format).
 
 6. [Sandbox] Simulate a bank transfer payment to the VBA
    POST /sandbox/customer_profile/{customer_profile_id}/bank_transfer_simulations
-   (Include amount and the VBA account number)
+   Body is FLAT. Required fields: destination_bank_account_no (the VBA account_no),
+   amount, source_bank_account_holder_name.
 
 7. [Sandbox] Complete the mock payment
    PUT /sandbox/customer_profile/{customer_profile_id}/payments/{contract_id}
@@ -101,10 +112,11 @@ sequenceDiagram
 
 8. Create a first-party payout (withdraw to the same bank account)
    POST /customer_profile/{customer_profile_id}/withdrawals
+   Body is FLAT. Required fields: bank_account_id, amount, idempotency_id (unique UUID).
 
 9. [Sandbox] Complete the mock payout
    PUT /sandbox/customer_profile/{customer_profile_id}/withdrawals/{contract_id}
-   Body: { "data": { "attributes": { "status": "completed" } } }
+   Body is FLAT: { "status": "completed" }
 ```
 
 ### Third-Party Flow
@@ -284,16 +296,19 @@ Note: Resend is primarily a production feature but useful to mention for complet
 
 ## Code Generation Rules
 
-1. **Always look up the endpoint** in the OpenAPI spec (`references/openapi-spec.json` in the `straitsx-api-overview` skill) for the exact request body schema, required fields, and parameter formats.
+1. **Always look up the endpoint** in the OpenAPI spec ([`references/openapi-spec.json`](references/openapi-spec.json)) for the exact request body schema, required fields, and parameter formats. **Do not assume `data.attributes` nesting** — many endpoints use flat request bodies. Check the spec for each endpoint.
 2. **Use sandbox base URL**: `https://api-sandbox.straitsx.com/v1`
 3. **Include the API key header**: `X-XFERS-APP-API-KEY` from environment variable.
 4. **Chain responses**: Extract IDs from each response to use in the next request (e.g., `customer_profile_id` from step 1 feeds into step 2).
 5. **Add status checks**: After each request, check the HTTP status and print the response. Stop on errors.
-6. **Use realistic test data**: Generate plausible names, registration IDs, addresses — not placeholder strings.
+6. **Use realistic test data**: Generate plausible names, registration IDs, addresses — not placeholder strings. For `nationality` and country fields, use ISO alpha-2 codes (e.g. `"SG"`, not `"SINGAPOREAN"`). For `address.street`, only use allowed characters: letters, numbers, spaces, and `/ - ? : ( ) . , ' +` (no `#`).
 7. **Add comments**: Explain what each step does and what to expect.
 8. **Print a summary**: At the end, print a summary of all created resources with their IDs.
 9. **Webhook setup (if requested)**: Prepend the flow with a `PATCH /webhooks` call to register the user's webhook.site URL for the relevant events.
 10. **Callback verification**: When the user wants to verify signatures locally (beyond webhook.site inspection), defer to the `straitsx-webhook-verification` skill's golden code. Never roll custom crypto.
+11. **Rate limiting**: Insert a short delay (200–300ms) between each API call to stay within the sandbox 5 TPS rate limit. Without delays, sequential requests will trigger `STXE-9000` (429 Too Many Requests).
+12. **Handle re-runs gracefully**: Before creating any resource (customer profile, bank account, VBA), check if it already exists using the corresponding GET/list endpoint and reuse it if found. Most resources cannot be deleted. Use `GET /kyc/customer_profiles?filter[registration_id]=...` for CPs, `GET /customer_profile/{id}/bank_accounts` for bank accounts, and create VBAs with a new unique `referenceId` each run.
+13. **Bank account proof**: When creating a CP bank account (`POST /customer_profile/{id}/bank_accounts`), include `bank_account_proof` with a `fileUrl` pointing to a directly accessible image (png/jpg/jpeg/pdf) without query parameters. For sandbox, use a simple public image URL like `"https://www.w3.org/Graphics/PNG/nurbcup2si.png"`.
 
 ## Sandbox-Specific Notes
 
@@ -306,14 +321,23 @@ Note: Resend is primarily a production feature but useful to mention for complet
 | Callbacks | Sandbox sends real callbacks to your configured webhook URL. Use a tool like ngrok if testing locally. |
 | Signing secret | Required for callback verification. Get it from Dashboard > Platform Tools > Callback URLs > Signing Key Section. Store as `STRAITSX_SIGNING_SECRET` env var. |
 | Callback retries | Failed callbacks retry every 5 minutes, up to 20 times. Return `200 OK` from your listener to acknowledge receipt. |
+| Rate limit | Sandbox enforces a 5 TPS (transactions per second) rate limit. Add a ~300ms delay between requests to avoid 429 errors. |
+| Re-runs | Most resources (customer profiles, bank accounts) cannot be deleted. On re-runs, check if the resource already exists via the GET/list endpoint and reuse it instead of creating a duplicate. |
+| Permissions | Sandbox API keys may need explicit scope grants. If you get `XFE6` (403), contact StraitsX support to request endpoint access. |
 
 ## Troubleshooting
 
 | Symptom | Likely cause |
 |---|---|
 | `STXE-1000` on any request | Invalid or missing API key. Check `X_XFERS_APP_API_KEY` is set and is a sandbox key. |
+| `XFE6` (403 Access Denied) | Your API key is missing required scopes. Contact StraitsX support at https://support.straitsx.com/hc/en-us/requests/new to request access to the relevant endpoints. Sandbox keys may need explicit scope grants. |
 | `STXE-4000 Resource Object Not Verified` | Customer profile or bank account not verified. Run the sandbox verification step first. |
 | `STXE-4000 Insufficient Balance` | Business account has no balance. Collect a payment first via VBA or PayNow mock flow. |
 | `STXE-5000 Record Not Found` | Wrong ID passed. Check you're using the ID from the previous step's response. |
 | `STXE-7000 Duplicated Idempotency Key` | Reusing an idempotency key. Generate a new UUID for each request. |
+| `STXE-9000 Rate Limit Reached` (429) | Too many requests per second. The sandbox enforces a 5 TPS limit. Add a ~300ms delay between API calls. |
+| `XFE16 Customer profile already exists` | A CP with the same `registrationId` already exists. Use `GET /kyc/customer_profiles?filter[registration_id]=...` to find and reuse it. |
+| `XFE16 Customer profile bank account already exists` | A bank account with the same details already exists for this CP. Use `GET /customer_profile/{id}/bank_accounts` to find and reuse it. |
+| `XFE16 Invalid file url provided` | The `bank_account_proof.fileUrl` is invalid. Use a direct URL to a png/jpg/jpeg/pdf file without query parameters. |
 | Payout fails with "bank account not verified" | The CP bank account needs to be verified via sandbox endpoint before creating a payout. |
+| `registrationType is missing` or similar field errors | The request body format is wrong. Check the OpenAPI spec — many endpoints use flat bodies, not `data.attributes` nesting. |
