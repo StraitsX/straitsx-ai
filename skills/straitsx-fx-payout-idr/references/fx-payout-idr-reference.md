@@ -143,6 +143,10 @@ POST /v1/fx/payout-recipients
     "id": "payout_recipient_<uuid>",
     "type": "fxPayoutRecipient",
     "attributes": {
+      "initiator": {
+        "mode": "onBehalfOf",
+        "customerProfileId": "customer_profile_<uuid>"
+      },
       "verificationStatus": "pending",
       "recipientCountry": "ID",
       "recipientInformation": {
@@ -209,7 +213,7 @@ POST /v1/fx/quotes
     "attributes": {
       "rate": "16234.50000000",
       "from": { "currency": "XUSD", "amount": "92.40" },
-      "to": { "currency": "IDR", "amount": "1500000" },
+      "to": { "currency": "IDR", "amount": "1500000.0" },
       "tenor": "instant",
       "createdAt": "2026-05-08T10:00:00+08:00",
       "expiresAt": "2026-05-08T10:02:00+08:00"
@@ -302,7 +306,7 @@ POST /v1/fx/payouts
       "recipientId": "payout_recipient_<uuid>",
       "rate": "16234.50000000",
       "from": { "currency": "XUSD", "amount": "92.40" },
-      "to": { "currency": "IDR", "amount": "1500000" },
+      "to": { "currency": "IDR", "amount": "1500000.0" },
       "fee": { "currency": "XUSD", "amount": "0.00" },
       "references": {
         "externalReference": null,
@@ -484,20 +488,20 @@ Use the table above as a reference for common banks. An unsupported SWIFT BIC wi
 
 ### Common Errors
 
-| Error | HTTP | Description | Resolution |
-|-------|------|-------------|------------|
-| Unsupported currency pair | 400 | Invalid source or target currency | Use supported pairs (XUSD/USD → IDR) |
-| Invalid amount | 400 | Zero, negative, or wrong decimal places | IDR must be whole numbers; USD/XUSD up to 2 decimals |
-| Must provide one amount | 400 | Both or neither from/to amount specified | Provide exactly one of `from.amount` or `to.amount` |
-| Quote expired | 400 | Quote has expired (~1 minute window) | Create a new quote |
-| Quote already executed | 400 | Quote already used for a payout | Create a new quote |
-| Recipient not found | 404 | Invalid recipient ID | Check recipient ID is correct |
-| Bank account pending | 400 | Recipient verification not yet complete | Wait for verification to complete, then retry |
-| Bank account rejected | 400 | Bank account verification failed | Create a new recipient with valid details |
-| Invalid SWIFT BIC | 400 | SWIFT BIC not in supported bank list | Use a supported Indonesian bank SWIFT BIC |
-| Insufficient balance | 400 | Wallet balance too low | Top up source currency wallet |
-| Idempotency key repeated | 422 | Duplicate `idempotencyId` | Use a unique idempotency key per payout |
-| FX service unavailable | 424 | Temporary service issue | Retry after a short delay |
+| Error | Code | HTTP | Description | Resolution |
+|-------|------|------|-------------|------------|
+| Unsupported currency pair | STXE-3000 | 400 | Invalid source or target currency | Use supported pairs (XUSD/USD → IDR) |
+| Invalid amount | STXE-3000 | 400 | Zero, negative, or wrong decimal places | IDR must be whole numbers; USD/XUSD up to 2 decimals |
+| Must provide one amount | STXE-3000 | 400 | Both or neither from/to amount specified | Provide exactly one of `from.amount` or `to.amount` |
+| Quote expired | STXE-4000 | 400 | Quote has expired (~1 minute window) | Create a new quote |
+| Quote already executed | STXE-4000 | 400 | Quote already used for a payout | Create a new quote |
+| Recipient not found | STXE-5000 | 404 | Invalid recipient ID | Check recipient ID is correct |
+| Bank account pending | STXE-4000 | 400 | Recipient verification not yet complete | Wait for verification to complete, then retry |
+| Bank account rejected | STXE-4000 | 400 | Bank account verification failed | Create a new recipient with valid details |
+| Invalid SWIFT BIC | STXE-3000 | 400 | SWIFT BIC not in supported bank list | Use a supported Indonesian bank SWIFT BIC |
+| Insufficient balance | STXE-4000 | 400 | Wallet balance too low | Top up source currency wallet |
+| Idempotency key repeated | STXE-7000 | 422 | Duplicate `idempotencyId` | Use a unique idempotency key per payout |
+| FX service unavailable | STXE-8000 | 424 | Temporary service issue | Retry after a short delay |
 
 ### Rate Expiry During Processing
 
@@ -616,7 +620,7 @@ Same structure as `GET /v1/fx/payouts/:id` response:
       "recipientId": "payout_recipient_<uuid>",
       "rate": "16234.50000000",
       "from": { "currency": "XUSD", "amount": "92.40" },
-      "to": { "currency": "IDR", "amount": "1500000" },
+      "to": { "currency": "IDR", "amount": "1500000.0" },
       "fee": { "currency": "XUSD", "amount": "0.00" },
       "initiator": {
         "mode": "onBehalfOf",
