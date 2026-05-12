@@ -105,9 +105,11 @@ straitsx-ai/
 │       └── references/
 ├── test-vectors/
 │   └── signing_vectors.json               # Also bundled in straitsx-request-signing/references/
-├── straitsx-sandbox-base-url.json         # OpenAPI 3.1.0 spec (sandbox, v1.4.0)
+├── shared-references/
+│   └── openapi-spec.json                  # OpenAPI 3.1.0 spec (v1.5.0) — single source of truth
 ├── .env.example
 ├── CHANGELOG.md
+├── validate-spec.sh                       # Validates the shared OpenAPI spec
 └── README.md
 ```
 
