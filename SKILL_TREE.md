@@ -28,6 +28,12 @@ You are an AI assistant helping developers integrate with the **StraitsX Public 
 | User asks about request signing, Ed25519, signatures, or "how do I sign requests?" | [`straitsx-request-signing`](skills/straitsx-request-signing/SKILL.md) | `skills/straitsx-request-signing/SKILL.md` |
 | User asks about webhook verification, callback signatures, or "how do I verify webhooks?" | [`straitsx-webhook-verification`](skills/straitsx-webhook-verification/SKILL.md) | `skills/straitsx-webhook-verification/SKILL.md` |
 
+## FX & Cross-Border Payouts
+
+| Use when | Skill | Path |
+|---|---|---|
+| User asks about IDR payouts, FX conversion, sending money to Indonesia, USD/XUSD → IDR, or "how do I do an FX payout?" | [`straitsx-fx-payout-idr`](skills/straitsx-fx-payout-idr/SKILL.md) | `skills/straitsx-fx-payout-idr/SKILL.md` |
+
 ## Testing
 
 | Use when | Skill | Path |
@@ -42,6 +48,7 @@ You are an AI assistant helping developers integrate with the **StraitsX Public 
 | auth, API key, credentials, environment variables, setup | `straitsx-auth-setup` |
 | signing, Ed25519, signature, private key, HMAC, canonical string | `straitsx-request-signing` |
 | webhook, callback, verify, public key, payload verification | `straitsx-webhook-verification` |
+| FX, IDR, Indonesia, cross-border, currency conversion, XUSD, USD, payout, remittance, SWIFT BIC, bank transfer IDR | `straitsx-fx-payout-idr` |
 | sandbox, testing, mock, simulate, walkthrough, integration test, end-to-end | `straitsx-sandbox-testing` |
 
 ## Shared Resources

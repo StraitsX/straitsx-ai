@@ -60,10 +60,14 @@ StraitsX supports three integration models. The model determines which endpoints
 
 | Concept | What it means | Endpoints |
 |---|---|---|
-| FX Quote | A foreign exchange rate quote for cross-currency payouts. | `POST /fx/quotes`, `GET /fx/quotes/{id}` |
-| FX Payout | A payout that includes currency conversion. | `POST /fx/payouts`, `GET /fx/payouts`, `GET /fx/payouts/{id}` |
+| FX Quote | A foreign exchange rate quote for cross-currency payouts. Valid for ~1 minute. | `POST /fx/quotes`, `GET /fx/quotes/{id}` |
+| FX Payout | A payout that includes automatic currency conversion (e.g., XUSD/USD → IDR). | `POST /fx/payouts`, `GET /fx/payouts`, `GET /fx/payouts/{id}` |
+| FX Payout Recipient | A bank account in the target country registered for FX payouts. Must be verified before use. | `POST /fx/payout-recipients`, `GET /fx/payout-recipients`, `GET /fx/payout-recipients/{id}` |
+| Recipient Requirements | Discover required fields and validation rules for a given country/currency/method. | `GET /fx/payout-recipients/requirements` |
 
-**FX flow:** Create FX quote → Execute (create payout with FX) → Check transaction status.
+**FX Payout flow:** Get recipient requirements → Create recipient → Wait for verification → Create FX quote → Create FX payout → Monitor status.
+
+For the complete IDR FX Payout integration guide, see the `straitsx-fx-payout-idr` skill.
 
 ## Blockchain
 
