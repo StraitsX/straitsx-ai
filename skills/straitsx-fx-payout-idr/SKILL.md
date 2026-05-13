@@ -81,4 +81,4 @@ For related skills:
 | `straitsx-auth-setup` | User needs to configure API credentials |
 | `straitsx-request-signing` | User needs to sign FX payout requests |
 | `straitsx-webhook-verification` | User needs to verify FX payout webhook signatures |
-| `straitsx-sandbox-testing` | User wants the general sandbox walkthrough (non-FX flows) |
+| `straitsx-sandbox-testing` | User needs sandbox data setup (e.g., Customer Profile creation/verification, wallet topup) or a general sandbox walkthrough |

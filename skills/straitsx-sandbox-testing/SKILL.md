@@ -205,6 +205,21 @@ sequenceDiagram
    Body: { "data": { "attributes": { "status": "completed" } } }
 ```
 
+## FX Payout (Optional Add-on)
+
+If the user also wants to test FX payouts (sending IDR to Indonesia), this can be combined with any integration model above. FX payout is not a separate integration model — it's a capability that layers on top of existing flows.
+
+For the FX-specific flow (recipient requirements → create recipient → create quote → create payout → simulate completion), follow the `straitsx-fx-payout-idr` skill.
+
+**Prerequisites for FX payout testing:**
+- Wallet funded with XUSD or USD (use sandbox topup: `POST /v1/sandbox/merchant/topup`)
+- If using `onBehalfOf` mode: a verified Customer Profile (covered in First-Party/Third-Party flows above)
+- FX payout feature enabled on the sandbox account (contact StraitsX team if you receive 403 `XFE6`)
+
+**Sandbox simulation for FX payouts:**
+- Simulate payout completion: `PUT /v1/sandbox/fx/payouts/:id` with `{"data":{"attributes":{"status":"completed"}}}`
+- Simulate payout failure: `PUT /v1/sandbox/fx/payouts/:id` with `{"data":{"attributes":{"status":"cancelled"}}}`
+
 ## Step 3: Webhook Integration (Optional but Recommended)
 
 Ask the user if they want to include webhook/callback testing in their sandbox flow. In production, callbacks are the primary way to know when a transaction status changes — so testing them in sandbox is strongly recommended.
