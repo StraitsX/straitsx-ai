@@ -34,7 +34,7 @@ All error responses return JSON in this structure:
 | 403 | STXE-6000 | Environment | Restricted Endpoints Access in Live Mode | Endpoint is sandbox-only. Switch to sandbox mode. |
 | 409 | STXE-7000 | Conflict | Duplicated Idempotency Key, Record Existed | Use a different idempotency key or check existing records. |
 | 500 | STXE-8XXX | Server Error | Required operation failed | Retry with backoff. If persistent, contact support. |
-| 429 | STXE-9000 | Rate Limit | Rate Limit reached for requests | Back off and retry after a delay. |
+| 429 | STXE-9000 | Rate Limit | Rate Limit Reached | 5 TPS per API key (all methods, both environments). No `Retry-After` header. Implement backoff: wait 1s → 2s → 4s on consecutive 429s. Insert 200–300ms delays between sequential calls to stay within limits. |
 
 ## STXE-4000 Detail (Business Logic Errors)
 
