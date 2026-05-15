@@ -12,7 +12,7 @@
 | Supported payment methods | Bank transfer (virtual bank account) and PayNow (SGD only) |
 | Can I mix integration models? | Yes — APIs are modular. E.g., First-Party Payment + Third-Party Payout. Contact sales if unsure. |
 | API key validity | 6 months. Dashboard shows expiry date. Email reminders sent 14 and 30 days before expiry. |
-| Rate limiting | Requests may be throttled if limits are exceeded. Use batch requests and caching to optimize. |
+| Rate limiting | 5 requests per second (TPS) per API key. Applies to all HTTP methods equally (GET, POST, PUT, PATCH). Same limit for sandbox and production. No `Retry-After` header in 429 responses — implement your own backoff. |
 | Failed callback retry | Every 5 minutes, up to 20 retries. |
 | Supported file uploads | PNG, JPG, PDF — max 10 MB per request. |
 | Fees on failed transactions | No penalties, but frequent failures from incorrect inputs may trigger fraud prevention checks. |
