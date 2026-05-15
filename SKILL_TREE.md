@@ -59,5 +59,4 @@ These files are referenced by multiple skills:
 |---|---|
 | `shared-references/openapi-spec.json` | OpenAPI 3.1.0 spec (v1.5.0) — single source of truth for endpoints, hand-maintained |
 | `test-vectors/signing_vectors.json` | Ed25519 signing test vectors — shared by request-signing skill |
-| `skill-authoring-guide.md` | Quality standards for creating and updating skills — follow when authoring new skills |
 | `.env.example` | Environment variable template |

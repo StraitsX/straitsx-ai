@@ -89,7 +89,6 @@ Once installed, just ask your AI assistant naturally:
 ```
 straitsx-ai/
 ├── SKILL_TREE.md                          # Skill index (for agents consuming the repo directly)
-├── skill-authoring-guide.md               # Quality standards for creating/updating skills
 ├── skills/
 │   ├── straitsx-api-overview/
 │   │   ├── SKILL.md
@@ -123,7 +122,3 @@ straitsx-ai/
 |---|---|
 | `X_XFERS_APP_API_KEY` | Authenticating StraitsX API requests |
 | `X_XFERS_APP_API_KEY` + `PRIVATE_KEY_PATH` | Signing StraitsX API requests (enhanced security) |
-
-## Contributing
-
-When creating or updating skills, follow the conventions in [`skill-authoring-guide.md`](skill-authoring-guide.md) — it defines mandatory quality standards for response annotations, chain maps, troubleshooting tables, and more.
