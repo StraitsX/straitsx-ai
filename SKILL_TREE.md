@@ -13,7 +13,7 @@ You are an AI assistant helping developers integrate with the **StraitsX Public 
 
 | Use when | Skill | Path |
 |---|---|---|
-| User asks about endpoints, request/response schemas, API capabilities, or "what can I do?" | [`straitsx-api-overview`](skills/straitsx-api-overview/SKILL.md) | `skills/straitsx-api-overview/SKILL.md` |
+| User asks about endpoints, request/response schemas, API capabilities, error codes, rate limiting, common pitfalls, or "what can I do?" | [`straitsx-api-overview`](skills/straitsx-api-overview/SKILL.md) | `skills/straitsx-api-overview/SKILL.md` |
 
 ## Authentication
 
@@ -26,7 +26,7 @@ You are an AI assistant helping developers integrate with the **StraitsX Public 
 | Use when | Skill | Path |
 |---|---|---|
 | User asks about request signing, Ed25519, signatures, or "how do I sign requests?" | [`straitsx-request-signing`](skills/straitsx-request-signing/SKILL.md) | `skills/straitsx-request-signing/SKILL.md` |
-| User asks about webhook verification, callback signatures, or "how do I verify webhooks?" | [`straitsx-webhook-verification`](skills/straitsx-webhook-verification/SKILL.md) | `skills/straitsx-webhook-verification/SKILL.md` |
+| User asks about webhook verification, callback signatures, callback delivery, retry behavior, or "how do I verify webhooks?" | [`straitsx-webhook-verification`](skills/straitsx-webhook-verification/SKILL.md) | `skills/straitsx-webhook-verification/SKILL.md` |
 
 ## FX & Cross-Border Payouts
 
@@ -44,10 +44,10 @@ You are an AI assistant helping developers integrate with the **StraitsX Public 
 
 | Keywords | Skill |
 |---|---|
-| endpoints, API, schema, payments, transfers, transactions, OpenAPI | `straitsx-api-overview` |
+| endpoints, API, schema, payments, transfers, transactions, OpenAPI, error codes, rate limit, pitfalls, idempotency | `straitsx-api-overview` |
 | auth, API key, credentials, environment variables, setup | `straitsx-auth-setup` |
 | signing, Ed25519, signature, private key, HMAC, canonical string | `straitsx-request-signing` |
-| webhook, callback, verify, public key, payload verification | `straitsx-webhook-verification` |
+| webhook, callback, verify, public key, payload verification, retry, delivery, deduplication | `straitsx-webhook-verification` |
 | FX, IDR, Indonesia, cross-border, currency conversion, XUSD, USD, payout, remittance, SWIFT BIC, bank transfer IDR | `straitsx-fx-payout-idr` |
 | sandbox, testing, mock, simulate, walkthrough, integration test, end-to-end | `straitsx-sandbox-testing` |
 
@@ -59,4 +59,5 @@ These files are referenced by multiple skills:
 |---|---|
 | `shared-references/openapi-spec.json` | OpenAPI 3.1.0 spec (v1.5.0) — single source of truth for endpoints, hand-maintained |
 | `test-vectors/signing_vectors.json` | Ed25519 signing test vectors — shared by request-signing skill |
+| `skill-authoring-guide.md` | Quality standards for creating and updating skills — follow when authoring new skills |
 | `.env.example` | Environment variable template |
