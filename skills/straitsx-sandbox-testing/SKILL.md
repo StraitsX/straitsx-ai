@@ -146,8 +146,6 @@ sequenceDiagram
     Body is FLAT: { "status": "completed" }
     → Response format: flat
     → Response: Updated payout object with `status: "completed"`
-    Note: The sandbox may auto-complete this payout within ~1 second. Check the payout
-    status before calling this endpoint. If already completed, skip this step.
 ```
 
 ### First-Party Response Chain Map
@@ -450,4 +448,4 @@ Note: Resend is primarily a production feature but useful to mention for complet
 | `XFE16 Invalid file url provided` | The `bank_account_proof.fileUrl` is invalid. Use a direct URL to a png/jpg/jpeg/pdf file without query parameters. |
 | Payout fails with "bank account not verified" | The CP bank account needs to be verified via sandbox endpoint before creating a payout. |
 | `registrationType is missing` or similar field errors | The request body format is wrong. Check the OpenAPI spec — many endpoints use flat bodies, not `data.attributes` nesting. |
-| `XFE16 Transaction not in pending status` on complete step | The sandbox may auto-complete some transactions within ~1 second. Check the payment/payout status before calling the complete endpoint. If already completed, skip the step. |
+| `XFE16 Transaction not in pending status` on complete step | The sandbox may auto-complete some payments within ~1 second. Check the payment status before calling the complete endpoint. If already completed, skip the step. |
