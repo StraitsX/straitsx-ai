@@ -63,10 +63,10 @@ Upload `public_key.pem` to the StraitsX Dashboard.
 
 | Skill | Purpose |
 |---|---|
-| `straitsx-api-overview` | Endpoint lookups, code generation from the OpenAPI spec |
+| `straitsx-api-overview` | Endpoint lookups, code generation from the OpenAPI spec, error codes, rate limiting, common pitfalls |
 | `straitsx-auth-setup` | Credential configuration — API key only or API key + signing |
 | `straitsx-request-signing` | Ed25519 request signing — golden code, canonical string format, test vectors |
-| `straitsx-webhook-verification` | Webhook signature verification — golden code for Python and JavaScript |
+| `straitsx-webhook-verification` | Webhook integration — delivery mechanics, retry behavior, signature verification, callback payloads |
 | `straitsx-fx-payout-idr` | IDR FX Payout — send USD/XUSD to Indonesian bank accounts with automatic FX conversion |
 | `straitsx-sandbox-testing` | End-to-end sandbox walkthrough — generates runnable code for first-party, third-party, or regular integration flows |
 
@@ -75,9 +75,12 @@ Once installed, just ask your AI assistant naturally:
 | What to say | Skill used |
 |---|---|
 | "What endpoints are available?" | `straitsx-api-overview` |
+| "What are common pitfalls?" | `straitsx-api-overview` |
+| "What are the rate limits?" | `straitsx-api-overview` |
 | "How do I authenticate?" | `straitsx-auth-setup` |
 | "How do I sign requests?" | `straitsx-request-signing` |
 | "How do I verify webhooks?" | `straitsx-webhook-verification` |
+| "How do webhook retries work?" | `straitsx-webhook-verification` |
 | "How do I send IDR to Indonesia?" | `straitsx-fx-payout-idr` |
 | "Walk me through sandbox testing" | `straitsx-sandbox-testing` |
 
