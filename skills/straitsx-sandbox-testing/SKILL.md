@@ -82,42 +82,82 @@ sequenceDiagram
    registrationId, countryOfResidence, dateOfBirth, nationality (ISO alpha-2 code, e.g. "SG"),
    address (object with street, city, postalCode, state, country).
    Note: address.street only allows letters, numbers, spaces, and / - ? : ( ) . , ' + (no # character).
+   → Response format: JSON:API (data.id)
+   → Response: CP ID at `data.id` (e.g., "customer_profile_a2a82920-...")
 
 2. [Sandbox] Verify the customer profile
    PUT /sandbox/kyc/customer_profiles/{customer_profile_id}
    Body: { "data": { "attributes": { "verificationStatus": "verified" } } }
+   → Response format: JSON:API (data.id)
+   → Response: Same CP ID at `data.id`, updated `data.attributes.verificationStatus`
 
 3. Create a customer profile bank account
    POST /customer_profile/{customer_profile_id}/bank_accounts
-   Body is FLAT. Required fields: account_holder_name, bank (e.g. "DBS"), account_no,
+   Body is FLAT. Required fields: account_holder_name, account_no,
    bank_account_proof (object with fileUrl — use a direct image URL, e.g. "https://xfers-public.s3.amazonaws.com/sample-bank-statement.png").
+   Either `bank` (e.g. "DBS") or `swift_bic` must be provided — use `bank` for SGD local transfers, `swift_bic` for USD/international transfers.
    Note: fileUrl must point to a directly accessible image (png/jpg/jpeg/pdf) without query parameters.
+   → Response format: array ([0].id)
+   → Response: Bank account ID at `[0].id` (integer, e.g., 26513). Note: response is an array, not an object.
 
 4. [Sandbox] Verify the bank account
    PUT /sandbox/customer_profile/{customer_profile_id}/bank_accounts/{bank_account_id}?verification_status=verified
    This endpoint uses a query parameter, NOT a request body. No body needed.
+   → Response format: flat
+   → Response: Updated bank account object with `verification_status: "verified"`
 
 5. Create a virtual bank account (VBA) for the customer profile
    POST /payment_methods/virtual_bank_accounts
    Body uses data.attributes + data.relationships (nested format).
+   → Response format: JSON:API (data.id)
+   → Response: VBA ID at `data.id`, account number at `data.attributes.instructions.accountNo`
+   Note: SGD VBAs are enabled immediately on creation. USD VBAs require an additional
+   sandbox verification step — see step 6.
 
-6. [Sandbox] Simulate a bank transfer payment to the VBA
+6. [Sandbox] Enable the USD VBA (USD only — skip for SGD)
+   PUT /sandbox/customer_profile/{customer_profile_id}/virtual_bank_accounts/{virtual_bank_account_id}
+   Body is FLAT: { "status": "enabled" }
+   → Response format: JSON:API (data.id)
+   → Response: VBA with updated `data.attributes.status: "enabled"` and `data.attributes.instructions` populated
+
+7. [Sandbox] Simulate a bank transfer payment to the VBA
    POST /sandbox/customer_profile/{customer_profile_id}/bank_transfer_simulations
    Body is FLAT. Required fields: destination_bank_account_no (the VBA account_no),
    amount, source_bank_account_holder_name.
+   → Response format: flat (id) — NOT JSON:API
+   → Response: Contract ID at `id` (e.g., "contract_fac6965b..."). Do NOT use `data.id`.
 
-7. [Sandbox] Complete the mock payment
+8. [Sandbox] Complete the mock payment
    PUT /sandbox/customer_profile/{customer_profile_id}/payments/{contract_id}
    Body: { "data": { "attributes": { "status": "completed" } } }
+   → Response format: JSON:API (data.id)
+   → Response: Contract ID at `data.id` (e.g., "contract_3b90b46511d5..."), updated `data.attributes.status`
+   Note: The sandbox may auto-complete this payment within ~1 second. Check the payment
+   status before calling this endpoint. If already completed, skip this step.
 
-8. Create a first-party payout (withdraw to the same bank account)
+9. Create a first-party payout (withdraw to the same bank account)
    POST /customer_profile/{customer_profile_id}/withdrawals
    Body is FLAT. Required fields: bank_account_id, amount, idempotency_id (unique UUID).
+   → Response format: nested flat (withdrawal_request.id)
+   → Response: Contract ID at `withdrawal_request.id` (e.g., "contract_1b6b81cf...")
 
-9. [Sandbox] Complete the mock payout
-   PUT /sandbox/customer_profile/{customer_profile_id}/withdrawals/{contract_id}
-   Body is FLAT: { "status": "completed" }
+10. [Sandbox] Complete the mock payout
+    PUT /sandbox/customer_profile/{customer_profile_id}/withdrawals/{contract_id}
+    Body is FLAT: { "status": "completed" }
+    → Response format: flat
+    → Response: Updated payout object with `status: "completed"`
 ```
+
+### First-Party Response Chain Map
+
+| Step | Response Field | Feeds Into |
+|------|---------------|------------|
+| Step 1 (Create CP) | `data.id` | Steps 2–10 path param `customer_profile_id` |
+| Step 3 (Create bank account) | `[0].id` (integer) | Step 4 path param `bank_account_id`, Step 9 body `bank_account_id` |
+| Step 5 (Create VBA) | `data.id` | Step 6 path param `virtual_bank_account_id` (USD only) |
+| Step 5 (Create VBA) | `data.attributes.instructions.accountNo` | Step 7 body `destination_bank_account_no` |
+| Step 7 (Simulate payment) | `id` (flat, not `data.id`) | Step 8 path param `contract_id` |
+| Step 9 (Create payout) | `withdrawal_request.id` | Step 10 path param `contract_id` |
 
 ### Third-Party Flow
 
@@ -128,7 +168,7 @@ sequenceDiagram
     participant API as StraitsX Sandbox API
 
     rect rgb(230, 242, 255)
-    Note over You, API: Setup (same as First-Party steps 1–7)
+    Note over You, API: Setup (same as First-Party steps 1–8)
     You->>API: Create CP → Verify → Bank Account → Verify → VBA → Mock Payment → Complete
     end
 
@@ -143,18 +183,42 @@ sequenceDiagram
 ```
 
 ```
-Steps 1–7: Same as First-Party Flow
+Steps 1–8: Same as First-Party Flow (see response annotations above)
 
-8. Create a payout recipient for the customer profile
+9. Create a payout recipient for the customer profile
    POST /customer_profile/{customer_profile_id}/payout-recipients
+   Body uses data.attributes (nested format). Required fields vary by disbursement method and currency.
+   Recommended: Call GET /payout-recipients/requirements first
+   to discover required fields for your specific disbursementMethod + currency combination.
+   Common required fields: recipientCountry, recipientInformation.disbursementMethod,
+   recipientInformation.recipientName, recipientInformation.currency, recipientInformation.entityType.
+   Additional fields by method:
+   - bankTransfer (SGD): + bankAccountNo, bankShortCode
+   - paynow (SGD): + proxyType, proxyValue
+   - swift (USD): + bankAccountNo, swiftBic, recipientAddress
+   → Response format: JSON:API (data.id)
+   → Response: Recipient ID at `data.id` (e.g., "payout_recipient_4b34a644-4b26-4e15-...")
 
-9. Create a third-party payout
-   POST /customer_profile/{customer_profile_id}/payouts
+10. Create a third-party payout
+    POST /customer_profile/{customer_profile_id}/payouts
+    Body uses data.attributes (nested format). Required fields: idempotencyId, amount,
+    payoutRecipient.payoutRecipientId, payoutRecipient.disbursementMethod.
+    → Response format: JSON:API (data.id)
+    → Response: Contract ID at `data.id` (e.g., "contract_bd0b8014d2d5...")
 
-10. [Sandbox] Complete the mock payout
+11. [Sandbox] Complete the mock payout
     PUT /sandbox/customer_profile/{customer_profile_id}/payouts/{contract_id}
     Body: { "data": { "attributes": { "status": "completed" } } }
+    → Response format: JSON:API (data.id)
+    → Response: Same contract ID at `data.id`, updated `data.attributes.status`
 ```
+
+### Third-Party Response Chain Map (steps 9–11 only; steps 1–8 same as First-Party)
+
+| Step | Response Field | Feeds Into |
+|------|---------------|------------|
+| Step 9 (Create recipient) | `data.id` | Step 10 body `payoutRecipient.payoutRecipientId` |
+| Step 10 (Create payout) | `data.id` | Step 11 path param `contract_id` |
 
 ### Regular Flow
 
@@ -165,12 +229,10 @@ sequenceDiagram
     participant API as StraitsX Sandbox API
 
     rect rgb(230, 242, 255)
-    Note over You, API: Get Balance (collect a payment first)
-    You->>API: POST /payment_methods/virtual_bank_accounts (create VBA)
-    API-->>You: account_no
-    You->>API: POST /sandbox/.../bank_transfer_simulations (mock payment)
+    Note over You, API: Get Balance (simulate a deposit)
+    You->>API: POST /sandbox/deposits/bank-transfer-simulation (mock deposit)
     API-->>You: contract_id
-    You->>API: PUT /sandbox/.../payments/{contract_id} (complete payment)
+    You->>API: PUT /sandbox/deposits/{contract_id} (complete deposit)
     end
 
     rect rgb(255, 243, 230)
@@ -184,26 +246,55 @@ sequenceDiagram
 ```
 
 ```
-1. Create a virtual bank account (to collect a payment and get balance)
-   POST /payment_methods/virtual_bank_accounts
+1. [Sandbox] Simulate a bank transfer deposit
+   POST /sandbox/deposits/bank-transfer-simulation
+   Body uses data.attributes (nested format). Required fields: amount.
+   Optional: currency ("SGD" or "USD"), source_bank_account_holder_name, source_bank_swift_code,
+   source_bank_account_no, transaction_remarks.
+   → Response format: JSON:API (data.id)
+   → Response: Contract ID at `data.id` (e.g., "contract_fac6965b..."), status will be `pending`
 
-2. [Sandbox] Simulate a bank transfer payment
-   POST /sandbox/virtual_bank_accounts/bank_transfer_simulation
-
-3. [Sandbox] Complete the mock payment
-   PUT /sandbox/payments/{contract_id}
+2. [Sandbox] Complete the mock deposit
+   PUT /sandbox/deposits/{contract_id}
    Body: { "data": { "attributes": { "status": "completed" } } }
+   → Response format: JSON:API (data.id)
+   → Response: Contract ID at `data.id`, updated status
 
-4. Create a payout recipient
+3. Create a payout recipient
    POST /payout-recipients
+   Body uses data.attributes (nested format). Required fields vary by disbursement method and currency.
+   Recommended: Call GET /payout-recipients/requirements first
+   to discover required fields for your specific disbursementMethod + currency combination.
+   Common required fields: recipientCountry, recipientInformation.disbursementMethod,
+   recipientInformation.recipientName, recipientInformation.currency, recipientInformation.entityType.
+   Additional fields by method:
+   - bankTransfer (SGD): + bankAccountNo, bankShortCode
+   - paynow (SGD): + proxyType, proxyValue
+   - swift (USD): + bankAccountNo, swiftBic, recipientAddress
+   → Response format: JSON:API (data.id)
+   → Response: Recipient ID at `data.id` (e.g., "payout_recipient_4b34a644-...")
 
-5. Create a regular payout
+4. Create a regular payout
    POST /payouts
+   Body uses data.attributes (nested format). Required fields: idempotencyId, amount,
+   payoutRecipient.payoutRecipientId, payoutRecipient.disbursementMethod.
+   → Response format: JSON:API (data.id)
+   → Response: Contract ID at `data.id` (e.g., "contract_266fd6d1c428...")
 
-6. [Sandbox] Complete the mock payout
+5. [Sandbox] Complete the mock payout
    PUT /sandbox/payouts/{contract_id}
    Body: { "data": { "attributes": { "status": "completed" } } }
+   → Response format: JSON:API (data.id)
+   → Response: Same contract ID at `data.id`, updated `data.attributes.status`
 ```
+
+### Regular Flow Response Chain Map
+
+| Step | Response Field | Feeds Into |
+|------|---------------|------------|
+| Step 1 (Simulate deposit) | `data.id` | Step 2 path param `contract_id` |
+| Step 3 (Create recipient) | `data.id` | Step 4 body `payoutRecipient.payoutRecipientId` |
+| Step 4 (Create payout) | `data.id` | Step 5 path param `contract_id` |
 
 ## FX Payout (Optional Add-on)
 
@@ -212,7 +303,7 @@ If the user also wants to test FX payouts (sending IDR to Indonesia), this can b
 For the FX-specific flow (recipient requirements → create recipient → create quote → create payout → simulate completion), follow the `straitsx-fx-payout-idr` skill.
 
 **Prerequisites for FX payout testing:**
-- Wallet funded with XUSD or USD (use sandbox topup: `POST /v1/sandbox/merchant/topup`)
+- Wallet funded with USD (use sandbox topup: `POST /v1/sandbox/merchant/topup` with `currency: "USD"`)
 - If using `onBehalfOf` mode: a verified Customer Profile (covered in First-Party/Third-Party flows above)
 - FX payout feature enabled on the sandbox account (contact StraitsX team if you receive 403 `XFE6`)
 
@@ -243,13 +334,14 @@ Body:
 }
 ```
 
-Alternatively, webhook URLs can also be configured via the StraitsX Dashboard under Developer Tools → API Key Management.
+Alternatively, webhook URLs can also be configured via the StraitsX Dashboard under Platform Tools → Callback URLs.
 
 Which events to configure per integration model:
 
 | Event | First-Party | Third-Party | Regular | Description |
 |---|---|---|---|---|
 | `paymentStatusUpdated` | ✅ | ✅ | ✅ | Fires when a VBA/PayNow payment status changes |
+| `userDepositStatusUpdated` | — | — | ✅ | Fires when a user deposit status changes |
 | `payoutStatusUpdated` | ✅ | ✅ | ✅ | Fires when a payout/withdrawal status changes |
 | `cpVerificationStatusUpdated` | ✅ | ✅ | — | Fires when a customer profile verification status changes |
 | `cpbaVerificationStatusUpdated` | ✅ | ✅ | — | Fires when a CP bank account verification status changes |
@@ -261,7 +353,7 @@ Use [webhook.site](https://webhook.site) as the callback receiver — no code or
 
 1. Open https://webhook.site — a unique URL is generated automatically (e.g., `https://webhook.site/abc-123-...`)
 2. Copy the unique URL
-3. Use it in the `PATCH /webhooks` call from step 3a (or paste it into the Dashboard under Developer Tools → API Key Management)
+3. Use it in the `PATCH /webhooks` call from step 3a (or paste it into the Dashboard under Platform Tools → Callback URLs)
 4. After running the flow, check webhook.site to inspect incoming callback payloads, headers (`Xfers-Signature`), and timing
 
 ### 3c. Callback Events During the Flow
@@ -281,7 +373,7 @@ When the sandbox flow runs, these callbacks fire at each step:
 
 | Flow step | Callback event fired |
 |---|---|
-| Complete mock payment (sandbox) | `paymentStatusUpdated` |
+| Complete mock deposit (sandbox) | `userDepositStatusUpdated` |
 | Complete mock payout (sandbox) | `payoutStatusUpdated` |
 
 ### 3d. Verify Callback Signatures
@@ -335,7 +427,7 @@ Note: Resend is primarily a production feature but useful to mention for complet
 | Balance | In sandbox, collect a payment first (via VBA or PayNow mock) to get balance in your business account before testing payouts. |
 | Callbacks | Sandbox sends real callbacks to your configured webhook URL. Use a tool like ngrok if testing locally. |
 | Signing secret | Required for callback verification. Get it from Dashboard > Platform Tools > Callback URLs > Signing Key Section. Store as `STRAITSX_SIGNING_SECRET` env var. |
-| Callback retries | Failed callbacks retry every 5 minutes, up to 20 times. Return `200 OK` from your listener to acknowledge receipt. |
+| Callback retries | Failed callbacks are retried with increasing delays (polynomial backoff), up to 20 attempts. Return any 2xx status code from your listener to acknowledge receipt. |
 | Rate limit | Sandbox enforces a 5 TPS (transactions per second) rate limit. Add a ~300ms delay between requests to avoid 429 errors. |
 | Re-runs | Most resources (customer profiles, bank accounts) cannot be deleted. On re-runs, check if the resource already exists via the GET/list endpoint and reuse it instead of creating a duplicate. |
 | Permissions | Sandbox API keys may need explicit scope grants. If you get `XFE6` (403), contact StraitsX support to request endpoint access. |
@@ -356,3 +448,4 @@ Note: Resend is primarily a production feature but useful to mention for complet
 | `XFE16 Invalid file url provided` | The `bank_account_proof.fileUrl` is invalid. Use a direct URL to a png/jpg/jpeg/pdf file without query parameters. |
 | Payout fails with "bank account not verified" | The CP bank account needs to be verified via sandbox endpoint before creating a payout. |
 | `registrationType is missing` or similar field errors | The request body format is wrong. Check the OpenAPI spec — many endpoints use flat bodies, not `data.attributes` nesting. |
+| `XFE16 Transaction not in pending status` on complete step | The sandbox may auto-complete some payments within ~1 second. Check the payment status before calling the complete endpoint. If already completed, skip the step. |
