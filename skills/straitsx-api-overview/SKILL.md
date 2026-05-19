@@ -1,6 +1,6 @@
 ---
 name: straitsx-api-overview
-description: Look up StraitsX API endpoints, generate code from the OpenAPI spec, and answer documentation questions. Use when the user asks about available endpoints, request/response schemas, or API capabilities.
+description: Look up StraitsX API endpoints, generate code from the OpenAPI spec, and answer documentation questions. Also covers common integration pitfalls — error codes, idempotency, rate limiting, and transaction safety. Use when the user asks about available endpoints, request/response schemas, API capabilities, error handling, retries, or "what should I watch out for?"
 category: reference
 parent: straitsx-api
 ---
@@ -13,6 +13,11 @@ parent: straitsx-api
 - User asks about a specific endpoint (e.g., "How do I create a payment?")
 - User asks about request/response schemas, parameters, or field types
 - User asks you to generate code for an API call
+- User asks about error handling, error codes, or debugging API responses
+- User asks about idempotency, retries, or transaction safety
+- User asks about rate limiting, throttling, or 429 errors
+- User asks about transaction statuses or when a transaction is considered final
+- User asks "What are common pitfalls?" or "What should I watch out for?"
 
 ## Spec Reference
 
@@ -28,6 +33,12 @@ parent: straitsx-api
 | Endpoint questions ("How do I create a payment?") | Look up the endpoint in the OpenAPI spec. Return path, HTTP method, description, parameters, request body schema, and response schema. Include example payloads where available. |
 | Parameter questions ("What params does transfer accept?") | Return the full parameter list with names, types, locations (path/query/header/body), required/optional status, and descriptions. |
 | Schema questions ("What does the payment response look like?") | Return the response schema with field names, types, and descriptions. |
+| Error handling questions ("What does error code X mean?", "How do I handle errors?") | Load [`references/error-codes.md`](references/error-codes.md). Return the error code, category, common messages, and handling guidance. |
+| Idempotency / retry questions ("How do I handle retries?", "What is idempotency_id?") | Load [`references/transaction-safety.md`](references/transaction-safety.md). Explain idempotency key usage, retry-safe patterns, and transaction status rules. |
+| Rate limiting questions ("What are the rate limits?", "I'm getting 429 errors") | Load [`references/error-codes.md`](references/error-codes.md) for handling guidance. For limit details (TPS, scope), see [`references/faqs.md`](references/faqs.md). |
+| Transaction status questions ("When is a transaction final?", "What does pending mean?") | Load [`references/transaction-safety.md`](references/transaction-safety.md). Explain status meanings and the rule to never assume success from a 2xx alone. |
+| Webhook / callback questions ("How do webhook retries work?", "What does a callback look like?") | Redirect to the `straitsx-webhook-verification` skill. |
+| Common pitfalls questions ("What should I watch out for?", "What are common mistakes?") | Load [`references/common-pitfalls.md`](references/common-pitfalls.md). Cover the relevant pitfall category based on the user's context. |
 | Authentication questions | Redirect to the `straitsx-auth-setup` skill. |
 | No match found | Suggest related endpoints or topics. For example, if they ask about "refunds" and there is no refund endpoint, suggest the payments or transactions endpoints. |
 
@@ -59,3 +70,4 @@ Load these on demand when the user's question requires deeper detail:
 | [`references/error-codes.md`](references/error-codes.md) | User asks about error handling, error codes, or debugging API responses |
 | [`references/transaction-safety.md`](references/transaction-safety.md) | User asks about idempotency, transaction status, retries, or safe payout handling |
 | [`references/faqs.md`](references/faqs.md) | User asks about capabilities, limits, supported currencies, swap pairs, customer profiles, bank accounts, or domain-specific behavior |
+| [`references/common-pitfalls.md`](references/common-pitfalls.md) | User asks "what should I watch out for?", common mistakes, sandbox vs production differences, or payout timing |
