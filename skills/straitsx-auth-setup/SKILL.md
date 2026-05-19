@@ -99,3 +99,13 @@ Before the user makes an API call, verify at minimum:
 If the user has chosen HTTP Request Signing, also verify:
 - `PRIVATE_KEY_PATH` is set and the file exists
 - `PUBLIC_KEY_ID` is set
+
+## References
+
+Load these on demand when the user needs Dashboard navigation guidance:
+
+| File | When to load |
+|---|---|
+| [`references/dashboard-get-api-key.md`](references/dashboard-get-api-key.md) | User asks how to find/reveal/create their API key in the Dashboard |
+| [`references/dashboard-setup-ip-whitelisting.md`](references/dashboard-setup-ip-whitelisting.md) | User asks how to set up IP whitelisting for API access |
+| [`references/dashboard-switch-sandbox-production.md`](references/dashboard-switch-sandbox-production.md) | User asks how to switch between sandbox and production mode in the Dashboard |
