@@ -9,7 +9,7 @@
 | Event | Description |
 |-------|-------------|
 | [`paymentStatusUpdated`](#paymentstatusupdated) | Fires when a VBA or PayNow payment status changes |
-| [`payoutStatusUpdated`](#payoutstatusupdated) | Fires when a bank transfer payout status changes |
+| [`payoutStatusUpdated`](#payoutstatusupdated) | Fires when a bank transfer payout or FX payout status changes |
 | [`cpVerificationStatusUpdated`](#cpverificationstatusupdated) | Fires when a customer profile verification status changes |
 | [`cpbaVerificationStatusUpdated`](#cpbaverificationstatusupdated) | Fires when a customer profile bank account verification status changes |
 | [`cpbaCreated`](#cpbacreated) | Fires when a new customer profile bank account is created |
@@ -24,8 +24,6 @@
 | [`cpRfiStatusUpdated`](#cprfistatusupdated) | Fires when a Request for Information (RFI) status changes |
 | [`ubaCreated`](#ubacreated) | Fires when a new user bank account is created |
 | [`ubaVerificationStatusUpdated`](#ubaverificationstatusupdated) | Fires when a user bank account verification status changes |
-| [`userFxPayoutStatusUpdated`](#userfxpayoutstatusupdated) | Fires when a direct FX payout status changes |
-| [`cpFxPayoutStatusUpdated`](#cpfxpayoutstatusupdated) | Fires when a customer profile FX payout status changes |
 
 ---
 
@@ -212,6 +210,12 @@ Fires when a VBA or PayNow payment status changes (e.g., `pending` → `complete
 
 Fires when a payout or withdrawal status changes (e.g., `pending` → `completed` or `failed`).
 
+This event covers two payout types with different payload structures:
+- **Bank transfer payout** — regular SGD/USD payouts to bank accounts. Payload uses flat JSON with `type: "Withdrawal on behalf"`.
+- **FX payout** — cross-currency payouts (e.g., XUSD → IDR). Payload uses JSON:API format with `data.type: "fxPayout"`.
+
+Distinguish between them by checking the response structure: FX payouts are wrapped in `data.attributes`, while bank transfer payouts are flat JSON.
+
 
 ### Example Payload (SGD Payout)
 
@@ -295,6 +299,83 @@ Fires when a payout or withdrawal status changes (e.g., `pending` → `completed
 | `created_at` | string | ISO 8601 timestamp when the transaction was created |
 | `updated_at` | string | ISO 8601 timestamp when the status last changed |
 | `express` | string | (SGD only) `"FAST"` if sent via FAST network |
+
+### Example Payload (FX Payout — Direct)
+
+FX payouts also fire `payoutStatusUpdated`. Distinguish them from regular payouts by checking `data.type` = `"fxPayout"`.
+
+```json
+{
+  "data": {
+    "id": "contract_a7b8c9d0-e1f2-3456-0123-567890123456",
+    "type": "fxPayout",
+    "attributes": {
+      "status": "completed",
+      "quoteId": "fx_quote_6ac94cb6-d36a-4ed6-866b-eea25dca2d3b",
+      "recipientId": "payout_recipient_654ad8a5-474b-4a0f-a4ea-170fe6a39de4",
+      "rate": "16388.30689414",
+      "from": { "currency": "XUSD", "amount": "91.53" },
+      "to": { "currency": "IDR", "amount": "1500000.0" },
+      "fee": { "currency": "XUSD", "amount": "0.0" },
+      "initiator": null,
+      "references": {
+        "externalReference": null,
+        "internalReference": "INV-2026-001"
+      },
+      "createdAt": "2026-05-11T10:00:00+08:00",
+      "updatedAt": "2026-05-11T10:05:00+08:00"
+    }
+  }
+}
+```
+
+### Example Payload (FX Payout — onBehalfOf)
+
+```json
+{
+  "data": {
+    "id": "contract_b8c9d0e1-f2a3-4567-1234-678901234567",
+    "type": "fxPayout",
+    "attributes": {
+      "status": "completed",
+      "quoteId": "fx_quote_7bd05dc7-e47b-5fe7-977c-ffb36eca3e4c",
+      "recipientId": "payout_recipient_38bb768d-37f5-4e85-a782-223db6961d4f",
+      "rate": "16388.30689414",
+      "from": { "currency": "XUSD", "amount": "91.53" },
+      "to": { "currency": "IDR", "amount": "1500000.0" },
+      "fee": { "currency": "XUSD", "amount": "0.0" },
+      "initiator": {
+        "mode": "onBehalfOf",
+        "customerProfileId": "customer_profile_8e1ebc55-ec98-4b09-a0c8-21dc5df2cf44"
+      },
+      "references": {
+        "externalReference": null,
+        "internalReference": "INV-2026-002"
+      },
+      "createdAt": "2026-05-11T11:00:00+08:00",
+      "updatedAt": "2026-05-11T11:05:00+08:00"
+    }
+  }
+}
+```
+
+### FX Payout Field Descriptions
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `data.id` | string | Unique payout contract ID. Use for deduplication. |
+| `data.type` | string | `"fxPayout"` (distinguishes from regular payouts) |
+| `data.attributes.status` | string | `"pending"`, `"completed"`, or `"failed"` |
+| `data.attributes.quoteId` | string | The FX quote ID used for this payout |
+| `data.attributes.recipientId` | string | The payout recipient ID |
+| `data.attributes.rate` | string | FX rate applied |
+| `data.attributes.from` | object | Source currency and amount |
+| `data.attributes.to` | object | Target currency and amount |
+| `data.attributes.fee` | object | Fee details |
+| `data.attributes.initiator` | object/null | `null` for direct payouts, populated for onBehalfOf |
+| `data.attributes.references` | object | Your reference IDs |
+| `data.attributes.createdAt` | string | ISO 8601 timestamp |
+| `data.attributes.updatedAt` | string | ISO 8601 timestamp |
 
 ---
 
@@ -760,115 +841,6 @@ Fires when a swap transaction status changes (e.g., XSGD ↔ XUSD conversion).
 | `data.attributes.createdAt` | string | ISO 8601 timestamp |
 | `data.attributes.updatedAt` | string | ISO 8601 timestamp |
 | `data.attributes.customerProfileId` | string/null | Customer profile ID (if swap was on behalf of a CP) |
-
----
-
-## `userFxPayoutStatusUpdated`
-
-Fires when a direct (self mode) FX payout status changes.
-
-
-### Example Payload
-
-```json
-{
-  "data": {
-    "id": "contract_a7b8c9d0-e1f2-3456-0123-567890123456",
-    "type": "fxPayout",
-    "attributes": {
-      "status": "completed",
-      "quoteId": "fx_quote_6ac94cb6-d36a-4ed6-866b-eea25dca2d3b",
-      "recipientId": "payout_recipient_654ad8a5-474b-4a0f-a4ea-170fe6a39de4",
-      "rate": "16388.30689414",
-      "from": { "currency": "XUSD", "amount": "91.53" },
-      "to": { "currency": "IDR", "amount": "1500000.0" },
-      "fee": { "currency": "XUSD", "amount": "0.0" },
-      "initiator": null,
-      "references": {
-        "externalReference": null,
-        "internalReference": "INV-2026-001"
-      },
-      "createdAt": "2026-05-11T10:00:00+08:00",
-      "updatedAt": "2026-05-11T10:05:00+08:00"
-    }
-  }
-}
-```
-
-### Field Descriptions
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `data.id` | string | Unique payout contract ID. Use for deduplication. |
-| `data.type` | string | Always `"fxPayout"` |
-| `data.attributes.status` | string | `"pending"`, `"completed"`, or `"failed"` |
-| `data.attributes.quoteId` | string | The FX quote ID used for this payout |
-| `data.attributes.recipientId` | string | The payout recipient ID |
-| `data.attributes.rate` | string | FX rate applied |
-| `data.attributes.from` | object | Source currency and amount |
-| `data.attributes.from.currency` | string | Source currency (e.g., `"XUSD"`, `"USD"`) |
-| `data.attributes.from.amount` | string | Source amount debited |
-| `data.attributes.to` | object | Target currency and amount |
-| `data.attributes.to.currency` | string | Target currency (e.g., `"IDR"`) |
-| `data.attributes.to.amount` | string | Target amount disbursed |
-| `data.attributes.fee` | object | Fee details |
-| `data.attributes.fee.currency` | string | Fee currency |
-| `data.attributes.fee.amount` | string | Fee amount |
-| `data.attributes.initiator` | object/null | `null` for direct (self mode) payouts |
-| `data.attributes.references` | object | Your reference IDs |
-| `data.attributes.references.internalReference` | string/null | Your internal reference |
-| `data.attributes.references.externalReference` | string/null | Your external reference |
-| `data.attributes.createdAt` | string | ISO 8601 timestamp |
-| `data.attributes.updatedAt` | string | ISO 8601 timestamp |
-
----
-
-## `cpFxPayoutStatusUpdated`
-
-Fires when a customer profile (onBehalfOf mode) FX payout status changes.
-
-
-### Example Payload
-
-```json
-{
-  "data": {
-    "id": "contract_b8c9d0e1-f2a3-4567-1234-678901234567",
-    "type": "fxPayout",
-    "attributes": {
-      "status": "completed",
-      "quoteId": "fx_quote_7bd05dc7-e47b-5fe7-977c-ffb36eca3e4c",
-      "recipientId": "payout_recipient_38bb768d-37f5-4e85-a782-223db6961d4f",
-      "rate": "16388.30689414",
-      "from": { "currency": "XUSD", "amount": "91.53" },
-      "to": { "currency": "IDR", "amount": "1500000.0" },
-      "fee": { "currency": "XUSD", "amount": "0.0" },
-      "initiator": {
-        "mode": "onBehalfOf",
-        "customerProfileId": "customer_profile_8e1ebc55-ec98-4b09-a0c8-21dc5df2cf44"
-      },
-      "references": {
-        "externalReference": null,
-        "internalReference": "INV-2026-002"
-      },
-      "createdAt": "2026-05-11T11:00:00+08:00",
-      "updatedAt": "2026-05-11T11:05:00+08:00"
-    }
-  }
-}
-```
-
-### Field Descriptions
-
-Same fields as `userFxPayoutStatusUpdated` above, with one difference:
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `data.attributes.initiator` | object | Present for onBehalfOf payouts |
-| `data.attributes.initiator.mode` | string | Always `"onBehalfOf"` |
-| `data.attributes.initiator.customerProfileId` | string | The customer profile ID this payout was executed for |
-
-> **Note:** Both `userFxPayoutStatusUpdated` and `cpFxPayoutStatusUpdated` use the same payload structure. The only difference is the `initiator` field: `null` for direct payouts, populated for customer profile payouts. Configure the appropriate webhook URL based on your integration model.
 
 ---
 
