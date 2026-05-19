@@ -250,6 +250,20 @@ For verifying Ed25519 signatures on API requests (a separate mechanism from call
 
 ---
 
+## References
+
+Load these on demand when the user needs deeper detail:
+
+| File | When to load |
+|---|---|
+| [`references/callback-payloads.md`](references/callback-payloads.md) | User asks "what does the callback payload look like?" or needs field-level details for a specific event type |
+| [`references/ed25519-verification.md`](references/ed25519-verification.md) | User needs Ed25519 signature verification (separate from HMAC callback verification) |
+| [`references/dashboard-get-signing-secret.md`](references/dashboard-get-signing-secret.md) | User asks how to find/reveal the signing secret in the Dashboard |
+| [`references/dashboard-register-callback-url.md`](references/dashboard-register-callback-url.md) | User asks how to configure webhook URLs in the Dashboard |
+| [`references/dashboard-trigger-callback-resend.md`](references/dashboard-trigger-callback-resend.md) | User asks how to resend a callback or check delivery history in the Dashboard |
+
+---
+
 ## Troubleshooting
 
 | Symptom | Likely cause |
