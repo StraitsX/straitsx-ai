@@ -18,6 +18,7 @@ parent: straitsx-api
 - User asks about rate limiting, throttling, or 429 errors
 - User asks about transaction statuses or when a transaction is considered final
 - User asks "What are common pitfalls?" or "What should I watch out for?"
+- User asks about payment/payout lifecycle, refunds, reversals, or "what happens when a transaction is refunded?"
 
 ## Spec Reference
 
@@ -39,6 +40,7 @@ parent: straitsx-api
 | Transaction status questions ("When is a transaction final?", "What does pending mean?") | Load [`references/transaction-safety.md`](references/transaction-safety.md). Explain status meanings and the rule to never assume success from a 2xx alone. |
 | Webhook / callback questions ("How do webhook retries work?", "What does a callback look like?") | Redirect to the `straitsx-webhook-verification` skill. |
 | Common pitfalls questions ("What should I watch out for?", "What are common mistakes?") | Load [`references/common-pitfalls.md`](references/common-pitfalls.md). Cover the relevant pitfall category based on the user's context. |
+| Payment/payout lifecycle questions ("What happens when a payment is refunded?", "How do payout statuses work?", "What is a T+1 rejection?") | Load [`references/payment-payout-lifecycle.md`](references/payment-payout-lifecycle.md). Explain status transitions, refund scenarios, and reconciliation. |
 | Authentication questions | Redirect to the `straitsx-auth-setup` skill. |
 | No match found | Suggest related endpoints or topics. For example, if they ask about "refunds" and there is no refund endpoint, suggest the payments or transactions endpoints. |
 
@@ -71,3 +73,4 @@ Load these on demand when the user's question requires deeper detail:
 | [`references/transaction-safety.md`](references/transaction-safety.md) | User asks about idempotency, transaction status, retries, or safe payout handling |
 | [`references/faqs.md`](references/faqs.md) | User asks about capabilities, limits, supported currencies, swap pairs, customer profiles, bank accounts, or domain-specific behavior |
 | [`references/common-pitfalls.md`](references/common-pitfalls.md) | User asks "what should I watch out for?", common mistakes, sandbox vs production differences, or payout timing |
+| [`references/payment-payout-lifecycle.md`](references/payment-payout-lifecycle.md) | User asks about payment/payout status transitions, refunds, reversals, T+1 rejections, or reconciliation |
