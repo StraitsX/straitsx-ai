@@ -22,12 +22,12 @@ FX Payout supports two modes depending on who the payout is initiated for:
 - Requires a Customer Profile to be created first via the Customer Profile API
 - The Customer Profile must be in `verified` status
 - Recipients and payouts are scoped to the specified Customer Profile
-- Webhook callbacks are sent to the `cpFxPayoutStatusUpdated` URL
+- Webhook callbacks are sent to the `payoutStatusUpdated` URL
 
 **Direct (self) mode:**
 - No Customer Profile needed — payouts are executed directly under your merchant account
 - Recipients and payouts are scoped to your account
-- Webhook callbacks are sent to the `userFxPayoutStatusUpdated` URL
+- Webhook callbacks are sent to the `payoutStatusUpdated` URL
 
 ---
 
@@ -586,19 +586,17 @@ Supported currencies for topup: `SGD`, `USD`. Amount must be a positive number w
 
 ### Configuring Webhooks
 
-Set your callback URLs via:
+Set your callback URL via:
 
 ```
 PUT /v1/webhooks
 ```
 
-Relevant fields:
-- `userFxPayoutStatusUpdated` — receives callbacks for direct user payouts
-- `cpFxPayoutStatusUpdated` — receives callbacks for customer profile (onBehalfOf) payouts
+Configure `payoutStatusUpdated` to receive FX payout status change callbacks. FX payouts use the same webhook URL as regular payouts — distinguish them by checking `data.type` (`"fxPayout"` for FX payouts).
 
 ### Event Types
 
-Webhooks are sent when a payout status changes. The merchant receives the full payout object (same as `GET /v1/fx/payouts/:id` response) at the configured URL.
+Webhooks are sent when a payout status changes. The merchant receives the full payout object (same as `GET /v1/fx/payouts/:id` response) at the configured `payoutStatusUpdated` URL.
 
 You can determine the event type by checking the `status` field in the payload:
 - `"status": "pending"` — payout created and processing started
