@@ -81,3 +81,12 @@ The file [`references/signing-vectors.json`](references/signing-vectors.json) co
 | `Invalid signature` from API | Wrong private key, or public key on Dashboard doesn't match |
 | `Timestamp expired` | Clock skew — ensure system clock is synced (NTP) |
 | PEM parse error | Key file is not Ed25519, or is in wrong format (need PKCS8 PEM) |
+
+## References
+
+| File | When to load |
+|---|---|
+| [`references/golden-code-python.md`](references/golden-code-python.md) | User needs Python signing implementation |
+| [`references/golden-code-javascript.md`](references/golden-code-javascript.md) | User needs JavaScript/Node.js signing implementation |
+| [`references/signing-vectors.json`](references/signing-vectors.json) | User needs test vectors to verify their signing implementation |
+| [`references/dashboard-setup-public-key-http-signing.md`](references/dashboard-setup-public-key-http-signing.md) | User asks how to upload their public key to the Dashboard and get the Key ID |
