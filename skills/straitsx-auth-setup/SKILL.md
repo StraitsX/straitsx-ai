@@ -32,7 +32,7 @@ Ask the user which method they want before proceeding:
 
 ## Option A: API Key Only
 
-**Step 1:** Get your API key from the [StraitsX Dashboard](https://dashboard.straitsx.com) (API settings page).
+**Step 1:** Get your API key from the [StraitsX Dashboard](https://biz.straitsx.com) (API settings page).
 
 **Step 2:** Configure your environment:
 
@@ -40,6 +40,8 @@ Ask the user which method they want before proceeding:
 # StraitsX API key — the only credential needed for API-key-only auth
 X_XFERS_APP_API_KEY=your_straitsx_api_key_here
 ```
+
+> **Naming note:** The environment variable uses underscores (`X_XFERS_APP_API_KEY`) because shell variables cannot contain hyphens. The HTTP header sent in API requests uses hyphens (`X-XFERS-APP-API-KEY`). Your code must read the env var and set the header — see examples below.
 
 **Step 3:** Include the API key header in requests:
 
@@ -61,7 +63,7 @@ const headers = {
 
 ## Option B: API Key + HTTP Request Signing
 
-**Step 1:** Get your API key from the StraitsX Dashboard.
+**Step 1:** Get your API key from the [StraitsX Dashboard](https://biz.straitsx.com).
 
 **Step 2:** Generate an Ed25519 key pair:
 
@@ -70,7 +72,7 @@ openssl genpkey -algorithm Ed25519 -out private_key.pem
 openssl pkey -in private_key.pem -pubout -out public_key.pem
 ```
 
-**Step 3:** Upload `public_key.pem` to the StraitsX Dashboard. You'll receive a **Key ID** — this is the `PUBLIC_KEY_ID`.
+**Step 3:** Upload `public_key.pem` to the [StraitsX Dashboard](https://biz.straitsx.com). You'll receive a **Key ID** — this is the `PUBLIC_KEY_ID`.
 
 **Step 4:** Configure your environment:
 
@@ -84,12 +86,12 @@ PUBLIC_KEY_ID=your_key_id_from_dashboard
 
 ## Environment Variable Reference
 
-| Variable | Required | Purpose |
-|---|---|---|
-| `X_XFERS_APP_API_KEY` | Always | Your StraitsX API key for authenticating API requests |
-| `PRIVATE_KEY_PATH` | Only for signing | Path to your Ed25519 private key PEM file |
-| `PUBLIC_KEY_ID` | Only for signing | The Key ID from the StraitsX Dashboard after uploading your public key |
-| `STRAITSX_SIGNING_SECRET` | Only for callbacks | HMAC-SHA256 signing secret for verifying incoming callbacks (from Dashboard > Platform Tools > Callback URLs) |
+| Variable (env) | HTTP Header | Required | Purpose |
+|---|---|---|---|
+| `X_XFERS_APP_API_KEY` | `X-XFERS-APP-API-KEY` | Always | Your StraitsX API key for authenticating API requests |
+| `PRIVATE_KEY_PATH` | — | Only for signing | Path to your Ed25519 private key PEM file |
+| `PUBLIC_KEY_ID` | `X-PUBLIC-KEY-ID` | Only for signing | The Key ID from the [StraitsX Dashboard](https://biz.straitsx.com) after uploading your public key |
+| `STRAITSX_SIGNING_SECRET` | — | Only for callbacks | HMAC-SHA256 signing secret for verifying incoming callbacks (from [StraitsX Dashboard](https://biz.straitsx.com) > Platform Tools > Callback URLs) |
 
 ## Pre-flight Check
 
