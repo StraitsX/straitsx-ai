@@ -19,8 +19,8 @@ parent: straitsx-api
 ## Prerequisites
 
 - Sandbox API key configured (see the `straitsx-auth-setup` skill)
-- `X_XFERS_APP_API_KEY` environment variable set with a sandbox key
-- (For webhook testing) `STRAITSX_SIGNING_SECRET` environment variable set with the signing secret from Dashboard
+- `X_XFERS_APP_API_KEY` environment variable set with a sandbox key — get it from the [StraitsX Dashboard](https://biz.straitsx.com) (Developer Tools section, in sandbox mode)
+- (For webhook testing) `STRAITSX_SIGNING_SECRET` environment variable set with the signing secret from the [StraitsX Dashboard](https://biz.straitsx.com) (Platform Tools > Callback URLs > Signing Key Section)
 - **Required permissions**: Your sandbox API key must have the necessary endpoint scopes enabled. If you receive `XFE6` (403 Access Denied) on any endpoint, contact StraitsX support at https://support.straitsx.com/hc/en-us/requests/new to request access. Sandbox keys may need explicit scope grants just like production keys.
 
 ## Step 1: Ask the User's Integration Model
@@ -94,7 +94,7 @@ sequenceDiagram
 3. Create a customer profile bank account
    POST /customer_profile/{customer_profile_id}/bank_accounts
    Body is FLAT. Required fields: account_holder_name, account_no,
-   bank_account_proof (object with fileUrl — use a direct image URL, e.g. "https://xfers-public.s3.amazonaws.com/sample-bank-statement.png").
+   bank_account_proof (object with fileUrl — use a direct image URL, e.g. "https://www.w3.org/Graphics/PNG/nurbcup2si.png").
    Either `bank` (e.g. "DBS") or `swift_bic` must be provided — use `bank` for SGD local transfers, `swift_bic` for USD/international transfers.
    Note: fileUrl must point to a directly accessible image (png/jpg/jpeg/pdf) without query parameters.
    → Response format: array ([0].id)
@@ -109,6 +109,8 @@ sequenceDiagram
 5. Create a virtual bank account (VBA) for the customer profile
    POST /payment_methods/virtual_bank_accounts
    Body uses data.attributes + data.relationships (nested format).
+   Required in data.attributes: referenceId (unique per request), currency ("SGD" or "USD").
+   Required in data.relationships: `customerProfile` (camelCase, NOT `customer_profile`) with nested data.id = customer_profile_id.
    → Response format: JSON:API (data.id)
    → Response: VBA ID at `data.id`, account number at `data.attributes.instructions.accountNo`
    Note: SGD VBAs are enabled immediately on creation. USD VBAs require an additional
@@ -334,7 +336,7 @@ Body:
 }
 ```
 
-Alternatively, webhook URLs can also be configured via the StraitsX Dashboard under Platform Tools → Callback URLs.
+Alternatively, webhook URLs can also be configured via the [StraitsX Dashboard](https://biz.straitsx.com) under Platform Tools → Callback URLs.
 
 Which events to configure per integration model:
 
@@ -353,7 +355,7 @@ Use [webhook.site](https://webhook.site) as the callback receiver — no code or
 
 1. Open https://webhook.site — a unique URL is generated automatically (e.g., `https://webhook.site/abc-123-...`)
 2. Copy the unique URL
-3. Use it in the `PATCH /webhooks` call from step 3a (or paste it into the Dashboard under Platform Tools → Callback URLs)
+3. Use it in the `PATCH /webhooks` call from step 3a (or paste it into the [StraitsX Dashboard](https://biz.straitsx.com) under Platform Tools → Callback URLs)
 4. After running the flow, check webhook.site to inspect incoming callback payloads, headers (`Xfers-Signature`), and timing
 
 ### 3c. Callback Events During the Flow
@@ -378,11 +380,11 @@ When the sandbox flow runs, these callbacks fire at each step:
 
 ### 3d. Verify Callback Signatures
 
-Every callback includes an `Xfers-Signature` header (HMAC-SHA256 hex digest). The generated code should verify it using the signing secret from the Dashboard.
+Every callback includes an `Xfers-Signature` header (HMAC-SHA256 hex digest). The generated code should verify it using the signing secret from the [StraitsX Dashboard](https://biz.straitsx.com).
 
 For signature verification logic, defer to the `straitsx-webhook-verification` skill — do not generate cryptographic code from scratch.
 
-**Required environment variable:** `STRAITSX_SIGNING_SECRET` (from Dashboard > Platform Tools > Callback URLs > Signing Key Section)
+**Required environment variable:** `STRAITSX_SIGNING_SECRET` (from [StraitsX Dashboard](https://biz.straitsx.com) > Platform Tools > Callback URLs > Signing Key Section)
 
 ### 3e. Resend Callbacks
 
@@ -421,12 +423,12 @@ Note: Resend is primarily a production feature but useful to mention for complet
 
 | Note | Detail |
 |---|---|
-| Sandbox API key | Must be a sandbox key, not production. Get it from Dashboard > Developer Tools in sandbox mode. |
+| Sandbox API key | Must be a sandbox key, not production. Get it from [StraitsX Dashboard](https://biz.straitsx.com) > Developer Tools in sandbox mode. |
 | Mock payments | Sandbox payments don't move real money. Use the simulation endpoints to trigger payment events. |
 | Verification | In sandbox, you manually set verification status via sandbox endpoints. In production, StraitsX handles verification. |
 | Balance | In sandbox, collect a payment first (via VBA or PayNow mock) to get balance in your business account before testing payouts. |
 | Callbacks | Sandbox sends real callbacks to your configured webhook URL. Use a tool like ngrok if testing locally. |
-| Signing secret | Required for callback verification. Get it from Dashboard > Platform Tools > Callback URLs > Signing Key Section. Store as `STRAITSX_SIGNING_SECRET` env var. |
+| Signing secret | Required for callback verification. Get it from [StraitsX Dashboard](https://biz.straitsx.com) > Platform Tools > Callback URLs > Signing Key Section. Store as `STRAITSX_SIGNING_SECRET` env var. |
 | Callback retries | Failed callbacks are retried with increasing delays (polynomial backoff), up to 20 attempts. Return any 2xx status code from your listener to acknowledge receipt. |
 | Rate limit | Sandbox enforces a 5 TPS (transactions per second) rate limit. Add a ~300ms delay between requests to avoid 429 errors. |
 | Re-runs | Most resources (customer profiles, bank accounts) cannot be deleted. On re-runs, check if the resource already exists via the GET/list endpoint and reuse it instead of creating a duplicate. |

@@ -20,8 +20,8 @@ parent: straitsx-api
 
 ## Prerequisites
 
-- Webhook URL configured (via `PATCH /webhooks` API or Dashboard > Platform Tools > Callback URLs)
-- Signing Secret from the StraitsX Dashboard (Dashboard > Platform Tools > Callback URLs > Signing Key Section)
+- Webhook URL configured (via `PATCH /webhooks` API or [StraitsX Dashboard](https://biz.straitsx.com) > Platform Tools > Callback URLs)
+- Signing Secret from the [StraitsX Dashboard](https://biz.straitsx.com) (Platform Tools > Callback URLs > Signing Key Section)
 - Store signing secret as environment variable: `STRAITSX_SIGNING_SECRET`
 
 ## Security Constraints
@@ -175,9 +175,9 @@ module.exports = { verifyCallbackSignature };
 
 StraitsX supports zero-downtime secret rotation:
 
-1. Generate a new secret in the Dashboard — it starts as **Inactive**.
+1. Generate a new secret in the [StraitsX Dashboard](https://biz.straitsx.com) — it starts as **Inactive**.
 2. Update your application code with the new secret.
-3. Click **Activate** in the Dashboard — the old secret is automatically deactivated.
+3. Click **Activate** in the [StraitsX Dashboard](https://biz.straitsx.com) — the old secret is automatically deactivated.
 4. Delete the old inactive secret.
 
 Only one signing secret can be active at a time.
@@ -240,7 +240,7 @@ POST /webhook-events/{event_type}/resend/{triggerable_id}
 
 5. **Use webhooks + polling** — Use webhooks as the primary notification mechanism. Implement periodic polling as a fallback for missed callbacks.
 
-6. **Monitor delivery** — Check the StraitsX Dashboard for failed webhook deliveries. Use the resend API to recover missed events.
+6. **Monitor delivery** — Check the [StraitsX Dashboard](https://biz.straitsx.com) for failed webhook deliveries. Use the resend API to recover missed events.
 
 ---
 
@@ -269,9 +269,9 @@ Load these on demand when the user needs deeper detail:
 | Symptom | Likely cause |
 |---|---|
 | Verification always fails | Wrong signing secret, or payload was parsed/re-serialized instead of using raw bytes. |
-| Missing `Xfers-Signature` header | Callback URL may not be configured in the Dashboard, or request is not from StraitsX. |
+| Missing `Xfers-Signature` header | Callback URL may not be configured in the [StraitsX Dashboard](https://biz.straitsx.com), or request is not from StraitsX. |
 | Works locally but fails in production | Middleware is parsing the body before you read the raw bytes — capture raw body first. |
-| Callbacks not arriving | Check callback URL configuration in Dashboard. Ensure your endpoint is publicly accessible. If your server uses IP whitelisting, ensure StraitsX [source IP addresses](https://docs.straitsx.com/docs/source-ip-addresses) are whitelisted. |
+| Callbacks not arriving | Check callback URL configuration in [StraitsX Dashboard](https://biz.straitsx.com). Ensure your endpoint is publicly accessible. If your server uses IP whitelisting, ensure StraitsX [source IP addresses](https://docs.straitsx.com/docs/source-ip-addresses) are whitelisted. |
 | Receiving duplicate callbacks | Expected behavior (at-least-once delivery). Implement deduplication using the `id` field. |
 | Callbacks arriving out of order | Expected behavior. Compare `status` in payload against your local state before processing. |
 | `failed` webhook status in Dashboard | Your endpoint returned non-2xx or timed out (>15s). Check server logs. Use resend API to retry. |

@@ -725,7 +725,7 @@ You can have multiple active (unexpired) quotes at the same time. Creating a new
 
 Each webhook request includes an `Xfers-Signature` header containing an HMAC-SHA256 signature of the request body. To verify:
 
-1. Get your webhook signing secret from the StraitsX dashboard
+1. Get your webhook signing secret from the [StraitsX Dashboard](https://biz.straitsx.com)
 2. Compute HMAC-SHA256 of the raw request body using your signing secret
 3. Compare the computed signature with the `Xfers-Signature` header value
 

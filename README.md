@@ -46,9 +46,9 @@ Edit `.env` with your credentials — see the `straitsx-auth-setup` skill for de
 
 | Variable | Purpose |
 |---|---|
-| `X_XFERS_APP_API_KEY` | Your StraitsX API key (from the Dashboard) |
+| `X_XFERS_APP_API_KEY` | Your StraitsX API key (from the [StraitsX Dashboard](https://biz.straitsx.com)) |
 | `PRIVATE_KEY_PATH` | Path to Ed25519 private key PEM (only for request signing) |
-| `PUBLIC_KEY_ID` | Key ID from Dashboard (only for request signing) |
+| `PUBLIC_KEY_ID` | Key ID from [StraitsX Dashboard](https://biz.straitsx.com) (only for request signing) |
 
 ### Generate Ed25519 key pair (optional, for request signing)
 
@@ -57,7 +57,7 @@ openssl genpkey -algorithm Ed25519 -out private_key.pem
 openssl pkey -in private_key.pem -pubout -out public_key.pem
 ```
 
-Upload `public_key.pem` to the StraitsX Dashboard.
+Upload `public_key.pem` to the [StraitsX Dashboard](https://biz.straitsx.com).
 
 ## Skills
 
