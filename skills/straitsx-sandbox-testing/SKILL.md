@@ -94,7 +94,7 @@ sequenceDiagram
 3. Create a customer profile bank account
    POST /customer_profile/{customer_profile_id}/bank_accounts
    Body is FLAT. Required fields: account_holder_name, account_no,
-   bank_account_proof (object with fileUrl — use a direct image URL, e.g. "https://xfers-public.s3.amazonaws.com/sample-bank-statement.png").
+   bank_account_proof (object with fileUrl — use a direct image URL, e.g. "https://www.w3.org/Graphics/PNG/nurbcup2si.png").
    Either `bank` (e.g. "DBS") or `swift_bic` must be provided — use `bank` for SGD local transfers, `swift_bic` for USD/international transfers.
    Note: fileUrl must point to a directly accessible image (png/jpg/jpeg/pdf) without query parameters.
    → Response format: array ([0].id)
