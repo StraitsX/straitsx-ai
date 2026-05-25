@@ -109,6 +109,8 @@ sequenceDiagram
 5. Create a virtual bank account (VBA) for the customer profile
    POST /payment_methods/virtual_bank_accounts
    Body uses data.attributes + data.relationships (nested format).
+   Required in data.attributes: referenceId (unique per request), currency ("SGD" or "USD").
+   Required in data.relationships: `customerProfile` (camelCase, NOT `customer_profile`) with nested data.id = customer_profile_id.
    → Response format: JSON:API (data.id)
    → Response: VBA ID at `data.id`, account number at `data.attributes.instructions.accountNo`
    Note: SGD VBAs are enabled immediately on creation. USD VBAs require an additional
