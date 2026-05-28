@@ -1,6 +1,6 @@
 # StraitsX API FAQs
 
-> Consolidated FAQ reference for AI clients. Load when the user asks domain-specific questions about StraitsX capabilities, limits, or behavior. Sources: [General](https://docs.straitsx.com/docs/common-faqs), [Payment](https://docs.straitsx.com/docs/payment-faqs), [Payout](https://docs.straitsx.com/docs/payout-faqs), [Swap](https://docs.straitsx.com/docs/swap-faqs), [Customer Profile](https://docs.straitsx.com/docs/customer-profile-faqs), [Bank Account](https://docs.straitsx.com/docs/bank-account-faqs)
+> Consolidated FAQ reference for AI clients. Load when the user asks domain-specific questions about StraitsX capabilities, limits, or behavior. Sources: [General](https://docs.straitsx.com/docs/common-faqs), [Payment](https://docs.straitsx.com/docs/payment-faqs), [Payout](https://docs.straitsx.com/docs/payout-faqs), [Swap](https://docs.straitsx.com/docs/swap-faqs), [Customer Profile](https://docs.straitsx.com/docs/customer-profile-faqs), [Bank Account](https://docs.straitsx.com/docs/bank-account-faqs), [Blockchain](https://docs.straitsx.com/docs/blockchain-faqs)
 
 ---
 
@@ -201,3 +201,43 @@
 | Is there a reason given for rejection? | No explicit reason — status is just `rejected`. |
 | Can I resubmit after rejection? | Yes — submit a new application with correct details. |
 | How fast is verification for first deposit? | Near-instant once the first deposit completes. |
+
+---
+
+## Blockchain
+
+| Question | Answer |
+|---|---|
+| Supported stablecoins for withdrawal | XSGD, XUSD, USDC, USDT |
+| How to get the current list of supported networks? | Call `GET /blockchain_transfer/blockchains` — networks may be added or disabled over time. |
+| What is the `blockchain` parameter? | A token + network combination (e.g., `XSGD_ERC20`) used when creating withdrawals or estimating fees. |
+| Security measures for whitelisting addresses? | Whitelisting ensures only approved destination addresses can receive withdrawal funds. Requires either a successful transaction to the address or KYB/KYC verification. |
+| How long do blockchain transactions take? | Ethereum (ERC-20): 5–15 min. Polygon (MATIC): 2–5 min. Avalanche (AVAX): 1–2 min. BNB Chain (BEP-20): 1–3 min. Depends on gas fees and network congestion. |
+| Are there gas fees? | Yes — gas fees depend on the blockchain network and current congestion. Use the network fee estimate API before executing a transfer. |
+| What happens if a transaction fails? | Failed transactions may occur due to low gas fees, network congestion, or invalid addresses. Retry after adjusting parameters. |
+| Does StraitsX support smart contract interactions? | No — not currently supported. |
+| Can I create a blockchain address via API in production? | No — withdrawal destination addresses must be whitelisted via the dashboard. The sandbox API (`POST /sandbox/blockchain_transfer/addresses`) is for testing only. |
+
+### Supported Networks by Token
+
+Use the `blockchain` parameter value (e.g., `XSGD_ERC20`) when creating withdrawals or estimating network fees.
+
+| Token | Network | Blockchain Parameter |
+|---|---|---|
+| XSGD | Ethereum (ERC-20) | `XSGD_ERC20` |
+| XSGD | Polygon (MATIC) | `XSGD_MATIC` |
+| XSGD | Avalanche C-Chain | `XSGD_AVAX` |
+| XSGD | Hedera (HTS) | `XSGD_HTS` |
+| XSGD | Arbitrum | `XSGD_ARB` |
+| XSGD | Ripple (XRP Ledger) | `XSGD_XRP` |
+| XSGD | Solana (SPL) | `XSGD_SPL` |
+| XSGD | Base | `XSGD_BASE` |
+| XUSD | Ethereum (ERC-20) | `XUSD_ERC20` |
+| XUSD | BNB Chain (BEP-20) | `XUSD_BEP20` |
+| XUSD | Solana (SPL) | `XUSD_SPL` |
+| USDC | Ethereum (ERC-20) | `USDC_ERC20` |
+| USDC | Polygon (MATIC) | `USDC_MATIC` |
+| USDT | Ethereum (ERC-20) | `USDT_ERC20` |
+| USDT | BNB Chain (BEP-20) | `USDT_BEP20` |
+
+> **Note:** The table above lists all networks currently available in production. Sandbox supports a subset of these networks — call `GET /blockchain_transfer/blockchains` in your target environment to confirm the current list. Networks may be added or removed over time.
