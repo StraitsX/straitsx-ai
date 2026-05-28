@@ -92,7 +92,7 @@ straitsx-ai/
 ├── skills/
 │   ├── straitsx-api-overview/
 │   │   ├── SKILL.md
-│   │   └── references/
+│   │   └── references/                    # Includes bundled openapi-spec.json
 │   ├── straitsx-auth-setup/
 │   │   └── SKILL.md
 │   ├── straitsx-fx-payout-idr/
@@ -100,16 +100,18 @@ straitsx-ai/
 │   │   └── references/
 │   ├── straitsx-request-signing/
 │   │   ├── SKILL.md
-│   │   └── references/
+│   │   └── references/                    # Includes bundled signing-vectors.json
 │   ├── straitsx-sandbox-testing/
-│   │   └── SKILL.md
+│   │   ├── SKILL.md
+│   │   └── references/                    # Includes bundled openapi-spec.json
 │   └── straitsx-webhook-verification/
 │       ├── SKILL.md
 │       └── references/
-├── test-vectors/
-│   └── signing_vectors.json               # Also bundled in straitsx-request-signing/references/
 ├── shared-references/
-│   └── openapi-spec.json                  # OpenAPI 3.1.0 spec (v1.5.0) — single source of truth
+│   └── openapi-spec.json                  # Canonical source — synced into skills via sync-shared-refs.sh
+├── test-vectors/
+│   └── signing_vectors.json               # Canonical source — synced into skills via sync-shared-refs.sh
+├── sync-shared-refs.sh                    # Copies shared files into skill bundles
 ├── .env.example
 ├── CHANGELOG.md
 ├── validate-spec.sh                       # Validates the shared OpenAPI spec
