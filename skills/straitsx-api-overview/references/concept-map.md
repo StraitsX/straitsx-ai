@@ -76,7 +76,7 @@ For the complete IDR FX Payout integration guide, see the `straitsx-fx-payout-id
 | Blockchain Address | A whitelisted wallet address for receiving stablecoin withdrawals. Must be verified. | `GET /blockchain_transfer/addresses/`, `GET /blockchain_transfer/deposit_addresses` |
 | Blockchain Withdrawal | Send stablecoins (XSGD, XUSD, USDC, USDT) from your StraitsX account to an external wallet. | `POST /blockchain_transfer/withdrawals/`, `GET /blockchain_transfer/withdrawals/{id}`, `GET /blockchain_transfer/withdrawals` |
 | Network Fee Estimate | Estimate the blockchain network fee before creating a withdrawal. | `POST /blockchain_transfer/withdrawals/{blockchain}/estimate_network_fee` |
-| Supported Blockchains | The blockchain networks available for withdrawals (e.g., Ethereum, Solana). | `GET /blockchain_transfer/blockchains` |
+| Supported Blockchains | The blockchain networks available for withdrawals. See [`references/faqs.md`](faqs.md) for the full list of supported networks per token. | `GET /blockchain_transfer/blockchains` |
 
 ## Transaction Limits
 
