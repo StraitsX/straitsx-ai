@@ -2,8 +2,9 @@
 # sync-shared-refs.sh
 # Copies local shared reference files into each skill that needs them.
 #
-# Note: The OpenAPI spec (shared-references/openapi-spec.json) is hand-maintained
-# and referenced directly by skills — no sync needed for it.
+# Each skill must be self-contained for `npx skills add` to work (the CLI only
+# copies skill folders). This script propagates canonical shared files into the
+# bundled copies inside each skill's references/ directory.
 #
 # Run this to ensure all skills have the latest shared files.
 # Safe to run repeatedly — idempotent.
@@ -18,6 +19,8 @@ REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
 
 LOCAL_DEPS=(
   "test-vectors/signing_vectors.json -> straitsx-request-signing/signing-vectors.json"
+  "shared-references/openapi-spec.json -> straitsx-api-overview/openapi-spec.json"
+  "shared-references/openapi-spec.json -> straitsx-sandbox-testing/openapi-spec.json"
 )
 
 # ─── Copy local files ────────────────────────────────────────────

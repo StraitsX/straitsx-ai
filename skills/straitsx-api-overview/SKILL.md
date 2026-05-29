@@ -22,7 +22,7 @@ parent: straitsx-api
 
 ## Spec Reference
 
-- **OpenAPI Spec**: [`../../shared-references/openapi-spec.json`](../../shared-references/openapi-spec.json) — the StraitsX OpenAPI spec (v1.5.0, OpenAPI 3.1.0, JSON format). Load this file when you need to look up endpoints, schemas, or parameters.
+- **OpenAPI Spec**: [`references/openapi-spec.json`](references/openapi-spec.json) — the StraitsX OpenAPI spec (v1.5.0, OpenAPI 3.1.0, JSON format). Load this file when you need to look up endpoints, schemas, or parameters.
 - **API Version**: 1.5.0
 - **Servers**: Sandbox (`https://api-sandbox.straitsx.com/v1`), Production (`https://api.straitsx.com/v1`)
 
@@ -68,7 +68,7 @@ Load these on demand when the user's question requires deeper detail:
 | File | When to load |
 |---|---|
 | [`references/concept-map.md`](references/concept-map.md) | **Load first** when the user mentions a business concept (e.g., "first-party payout", "virtual bank account", "swap") — maps concepts to endpoint paths |
-| [`../../shared-references/openapi-spec.json`](../../shared-references/openapi-spec.json) | User asks about endpoints, parameters, schemas, or you need to generate code for an API call |
+| [`references/openapi-spec.json`](references/openapi-spec.json) | User asks about endpoints, parameters, schemas, or you need to generate code for an API call |
 | [`references/error-codes.md`](references/error-codes.md) | User asks about error handling, error codes, or debugging API responses |
 | [`references/transaction-safety.md`](references/transaction-safety.md) | User asks about idempotency, transaction status, retries, or safe payout handling |
 | [`references/faqs.md`](references/faqs.md) | User asks about capabilities, limits, supported currencies, swap pairs, customer profiles, bank accounts, or domain-specific behavior |

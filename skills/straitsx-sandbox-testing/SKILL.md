@@ -405,7 +405,7 @@ Note: Resend is primarily a production feature but useful to mention for complet
 
 ## Code Generation Rules
 
-1. **Always look up the endpoint** in the OpenAPI spec ([`../../shared-references/openapi-spec.json`](../../shared-references/openapi-spec.json)) for the exact request body schema, required fields, and parameter formats. **Do not assume `data.attributes` nesting** — many endpoints use flat request bodies. Check the spec for each endpoint.
+1. **Always look up the endpoint** in the OpenAPI spec ([`references/openapi-spec.json`](references/openapi-spec.json)) for the exact request body schema, required fields, and parameter formats. **Do not assume `data.attributes` nesting** — many endpoints use flat request bodies. Check the spec for each endpoint.
 2. **Use sandbox base URL**: `https://api-sandbox.straitsx.com/v1`
 3. **Include the API key header**: `X-XFERS-APP-API-KEY` from environment variable.
 4. **Chain responses**: Extract IDs from each response to use in the next request (e.g., `customer_profile_id` from step 1 feeds into step 2).
