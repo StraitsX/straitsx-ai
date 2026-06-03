@@ -319,7 +319,9 @@ Ask the user if they want to include webhook/callback testing in their sandbox f
 
 ### 3a. Configure Webhook URLs
 
-Before running the flow, register your webhook.site URL for the events relevant to the chosen integration model using `PATCH /webhooks`. The API auto-creates the webhook config if one doesn't exist yet, so this works for first-time setup too.
+Before running the flow, register your callback URL for the events relevant to the chosen integration model using `PATCH /webhooks`. The API auto-creates the webhook config if one doesn't exist yet, so this works for first-time setup too.
+
+> **Which URL to use?** See [Step 3b](#3b-set-up-a-callback-receiver) for options — ngrok (data stays local) or a third-party capture tool. Use whichever URL you set up there.
 
 ```
 PATCH /webhooks
@@ -327,10 +329,10 @@ Body:
 {
   "data": {
     "attributes": {
-      "paymentStatusUpdated": "https://webhook.site/<your-unique-id>",
-      "payoutStatusUpdated": "https://webhook.site/<your-unique-id>",
-      "cpVerificationStatusUpdated": "https://webhook.site/<your-unique-id>",
-      "cpbaVerificationStatusUpdated": "https://webhook.site/<your-unique-id>"
+      "paymentStatusUpdated": "<YOUR_CALLBACK_URL>",
+      "payoutStatusUpdated": "<YOUR_CALLBACK_URL>",
+      "cpVerificationStatusUpdated": "<YOUR_CALLBACK_URL>",
+      "cpbaVerificationStatusUpdated": "<YOUR_CALLBACK_URL>"
     }
   }
 }
@@ -349,9 +351,26 @@ Which events to configure per integration model:
 | `cpbaVerificationStatusUpdated` | ✅ | ✅ | — | Fires when a CP bank account verification status changes |
 | `virtualAccountStatusUpdated` | ✅ | ✅ | ✅ | Fires when a VBA is enabled/disabled |
 
-### 3b. Set Up a Callback Receiver via webhook.site
+### 3b. Set Up a Callback Receiver
 
-Use [webhook.site](https://webhook.site) as the callback receiver — no code or infrastructure needed:
+You need a publicly reachable URL to receive sandbox callbacks. Choose one of these options:
+
+| Option | Setup effort | Data stays local? | Best for |
+|---|---|---|---|
+| **Local server + ngrok** | Medium | ✅ Yes | Developers who want full control |
+| **webhook.site** | None | ❌ Third-party | Quick inspection without writing code |
+
+**Option A — Local server + ngrok (recommended for sensitive data)**
+
+1. Run a minimal HTTP server locally (e.g., `python -m http.server 8080` or a custom listener)
+2. Expose it via [ngrok](https://ngrok.com): `ngrok http 8080`
+3. Use the generated `https://*.ngrok-free.app` URL in the `PATCH /webhooks` call
+
+This keeps all callback payloads on your machine.
+
+**Option B — webhook.site (quickest, sandbox-only)**
+
+> ⚠️ **Data-flow note**: webhook.site is a third-party service. Callback payloads (which contain sandbox test data like names, amounts, and transaction IDs) will be visible on their servers. This is acceptable for sandbox/test data but should **never** be used with production callbacks.
 
 1. Open https://webhook.site — a unique URL is generated automatically (e.g., `https://webhook.site/abc-123-...`)
 2. Copy the unique URL
@@ -413,8 +432,8 @@ Note: Resend is primarily a production feature but useful to mention for complet
 6. **Use realistic test data**: Generate plausible names, registration IDs, addresses — not placeholder strings. For `nationality` and country fields, use ISO alpha-2 codes (e.g. `"SG"`, not `"SINGAPOREAN"`). For `address.street`, only use allowed characters: letters, numbers, spaces, and `/ - ? : ( ) . , ' +` (no `#`).
 7. **Add comments**: Explain what each step does and what to expect.
 8. **Print a summary**: At the end, print a summary of all created resources with their IDs.
-9. **Webhook setup (if requested)**: Prepend the flow with a `PATCH /webhooks` call to register the user's webhook.site URL for the relevant events.
-10. **Callback verification**: When the user wants to verify signatures locally (beyond webhook.site inspection), defer to the `straitsx-webhook-verification` skill's golden code. Never roll custom crypto.
+9. **Webhook setup (if requested)**: Prepend the flow with a `PATCH /webhooks` call to register the user's callback URL for the relevant events.
+10. **Callback verification**: When the user wants to verify signatures locally, defer to the `straitsx-webhook-verification` skill's golden code. Never roll custom crypto.
 11. **Rate limiting**: Insert a short delay (200–300ms) between each API call to stay within the sandbox 5 TPS rate limit. Without delays, sequential requests will trigger `STXE-9000` (429 Too Many Requests).
 12. **Handle re-runs gracefully**: Before creating any resource (customer profile, bank account, VBA), check if it already exists using the corresponding GET/list endpoint and reuse it if found. Most resources cannot be deleted. Use `GET /kyc/customer_profiles?filter[registration_id]=...` for CPs, `GET /customer_profile/{id}/bank_accounts` for bank accounts, and create VBAs with a new unique `referenceId` each run.
 13. **Bank account proof**: When creating a CP bank account (`POST /customer_profile/{id}/bank_accounts`), include `bank_account_proof` with a `fileUrl` pointing to a directly accessible image (png/jpg/jpeg/pdf) without query parameters. For sandbox, use a simple public image URL like `"https://www.w3.org/Graphics/PNG/nurbcup2si.png"`.
@@ -427,7 +446,7 @@ Note: Resend is primarily a production feature but useful to mention for complet
 | Mock payments | Sandbox payments don't move real money. Use the simulation endpoints to trigger payment events. |
 | Verification | In sandbox, you manually set verification status via sandbox endpoints. In production, StraitsX handles verification. |
 | Balance | In sandbox, collect a payment first (via VBA or PayNow mock) to get balance in your business account before testing payouts. |
-| Callbacks | Sandbox sends real callbacks to your configured webhook URL. Use a tool like ngrok if testing locally. |
+| Callbacks | Sandbox sends real callbacks to your configured webhook URL. Use ngrok (data stays local) or webhook.site (quickest, but data transits a third-party — sandbox only). |
 | Signing secret | Required for callback verification. Get it from [StraitsX Dashboard](https://biz.straitsx.com) > Platform Tools > Callback URLs > Signing Key Section. Store as `STRAITSX_SIGNING_SECRET` env var. |
 | Callback retries | Failed callbacks are retried with increasing delays (polynomial backoff), up to 20 attempts. Return any 2xx status code from your listener to acknowledge receipt. |
 | Rate limit | Sandbox enforces a 5 TPS (transactions per second) rate limit. Add a ~300ms delay between requests to avoid 429 errors. |
