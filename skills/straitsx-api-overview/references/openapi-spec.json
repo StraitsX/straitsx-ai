@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "StraitsX Public API",
-    "version": "1.5.0"
+    "version": "1.6.0"
   },
   "servers": [
     {
@@ -5831,7 +5831,7 @@
               "application/json": {
                 "examples": {
                   "SG txns retrieved": {
-                    "value": "[   \n    {\n        \"id\": \"contract_df1bebad457c40dc91fa4dd64e297912\",\n        \"type\": \"Direct bank transfer\",\n        \"idempotency_id\": \"1ee0f5ee-2699-4712-a727-179870fa5424\",\n        \"amount\": \"27.0\",\n        \"fees\": null,\n        \"status\": \"pending\",\n        \"bank_account_no\": null,\n        \"merchant_ref\": null,\n        \"blocked_reasons\": [],\n        \"currency\": \"xsgd\",\n        \"end_to_end_ref\": null,\n        \"sender_bank\": null,\n        \"sender_bank_account_no\": null,\n        \"sender_bank_account_holder_name\": null,\n        \"sender_bank_swift_bic\": null,\n        \"created_at\": \"2023-09-27T07:45:31.425Z\"\n    },\n    {\n        \"id\": \"contract_df1bebad457c40dc91fa4dd64e297212\",\n        \"type\": \"Direct bank transfer\",\n        \"idempotency_id\": \"1ee0f5ee-2699-4712-a727-1798702gh5424\",\n        \"amount\": \"10.0\",\n        \"fees\": null,\n        \"status\": \"pending\",\n        \"bank_account_no\": null,\n        \"merchant_ref\": null,\n        \"blocked_reasons\": [],\n        \"currency\": \"xsgd\",\n        \"end_to_end_ref\": null,\n        \"sender_bank\": null,\n        \"sender_bank_account_no\": null,\n        \"sender_bank_account_holder_name\": null,\n        \"sender_bank_swift_bic\": null,\n        \"created_at\": \"2023-09-27T07:45:31.425Z\"\n    }\n]"
+                    "value": "[\n    {\n        \"id\": \"contract_df1bebad457c40dc91fa4dd64e297912\",\n        \"type\": \"Direct bank transfer\",\n        \"idempotency_id\": \"1ee0f5ee-2699-4712-a727-179870fa5424\",\n        \"amount\": \"27.0\",\n        \"fees\": null,\n        \"status\": \"pending\",\n        \"bank_account_no\": null,\n        \"merchant_ref\": null,\n        \"blocked_reasons\": [],\n        \"currency\": \"xsgd\",\n        \"end_to_end_ref\": null,\n        \"transaction_remarks\": null,\n        \"payment_method\": {\n            \"id\": \"bank_account_a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n            \"reference_id\": \"1ee0f5ee-2699-4712-a727-179870fa5424\",\n            \"account_no\": \"0012345678\",\n            \"bank_short_code\": \"DBS\",\n            \"bank_name\": \"DBS Bank\",\n            \"bank_address\": null,\n            \"bank_country\": null,\n            \"swift_bic\": \"DBSSSGSG\",\n            \"recipient_name\": \"StraitsX\"\n        },\n        \"sender_information\": {\n            \"account_holder_name\": null,\n            \"account_number\": null,\n            \"bank_short_code\": null,\n            \"bank_name\": null,\n            \"end_to_end_ref\": null,\n            \"swift_bic\": null,\n            \"transaction_remarks\": null\n        },\n        \"sender_bank\": null,\n        \"sender_bank_account_no\": null,\n        \"sender_bank_account_holder_name\": null,\n        \"sender_bank_swift_bic\": null,\n        \"created_at\": \"2023-09-27T15:45:31.425+08:00\",\n        \"updated_at\": \"2023-09-27T15:45:31.425+08:00\",\n        \"customer_profile_id\": \"customer_profile_08d5ffe5-8a02-4dc2-aabb-9057b8ab3c65\"\n    },\n    {\n        \"id\": \"contract_df1bebad457c40dc91fa4dd64e297212\",\n        \"type\": \"Direct bank transfer\",\n        \"idempotency_id\": \"1ee0f5ee-2699-4712-a727-1798702gh5424\",\n        \"amount\": \"10.0\",\n        \"fees\": null,\n        \"status\": \"completed\",\n        \"bank_account_no\": null,\n        \"merchant_ref\": null,\n        \"blocked_reasons\": [],\n        \"currency\": \"xsgd\",\n        \"end_to_end_ref\": null,\n        \"transaction_remarks\": null,\n        \"payment_method\": {\n            \"id\": \"bank_account_b2c3d4e5-f6a7-8901-bcde-f12345678901\",\n            \"reference_id\": \"1ee0f5ee-2699-4712-a727-1798702gh5424\",\n            \"account_no\": \"0012345678\",\n            \"bank_short_code\": \"DBS\",\n            \"bank_name\": \"DBS Bank\",\n            \"bank_address\": null,\n            \"bank_country\": null,\n            \"swift_bic\": \"DBSSSGSG\",\n            \"recipient_name\": \"StraitsX\"\n        },\n        \"sender_information\": {\n            \"account_holder_name\": \"John Doe\",\n            \"account_number\": \"987654321\",\n            \"bank_short_code\": \"DBS\",\n            \"bank_name\": \"DBS Bank Ltd\",\n            \"end_to_end_ref\": null,\n            \"swift_bic\": \"DBSSSGSGXXX\",\n            \"transaction_remarks\": null\n        },\n        \"sender_bank\": \"DBS Bank Ltd\",\n        \"sender_bank_account_no\": \"987654321\",\n        \"sender_bank_account_holder_name\": \"John Doe\",\n        \"sender_bank_swift_bic\": \"DBSSSGSGXXX\",\n        \"created_at\": \"2023-09-27T15:45:31.425+08:00\",\n        \"updated_at\": \"2023-09-28T10:30:00.000+08:00\",\n        \"customer_profile_id\": \"customer_profile_08d5ffe5-8a02-4dc2-aabb-9057b8ab3c65\"\n    }\n]"
                   }
                 },
                 "schema": {
@@ -5841,42 +5841,228 @@
                     "properties": {
                       "id": {
                         "type": "string",
-                        "example": "contract_df1bebad457c40dc91fa4dd64e297912"
+                        "example": "contract_df1bebad457c40dc91fa4dd64e297912",
+                        "description": "Payment contract ID."
                       },
                       "type": {
                         "type": "string",
-                        "example": "Direct bank transfer"
+                        "example": "Direct bank transfer",
+                        "description": "Transaction type. Either `Direct bank transfer` or `paynowTransaction`."
                       },
                       "idempotency_id": {
                         "type": "string",
-                        "example": "1ee0f5ee-2699-4712-a727-179870fa5424"
+                        "example": "1ee0f5ee-2699-4712-a727-179870fa5424",
+                        "description": "Idempotency ID for the transaction."
                       },
                       "amount": {
                         "type": "string",
-                        "example": "27.0"
+                        "example": "27.0",
+                        "description": "Transaction amount."
                       },
-                      "fees": {},
+                      "fees": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Additional transaction fees charged."
+                      },
                       "status": {
                         "type": "string",
-                        "example": "pending"
+                        "example": "pending",
+                        "description": "Transaction status."
                       },
-                      "bank_account_no": {},
-                      "merchant_ref": {},
+                      "bank_account_no": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Bank account number from the payment method."
+                      },
+                      "merchant_ref": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Merchant reference ID."
+                      },
                       "blocked_reasons": {
-                        "type": "array"
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "description": "Blocked reason code."
+                            }
+                          }
+                        },
+                        "description": "Reasons blocking the transaction, if any."
                       },
                       "currency": {
                         "type": "string",
-                        "example": "xsgd"
+                        "example": "xsgd",
+                        "description": "Transaction currency."
                       },
-                      "end_to_end_ref": {},
-                      "sender_bank": {},
-                      "sender_bank_account_no": {},
-                      "sender_bank_account_holder_name": {},
-                      "sender_bank_swift_bic": {},
+                      "end_to_end_ref": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "End user's added comments/notes."
+                      },
+                      "transaction_remarks": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Transaction remarks from the sender."
+                      },
+                      "payment_method": {
+                        "type": "object",
+                        "description": "Payment method details. Shape varies by transaction type (bank transfer vs PayNow).",
+                        "oneOf": [
+                          {
+                            "title": "Bank Transfer",
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "Payment method unique ID."
+                              },
+                              "reference_id": {
+                                "type": "string",
+                                "description": "Payment method reference ID."
+                              },
+                              "account_no": {
+                                "type": "string",
+                                "description": "Bank account number."
+                              },
+                              "bank_short_code": {
+                                "type": "string",
+                                "description": "Bank abbreviation code."
+                              },
+                              "bank_name": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Full bank name."
+                              },
+                              "bank_address": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Bank address."
+                              },
+                              "bank_country": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Bank country."
+                              },
+                              "swift_bic": {
+                                "type": "string",
+                                "description": "Bank SWIFT/BIC code."
+                              },
+                              "recipient_name": {
+                                "type": "string",
+                                "description": "Recipient display name."
+                              }
+                            }
+                          },
+                          {
+                            "title": "PayNow",
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "Payment method unique ID."
+                              },
+                              "reference_id": {
+                                "type": "string",
+                                "description": "Payment method reference ID."
+                              },
+                              "virtual_payment_address": {
+                                "type": "string",
+                                "description": "PayNow virtual payment address (UEN or proxy)."
+                              },
+                              "base64_encoded_image": {
+                                "type": "string",
+                                "description": "Base64-encoded QR code image."
+                              },
+                              "qr_code_data": {
+                                "type": "string",
+                                "description": "Raw QR code data string."
+                              },
+                              "expires_at": {
+                                "type": "string",
+                                "description": "QR code expiry timestamp."
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "sender_information": {
+                        "type": "object",
+                        "description": "Structured sender details.",
+                        "properties": {
+                          "account_holder_name": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Sender's account holder name."
+                          },
+                          "account_number": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Sender's account number."
+                          },
+                          "bank_short_code": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Sender's bank abbreviation code."
+                          },
+                          "bank_name": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Sender's bank name."
+                          },
+                          "end_to_end_ref": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "End-to-end reference from sender."
+                          },
+                          "swift_bic": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Sender's bank SWIFT/BIC code."
+                          },
+                          "transaction_remarks": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Transaction remarks from sender."
+                          }
+                        }
+                      },
+                      "sender_bank": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Sender bank name."
+                      },
+                      "sender_bank_account_no": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Sender's bank account number."
+                      },
+                      "sender_bank_account_holder_name": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Sender's bank account holder name."
+                      },
+                      "sender_bank_swift_bic": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Sender's bank SWIFT/BIC code."
+                      },
                       "created_at": {
                         "type": "string",
-                        "example": "2023-09-27T07:45:31.425Z"
+                        "example": "2023-09-27T15:45:31.425+08:00",
+                        "description": "Timestamp when the transaction was created (Singapore timezone)."
+                      },
+                      "updated_at": {
+                        "type": "string",
+                        "example": "2023-09-27T15:45:31.425+08:00",
+                        "description": "Timestamp when the transaction was last updated (Singapore timezone)."
+                      },
+                      "customer_profile_id": {
+                        "type": "string",
+                        "example": "customer_profile_08d5ffe5-8a02-4dc2-aabb-9057b8ab3c65",
+                        "description": "Customer Profile ID associated with this payment."
                       }
                     }
                   }
@@ -5966,7 +6152,7 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "Payment retrieved": {
+                  "Bank Transfer Payment retrieved": {
                     "value": {
                       "id": "contract_df1bebad457c40dc91fa4dd64e297912",
                       "type": "Direct bank transfer",
@@ -5979,11 +6165,74 @@
                       "blocked_reasons": [],
                       "currency": "xsgd",
                       "end_to_end_ref": null,
+                      "transaction_remarks": null,
+                      "payment_method": {
+                        "id": "bank_account_a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                        "reference_id": "1ee0f5ee-2699-4712-a727-179870fa5424",
+                        "account_no": "0012345678",
+                        "bank_short_code": "DBS",
+                        "bank_name": "DBS Bank",
+                        "bank_address": null,
+                        "bank_country": null,
+                        "swift_bic": "DBSSSGSG",
+                        "recipient_name": "StraitsX"
+                      },
+                      "sender_information": {
+                        "account_holder_name": null,
+                        "account_number": null,
+                        "bank_short_code": null,
+                        "bank_name": null,
+                        "end_to_end_ref": null,
+                        "swift_bic": null,
+                        "transaction_remarks": null
+                      },
                       "sender_bank": null,
                       "sender_bank_account_no": null,
                       "sender_bank_account_holder_name": null,
                       "sender_bank_swift_bic": null,
-                      "created_at": "2023-09-27T07:45:31.425Z"
+                      "created_at": "2023-09-27T15:45:31.425+08:00",
+                      "updated_at": "2023-09-27T15:45:31.425+08:00",
+                      "customer_profile_id": "customer_profile_08d5ffe5-8a02-4dc2-aabb-9057b8ab3c65"
+                    }
+                  },
+                  "PayNow Payment retrieved": {
+                    "value": {
+                      "id": "contract_a2c4e6f8b0d2146890ab12cd34ef5678",
+                      "type": "paynowTransaction",
+                      "idempotency_id": "dynamic_paynow_payment_1",
+                      "amount": "10.0",
+                      "fees": null,
+                      "status": "pending",
+                      "bank_account_no": null,
+                      "merchant_ref": null,
+                      "blocked_reasons": [],
+                      "currency": "xsgd",
+                      "end_to_end_ref": null,
+                      "transaction_remarks": null,
+                      "payment_method": {
+                        "id": "paynow_d42d297b-026b-4da7-bc03-2072118db44c",
+                        "reference_id": "dynamic_paynow_payment_1",
+                        "virtual_payment_address": "12345678A",
+                        "base64_encoded_image": "iVBORw0KGgoAAAANSUhEUgAA...",
+                        "qr_code_data": "00020101021226...",
+                        "expires_at": "2023-09-28T15:45:31.425+08:00"
+                      },
+                      "sender_information": {
+                        "account_holder_name": null,
+                        "account_number": null,
+                        "bank_short_code": null,
+                        "bank_name": null,
+                        "end_to_end_ref": null,
+                        "swift_bic": null,
+                        "transaction_remarks": null
+                      },
+                      "sender_bank": null,
+                      "sender_bank_account_no": null,
+                      "sender_bank_account_holder_name": null,
+                      "sender_bank_swift_bic": null,
+                      "created_at": "2023-09-27T15:45:31.425+08:00",
+                      "updated_at": "2023-09-27T15:45:31.425+08:00",
+                      "customer_profile_id": "customer_profile_08d5ffe5-8a02-4dc2-aabb-9057b8ab3c65"
                     }
                   }
                 },
@@ -5998,7 +6247,7 @@
                     "type": {
                       "type": "string",
                       "example": "Direct bank transfer",
-                      "description": "Transaction type."
+                      "description": "Transaction type. Either `Direct bank transfer` or `paynowTransaction`."
                     },
                     "idempotency_id": {
                       "type": "string",
@@ -6011,6 +6260,8 @@
                       "description": "Transaction amount."
                     },
                     "fees": {
+                      "type": "string",
+                      "nullable": true,
                       "description": "Additional transaction fees charged."
                     },
                     "status": {
@@ -6019,16 +6270,25 @@
                       "description": "Transaction status."
                     },
                     "bank_account_no": {
-                      "description": "Bank account number."
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Bank account number from the payment method."
                     },
                     "merchant_ref": {
-                      "description": "Merchant reference."
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Merchant reference ID."
                     },
                     "blocked_reasons": {
                       "type": "array",
                       "items": {
                         "type": "object",
-                        "properties": {}
+                        "properties": {
+                          "code": {
+                            "type": "string",
+                            "description": "Blocked reason code."
+                          }
+                        }
                       },
                       "description": "Reasons blocking the transaction, if any."
                     },
@@ -6038,24 +6298,171 @@
                       "description": "Transaction currency."
                     },
                     "end_to_end_ref": {
-                      "description": "End user’s added comments/notes."
+                      "type": "string",
+                      "nullable": true,
+                      "description": "End user's added comments/notes."
+                    },
+                    "transaction_remarks": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Transaction remarks from the sender."
+                    },
+                    "payment_method": {
+                      "type": "object",
+                      "description": "Payment method details. Shape varies by transaction type (bank transfer vs PayNow).",
+                      "oneOf": [
+                        {
+                          "title": "Bank Transfer",
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "description": "Payment method unique ID."
+                            },
+                            "reference_id": {
+                              "type": "string",
+                              "description": "Payment method reference ID."
+                            },
+                            "account_no": {
+                              "type": "string",
+                              "description": "Bank account number."
+                            },
+                            "bank_short_code": {
+                              "type": "string",
+                              "description": "Bank abbreviation code."
+                            },
+                            "bank_name": {
+                              "type": "string",
+                              "nullable": true,
+                              "description": "Full bank name."
+                            },
+                            "bank_address": {
+                              "type": "string",
+                              "nullable": true,
+                              "description": "Bank address."
+                            },
+                            "bank_country": {
+                              "type": "string",
+                              "nullable": true,
+                              "description": "Bank country."
+                            },
+                            "swift_bic": {
+                              "type": "string",
+                              "description": "Bank SWIFT/BIC code."
+                            },
+                            "recipient_name": {
+                              "type": "string",
+                              "description": "Recipient display name."
+                            }
+                          }
+                        },
+                        {
+                          "title": "PayNow",
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "description": "Payment method unique ID."
+                            },
+                            "reference_id": {
+                              "type": "string",
+                              "description": "Payment method reference ID."
+                            },
+                            "virtual_payment_address": {
+                              "type": "string",
+                              "description": "PayNow virtual payment address (UEN or proxy)."
+                            },
+                            "base64_encoded_image": {
+                              "type": "string",
+                              "description": "Base64-encoded QR code image."
+                            },
+                            "qr_code_data": {
+                              "type": "string",
+                              "description": "Raw QR code data string."
+                            },
+                            "expires_at": {
+                              "type": "string",
+                              "description": "QR code expiry timestamp."
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "sender_information": {
+                      "type": "object",
+                      "description": "Structured sender details.",
+                      "properties": {
+                        "account_holder_name": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Sender's account holder name."
+                        },
+                        "account_number": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Sender's account number."
+                        },
+                        "bank_short_code": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Sender's bank abbreviation code."
+                        },
+                        "bank_name": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Sender's bank name."
+                        },
+                        "end_to_end_ref": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "End-to-end reference from sender."
+                        },
+                        "swift_bic": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Sender's bank SWIFT/BIC code."
+                        },
+                        "transaction_remarks": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Transaction remarks from sender."
+                        }
+                      }
                     },
                     "sender_bank": {
+                      "type": "string",
+                      "nullable": true,
                       "description": "Sender bank name."
                     },
                     "sender_bank_account_no": {
+                      "type": "string",
+                      "nullable": true,
                       "description": "Sender's bank account number."
                     },
                     "sender_bank_account_holder_name": {
+                      "type": "string",
+                      "nullable": true,
                       "description": "Sender's bank account holder name."
                     },
                     "sender_bank_swift_bic": {
+                      "type": "string",
+                      "nullable": true,
                       "description": "Sender's bank SWIFT/BIC code."
                     },
                     "created_at": {
                       "type": "string",
-                      "example": "2023-09-27T07:45:31.425Z",
-                      "description": "Timestamp when the transaction was created."
+                      "example": "2023-09-27T15:45:31.425+08:00",
+                      "description": "Timestamp when the transaction was created (Singapore timezone)."
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "example": "2023-09-27T15:45:31.425+08:00",
+                      "description": "Timestamp when the transaction was last updated (Singapore timezone)."
+                    },
+                    "customer_profile_id": {
+                      "type": "string",
+                      "example": "customer_profile_08d5ffe5-8a02-4dc2-aabb-9057b8ab3c65",
+                      "description": "Customer Profile ID associated with this payment."
                     }
                   }
                 }
@@ -12887,7 +13294,7 @@
               "application/json": {
                 "examples": {
                   "Result": {
-                    "value": "{\n    \"data\": [\n        {\n            \"id\": \"contract_39f038cd10f24a78abd3ce6b3b7504b3\",\n            \"type\": \"bankTransferTransaction\",\n            \"attributes\": {\n                \"idempotencyId\": \"SUBSCRIPTION_f4edd70890bfbb38bf5d0c4229f8fd07\",\n                \"currency\": \"xsgd\",\n                \"amount\": \"0.1\",\n                \"fees\": \"0.1\",\n                \"status\": \"completed\",\n                \"createdAt\": \"2024-07-29T15:17:04.754+08:00\",\n                \"senderInformation\": {\n                    \"accountHolderName\": \"LIM ZI XUAN\",\n                    \"accountNumber\": \"00000001\",\n                    \"bankName\": \"DBS Bank Ltd\",\n                    \"endToEndRef\": \"Transfer\",\n                    \"swiftBic\": \"DBSSSGSGXXX\",\n                    \"transactionRemarks\": null\n                },\n                \"paymentMethod\": {\n                    \"id\": \"StraitsX-3184-c7fe5d05-6d21-4f0a-8179-bcf33c038b36\",\n                    \"referenceId\": \"John Doe\",\n                    \"accountNo\": \"3225225839000\",\n                    \"bankShortCode\": \"FAZZ\",\n                    \"recipientName\": \"Xfers Pte Ltd\"\n                },\n                \"blockedReasons\": []\n            }\n        },\n        {\n            \"id\": \"contract_963b7f8d128842bfae7f25e2632da78f\",\n            \"type\": \"bankTransferTransaction\",\n            \"attributes\": {\n                \"idempotencyId\": \"SUBSCRIPTION_b6d879ee94d8f18fc1159808903344c3\",\n                \"currency\": \"xsgd\",\n                \"amount\": \"10.0\",\n                \"fees\": \"0.85\",\n                \"status\": \"completed\",\n                \"createdAt\": \"2024-07-19T12:40:34.179+08:00\",\n                \"senderInformation\": {\n                    \"accountHolderName\": \"CHOO JING HANG\",\n                    \"accountNumber\": \"7733390933\",\n                    \"bankName\": \"United Overseas Bank Ltd\",\n                    \"endToEndRef\": \"return back fund from jh\",\n                    \"swiftBic\": \"UOVBSGSGXXX\",\n                    \"transactionRemarks\": null\n                },\n                \"paymentMethod\": {\n                    \"id\": \"StraitsX-3184-bccb1c0d-8748-4fb2-a561-f3c53c8f27b5\",\n                    \"referenceId\": \"ABC\",\n                    \"accountNo\": \"3225826439000\",\n                    \"bankShortCode\": \"FAZZ\",\n                    \"recipientName\": \"Xfers Pte Ltd\"\n                },\n                \"blockedReasons\": []\n            }\n        }\n    ],\n    \"meta\": {\n        \"total\": 2,\n        \"pages\": 1\n    },\n    \"links\": {\n        \"self\": \"https://api.straitsx.com/v1/payments?page[size]=10\"\n    }\n}"
+                    "value": "{\n    \"data\": [\n        {\n            \"id\": \"contract_39f038cd10f24a78abd3ce6b3b7504b3\",\n            \"type\": \"bankTransferTransaction\",\n            \"attributes\": {\n                \"idempotencyId\": \"SUBSCRIPTION_f4edd70890bfbb38bf5d0c4229f8fd07\",\n                \"customerProfileId\": \"customer_profile_08d5ffe5-8a02-4dc2-aabb-9057b8ab3c65\",\n                \"currency\": \"xsgd\",\n                \"amount\": \"0.1\",\n                \"fees\": \"0.1\",\n                \"status\": \"completed\",\n                \"createdAt\": \"2024-07-29T15:17:04.754+08:00\",\n                \"senderInformation\": {\n                    \"accountHolderName\": \"John Doe\",\n                    \"accountNumber\": \"00000001\",\n                    \"bankShortCode\": \"DBS\",\n                    \"bankName\": \"DBS Bank Ltd\",\n                    \"endToEndRef\": \"Transfer\",\n                    \"swiftBic\": \"DBSSSGSGXXX\",\n                    \"transactionRemarks\": null\n                },\n                \"paymentMethod\": {\n                    \"id\": \"StraitsX-3184-c7fe5d05-6d21-4f0a-8179-bcf33c038b36\",\n                    \"referenceId\": \"BCD\",\n                    \"accountNo\": \"3225225839000\",\n                    \"bankShortCode\": \"FAZZ\",\n                    \"recipientName\": \"Xfers Pte Ltd\"\n                },\n                \"blockedReasons\": []\n            }\n        },\n        {\n            \"id\": \"contract_a2c4e6f8b0d2146890ab12cd34ef5678\",\n            \"type\": \"paynowTransaction\",\n            \"attributes\": {\n                \"idempotencyId\": \"dynamic_paynow_payment_1\",\n                \"customerProfileId\": \"customer_profile_08d5ffe5-8a02-4dc2-aabb-9057b8ab3c65\",\n                \"currency\": \"xsgd\",\n                \"amount\": \"10.0\",\n                \"fees\": \"0.0\",\n                \"status\": \"pending\",\n                \"createdAt\": \"2024-07-30T10:00:00.000+08:00\",\n                \"senderInformation\": {\n                    \"accountHolderName\": null,\n                    \"accountNumber\": null,\n                    \"bankShortCode\": null,\n                    \"bankName\": null,\n                    \"endToEndRef\": null,\n                    \"swiftBic\": null,\n                    \"transactionRemarks\": null\n                },\n                \"paymentMethod\": {\n                    \"id\": \"paynow_d42d297b-026b-4da7-bc03-2072118db44c\",\n                    \"referenceId\": \"dynamic_paynow_payment_1\",\n                    \"virtualPaymentAddress\": \"12345678A\",\n                    \"base64EncodedImage\": \"iVBORw0KGgoAAAANSUhEUgAA...\",\n                    \"expiresAt\": \"2024-07-31T10:00:00.000+08:00\"\n                },\n                \"blockedReasons\": []\n            }\n        }\n    ],\n    \"meta\": {\n        \"total\": 2,\n        \"pages\": 1\n    },\n    \"links\": {\n        \"self\": \"https://api-sandbox.straitsx.com/v1/payments?page[size]=10\"\n    }\n}"
                   }
                 },
                 "schema": {
@@ -12906,7 +13313,7 @@
                           "type": {
                             "type": "string",
                             "example": "bankTransferTransaction",
-                            "description": "Payment type."
+                            "description": "Payment type. Either `bankTransferTransaction` or `paynowTransaction`."
                           },
                           "attributes": {
                             "type": "object",
@@ -12914,7 +13321,12 @@
                               "idempotencyId": {
                                 "type": "string",
                                 "example": "SUBSCRIPTION_f4edd70890bfbb38bf5d0c4229f8fd07",
-                                "description": "Idempotency ID for this transaction."
+                                "description": "Idempotency ID for the transaction."
+                              },
+                              "customerProfileId": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Customer profile ID. Present when the payment is associated with a customer profile."
                               },
                               "currency": {
                                 "type": "string",
@@ -12939,84 +13351,139 @@
                               "createdAt": {
                                 "type": "string",
                                 "example": "2024-07-29T15:17:04.754+08:00",
-                                "description": "Timestamp when the transaction was created."
+                                "description": "Timestamp when the transaction was created (Singapore timezone)."
                               },
                               "senderInformation": {
                                 "type": "object",
+                                "description": "Sender information.",
                                 "properties": {
                                   "accountHolderName": {
                                     "type": "string",
-                                    "example": "LIM ZI XUAN",
+                                    "nullable": true,
                                     "description": "Sender's bank account holder name."
                                   },
                                   "accountNumber": {
                                     "type": "string",
-                                    "example": "00000001",
+                                    "nullable": true,
                                     "description": "Sender's bank account number."
+                                  },
+                                  "bankShortCode": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "Sender's bank abbreviation code."
                                   },
                                   "bankName": {
                                     "type": "string",
-                                    "example": "DBS Bank Ltd",
+                                    "nullable": true,
                                     "description": "Sender's bank name."
                                   },
                                   "endToEndRef": {
                                     "type": "string",
-                                    "example": "Transfer",
-                                    "description": "End user’s added comments/notes."
+                                    "nullable": true,
+                                    "description": "End user's added comments/notes."
                                   },
                                   "swiftBic": {
                                     "type": "string",
-                                    "example": "DBSSSGSGXXX",
+                                    "nullable": true,
                                     "description": "Sender's bank SWIFT/BIC code."
                                   },
                                   "transactionRemarks": {
-                                    "description": "Transaction remarks."
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "Transaction remarks from sender."
                                   }
-                                },
-                                "description": "Sender information."
+                                }
                               },
                               "paymentMethod": {
                                 "type": "object",
-                                "properties": {
-                                  "id": {
-                                    "type": "string",
-                                    "example": "StraitsX-3184-c7fe5d05-6d21-4f0a-8179-bcf33c038b36",
-                                    "description": "Payment method ID."
+                                "description": "Payment method details. Shape varies by transaction type.",
+                                "oneOf": [
+                                  {
+                                    "title": "Bank Transfer",
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string",
+                                        "description": "Payment method unique ID."
+                                      },
+                                      "referenceId": {
+                                        "type": "string",
+                                        "description": "Payment method reference ID."
+                                      },
+                                      "accountNo": {
+                                        "type": "string",
+                                        "description": "Bank account number."
+                                      },
+                                      "bankShortCode": {
+                                        "type": "string",
+                                        "description": "Bank abbreviation code."
+                                      },
+                                      "bankName": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Full bank name."
+                                      },
+                                      "bankAddress": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Bank address."
+                                      },
+                                      "bankCountry": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Bank country."
+                                      },
+                                      "swiftBic": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Bank SWIFT/BIC code."
+                                      },
+                                      "recipientName": {
+                                        "type": "string",
+                                        "description": "Recipient display name."
+                                      }
+                                    }
                                   },
-                                  "referenceId": {
-                                    "type": "string",
-                                    "example": "John Doe",
-                                    "description": "Reference ID."
-                                  },
-                                  "base64EncodedImage": {
-                                    "type": "string",
-                                    "description": "[PayNow only] Base64-encoded PayNow QR image for the PayNow payment method."
-                                  },
-                                  "expiresAt": {
-                                    "type": "string",
-                                    "description": "[PayNow only] Timestamp when the transaction QR expires."
-                                  },
-                                  "accountNo": {
-                                    "type": "string",
-                                    "example": "3225225839000",
-                                    "description": "[Bank transfer only] Bank account number."
-                                  },
-                                  "bankShortCode": {
-                                    "type": "string",
-                                    "example": "FAZZ",
-                                    "description": "[Bank transfer only] Bank short code."
-                                  },
-                                  "recipientName": {
-                                    "type": "string",
-                                    "example": "Xfers Pte Ltd",
-                                    "description": "[Bank transfer only] Recipient name."
+                                  {
+                                    "title": "PayNow",
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string",
+                                        "description": "Payment method unique ID."
+                                      },
+                                      "referenceId": {
+                                        "type": "string",
+                                        "description": "Payment method reference ID."
+                                      },
+                                      "virtualPaymentAddress": {
+                                        "type": "string",
+                                        "description": "PayNow virtual payment address (UEN or proxy)."
+                                      },
+                                      "base64EncodedImage": {
+                                        "type": "string",
+                                        "description": "Base64-encoded QR code image."
+                                      },
+                                      "expiresAt": {
+                                        "type": "string",
+                                        "description": "QR code expiry timestamp."
+                                      }
+                                    }
                                   }
-                                },
-                                "description": "Payment method details."
+                                ]
                               },
                               "blockedReasons": {
                                 "type": "array",
-                                "description": "Reason blocking the transaction, if any."
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "code": {
+                                      "type": "string",
+                                      "description": "Blocked reason code."
+                                    }
+                                  }
+                                },
+                                "description": "Reasons blocking the transaction, if any."
                               }
                             }
                           }
@@ -13029,28 +13496,23 @@
                         "total": {
                           "type": "integer",
                           "example": 2,
-                          "default": 0,
-                          "description": "Total count."
+                          "description": "Total number of results."
                         },
                         "pages": {
                           "type": "integer",
                           "example": 1,
-                          "default": 0,
-                          "description": "Page size."
+                          "description": "Total number of pages."
                         }
-                      },
-                      "description": "Metadata about the returned list, such as pagination details."
+                      }
                     },
                     "links": {
                       "type": "object",
                       "properties": {
                         "self": {
                           "type": "string",
-                          "example": "https://api.straitsx.com/v1/payments?page[size]=10",
                           "description": "The URL of the current request/page."
                         }
-                      },
-                      "description": "URLs related to the paginated result set."
+                      }
                     }
                   }
                 }
@@ -13129,7 +13591,7 @@
               "application/json": {
                 "examples": {
                   "OK": {
-                    "value": "{\n    \"data\": {\n        \"id\": \"contract_39f038cd10f24a78abd3ce6b3b7504b3\",\n        \"type\": \"bankTransferTransaction\",\n        \"attributes\": {\n            \"idempotencyId\": \"SUBSCRIPTION_f4edd70890bfbb38bf5d0c4229f8fd07\",\n            \"currency\": \"xsgd\",\n            \"amount\": \"0.1\",\n            \"fees\": \"0.1\",\n            \"status\": \"completed\",\n            \"createdAt\": \"2024-07-29T15:17:04.754+08:00\",\n            \"senderInformation\": {\n                \"accountHolderName\": \"LIM ZI XUAN\",\n                \"accountNumber\": \"00000001\",\n                \"bankName\": \"DBS Bank Ltd\",\n                \"endToEndRef\": \"Transfer\",\n                \"swiftBic\": \"DBSSSGSGXXX\",\n                \"transactionRemarks\": null\n            },\n            \"paymentMethod\": {\n                \"id\": \"StraitsX-3184-c7fe5d05-6d21-4f0a-8179-bcf33c038b36\",\n                \"referenceId\": \"BCD\",\n                \"accountNo\": \"3225225839000\",\n                \"bankShortCode\": \"FAZZ\",\n                \"recipientName\": \"Xfers Pte Ltd\"\n            },\n            \"blockedReasons\": []\n        }\n    }\n}"
+                    "value": "{\n    \"data\": {\n        \"id\": \"contract_39f038cd10f24a78abd3ce6b3b7504b3\",\n        \"type\": \"bankTransferTransaction\",\n        \"attributes\": {\n            \"idempotencyId\": \"SUBSCRIPTION_f4edd70890bfbb38bf5d0c4229f8fd07\",\n            \"customerProfileId\": \"customer_profile_08d5ffe5-8a02-4dc2-aabb-9057b8ab3c65\",\n            \"currency\": \"xsgd\",\n            \"amount\": \"0.1\",\n            \"fees\": \"0.1\",\n            \"status\": \"completed\",\n            \"createdAt\": \"2024-07-29T15:17:04.754+08:00\",\n            \"senderInformation\": {\n                \"accountHolderName\": \"John Doe\",\n                \"accountNumber\": \"00000001\",\n                \"bankShortCode\": \"DBS\",\n                \"bankName\": \"DBS Bank Ltd\",\n                \"endToEndRef\": \"Transfer\",\n                \"swiftBic\": \"DBSSSGSGXXX\",\n                \"transactionRemarks\": null\n            },\n            \"paymentMethod\": {\n                \"id\": \"StraitsX-3184-c7fe5d05-6d21-4f0a-8179-bcf33c038b36\",\n                \"referenceId\": \"BCD\",\n                \"accountNo\": \"3225225839000\",\n                \"bankShortCode\": \"FAZZ\",\n                \"recipientName\": \"Xfers Pte Ltd\"\n            },\n            \"blockedReasons\": []\n        }\n    }\n}"
                   }
                 },
                 "schema": {
@@ -13146,7 +13608,7 @@
                         "type": {
                           "type": "string",
                           "example": "bankTransferTransaction",
-                          "description": "Transaction type."
+                          "description": "Payment type. Either `bankTransferTransaction` or `paynowTransaction`."
                         },
                         "attributes": {
                           "type": "object",
@@ -13154,7 +13616,12 @@
                             "idempotencyId": {
                               "type": "string",
                               "example": "SUBSCRIPTION_f4edd70890bfbb38bf5d0c4229f8fd07",
-                              "description": "Idempotency ID for this transaction."
+                              "description": "Idempotency ID for the transaction."
+                            },
+                            "customerProfileId": {
+                              "type": "string",
+                              "nullable": true,
+                              "description": "Customer profile ID. Present when the payment is associated with a customer profile."
                             },
                             "currency": {
                               "type": "string",
@@ -13179,75 +13646,138 @@
                             "createdAt": {
                               "type": "string",
                               "example": "2024-07-29T15:17:04.754+08:00",
-                              "description": "Timestamp when the transaction was created."
+                              "description": "Timestamp when the transaction was created (Singapore timezone)."
                             },
                             "senderInformation": {
                               "type": "object",
+                              "description": "Sender information.",
                               "properties": {
                                 "accountHolderName": {
                                   "type": "string",
-                                  "example": "LIM ZI XUAN",
+                                  "nullable": true,
                                   "description": "Sender's bank account holder name."
                                 },
                                 "accountNumber": {
                                   "type": "string",
-                                  "example": "00000001",
+                                  "nullable": true,
                                   "description": "Sender's bank account number."
+                                },
+                                "bankShortCode": {
+                                  "type": "string",
+                                  "nullable": true,
+                                  "description": "Sender's bank abbreviation code."
                                 },
                                 "bankName": {
                                   "type": "string",
-                                  "example": "DBS Bank Ltd",
+                                  "nullable": true,
                                   "description": "Sender's bank name."
                                 },
                                 "endToEndRef": {
                                   "type": "string",
-                                  "example": "Transfer",
-                                  "description": "End user’s added comments/notes."
+                                  "nullable": true,
+                                  "description": "End user's added comments/notes."
                                 },
                                 "swiftBic": {
                                   "type": "string",
-                                  "example": "DBSSSGSGXXX",
+                                  "nullable": true,
                                   "description": "Sender's bank SWIFT/BIC code."
                                 },
                                 "transactionRemarks": {
-                                  "description": "Transaction remarks."
+                                  "type": "string",
+                                  "nullable": true,
+                                  "description": "Transaction remarks from sender."
                                 }
-                              },
-                              "description": "Sender information."
+                              }
                             },
                             "paymentMethod": {
                               "type": "object",
-                              "properties": {
-                                "id": {
-                                  "type": "string",
-                                  "example": "StraitsX-3184-c7fe5d05-6d21-4f0a-8179-bcf33c038b36",
-                                  "description": "Payment method ID."
+                              "description": "Payment method details. Shape varies by transaction type.",
+                              "oneOf": [
+                                {
+                                  "title": "Bank Transfer",
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string",
+                                      "description": "Payment method unique ID."
+                                    },
+                                    "referenceId": {
+                                      "type": "string",
+                                      "description": "Payment method reference ID."
+                                    },
+                                    "accountNo": {
+                                      "type": "string",
+                                      "description": "Bank account number."
+                                    },
+                                    "bankShortCode": {
+                                      "type": "string",
+                                      "description": "Bank abbreviation code."
+                                    },
+                                    "bankName": {
+                                      "type": "string",
+                                      "nullable": true,
+                                      "description": "Full bank name."
+                                    },
+                                    "bankAddress": {
+                                      "type": "string",
+                                      "nullable": true,
+                                      "description": "Bank address."
+                                    },
+                                    "bankCountry": {
+                                      "type": "string",
+                                      "nullable": true,
+                                      "description": "Bank country."
+                                    },
+                                    "swiftBic": {
+                                      "type": "string",
+                                      "nullable": true,
+                                      "description": "Bank SWIFT/BIC code."
+                                    },
+                                    "recipientName": {
+                                      "type": "string",
+                                      "description": "Recipient display name."
+                                    }
+                                  }
                                 },
-                                "referenceId": {
-                                  "type": "string",
-                                  "example": "BCD",
-                                  "description": "Payment method type."
-                                },
-                                "accountNo": {
-                                  "type": "string",
-                                  "example": "3225225839000",
-                                  "description": "Bank account number."
-                                },
-                                "bankShortCode": {
-                                  "type": "string",
-                                  "example": "FAZZ",
-                                  "description": "Bank short code."
-                                },
-                                "recipientName": {
-                                  "type": "string",
-                                  "example": "Xfers Pte Ltd",
-                                  "description": "Recipient name."
+                                {
+                                  "title": "PayNow",
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string",
+                                      "description": "Payment method unique ID."
+                                    },
+                                    "referenceId": {
+                                      "type": "string",
+                                      "description": "Payment method reference ID."
+                                    },
+                                    "virtualPaymentAddress": {
+                                      "type": "string",
+                                      "description": "PayNow virtual payment address (UEN or proxy)."
+                                    },
+                                    "base64EncodedImage": {
+                                      "type": "string",
+                                      "description": "Base64-encoded QR code image."
+                                    },
+                                    "expiresAt": {
+                                      "type": "string",
+                                      "description": "QR code expiry timestamp."
+                                    }
+                                  }
                                 }
-                              },
-                              "description": "Payment method details."
+                              ]
                             },
                             "blockedReasons": {
                               "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "code": {
+                                    "type": "string",
+                                    "description": "Blocked reason code."
+                                  }
+                                }
+                              },
                               "description": "Reasons blocking the transaction, if any."
                             }
                           }
@@ -16457,6 +16987,193 @@
                 "schema": {
                   "type": "object",
                   "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/payout-recipients/requirements": {
+      "get": {
+        "summary": "Get recipient requirements",
+        "description": "",
+        "operationId": "fx-get-recipient-requirements",
+        "parameters": [
+          {
+            "name": "filter[recipientCountry]",
+            "in": "query",
+            "description": "Accepts alpha-2 country code e.g. `SG`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter[currency]",
+            "in": "query",
+            "description": "`SGD` or `USD`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter[disbursementMethod]",
+            "in": "query",
+            "description": "`bankTransfer` or `paynow` or `swift`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter[proxyType]",
+            "in": "query",
+            "description": "`mobile_number`, `nric`, `uen` or `vpa` - only applicable when disbursementMethod = `paynow`",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter[entityType]",
+            "in": "query",
+            "description": "`individual` or `business`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-XFERS-APP-API-KEY",
+            "in": "header",
+            "description": "You can retrieve this from your Dashboard Developer Tools.<br><br><strong>Note:</strong> The `X-XFERS-APP-API-KEY` is a mandatory header for all authentication methods, including standard API key usage and HTTP Request Signing mode.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-PUBLIC-KEY-ID",
+            "in": "header",
+            "description": "The Key ID, can be retrieved from your StraitsX Dashboard.<br><br><strong>Note:</strong> This header attribute is required when HTTP Request Signing is enabled for your account.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-TIMESTAMP",
+            "in": "header",
+            "description": "Current Unix epoch time in seconds. Must be within ±300 seconds of server time.<br><br><strong>Note:</strong> This header attribute is required when HTTP Request Signing is enabled for your account.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-NONCE",
+            "in": "header",
+            "description": "A unique UUID string per request, used for replay protection. Must not be reused within the timestamp window.<br>Regex: `/\\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\z/i`<br><br><strong>Note:</strong> This header attribute is required when HTTP Request Signing is enabled for your account.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SIGNATURE",
+            "in": "header",
+            "description": "Base64-encoded digital signature of the canonical request string.<br><br><strong>Note:</strong> This header attribute is required when HTTP Request Signing is enabled for your account.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{\n    \"data\": {\n        \"id\": \"recipientRequirement_5b1ab16b-2ffe-447e-a89c-378acd2e3bb7\",\n        \"type\": \"recipientRequirement\",\n        \"attributes\": {\n            \"recipientCountry\": \"SG\",\n            \"recipientInformation\": {\n                \"disbursementMethod\": \"paynow\",\n                \"currency\": \"SGD\",\n                \"entityType\": \"individual\",\n                \"recipientName\": \"^\\\\s*.{1,255}\\\\s*$\",\n                \"proxyType\": \"^(mobile_number|nric|vpa)$\",\n                \"proxyValue\": \"^(\\\\+65(6|8|9)\\\\d{7,15}|[STFG]\\\\d{7}[A-Z]|UEN((S|T)(\\\\d{2})([A-Z]{2})(\\\\d{4})([A-Z])([a-zA-Z0-9]{0,3})|(\\\\d{8,12})([A-Z])([a-zA-Z0-9]{0,3})))#[A-Z]{4})$\"\n            },\n            \"requiredFields\": [\n                \"recipientCountry\",\n                \"recipientInformation\",\n                \"recipientInformation.currency\",\n                \"recipientInformation.recipientName\",\n                \"recipientInformation.disbursementMethod\",\n                \"recipientInformation.entityType\",\n                \"recipientInformation.proxyType\",\n                \"recipientInformation.proxyValue\"\n            ]\n        }\n    }\n}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "recipientRequirement_5b1ab16b-2ffe-447e-a89c-378acd2e3bb7",
+                          "description": "Recipient requirement ID."
+                        },
+                        "type": {
+                          "type": "string",
+                          "example": "recipientRequirement",
+                          "description": "Request type."
+                        },
+                        "attributes": {
+                          "type": "object",
+                          "properties": {
+                            "recipientCountry": {
+                              "type": "string",
+                              "example": "SG",
+                              "description": "The country where the recipient is located."
+                            },
+                            "recipientInformation": {
+                              "type": "object",
+                              "properties": {
+                                "disbursementMethod": {
+                                  "type": "string",
+                                  "example": "paynow",
+                                  "description": "Disbursement method used to send funds."
+                                },
+                                "currency": {
+                                  "type": "string",
+                                  "example": "SGD",
+                                  "description": "Currency for the transfer."
+                                },
+                                "entityType": {
+                                  "type": "string",
+                                  "example": "individual",
+                                  "description": "Recipient entity type."
+                                },
+                                "recipientName": {
+                                  "type": "string",
+                                  "example": "^\\s*.{1,255}\\s*$",
+                                  "description": "Recipient name."
+                                },
+                                "proxyType": {
+                                  "type": "string",
+                                  "example": "^(mobile_number|nric|vpa)$",
+                                  "description": "Type of PayNow proxy."
+                                },
+                                "proxyValue": {
+                                  "type": "string",
+                                  "example": "^(\\+65(6|8|9)\\d{7,15}|[STFG]\\d{7}[A-Z]|UEN((S|T)(\\d{2})([A-Z]{2})(\\d{4})([A-Z])([a-zA-Z0-9]{0,3})|(\\d{8,12})([A-Z])([a-zA-Z0-9]{0,3})))#[A-Z]{4})$",
+                                  "description": "The actual PayNow identifier value."
+                                }
+                              },
+                              "description": "Recipient information."
+                            },
+                            "requiredFields": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "example": "recipientCountry"
+                              },
+                              "description": "List of fields that must be provided when creating the payout recipient."
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -23780,7 +24497,7 @@
           {
             "name": "filter[from]",
             "in": "query",
-            "description": "Start of the ledger in ISO8601 format e.g. `2024-03-27T10:59:53.000+08:00`<br>Regex: `/^(\\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])T([01]\\d|2[0-3]):([0-5]\\d):([0-5]\\d)(\\.\\d+)?(?:Z|(?:\\s([+-]?\\d{2}:?\\d{2})))?$/`",
+            "description": "Start of the ledger in ISO8601 format (supports up to 6 decimal places / microsecond precision) e.g. `2024-03-27T10:59:53.000000+08:00`<br>Regex: `/^(\\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])T([01]\\d|2[0-3]):([0-5]\\d):([0-5]\\d)(\\.\\d+)?(?:Z|(?:\\s([+-]?\\d{2}:?\\d{2})))?$/`",
             "required": true,
             "schema": {
               "type": "string"
@@ -23789,7 +24506,7 @@
           {
             "name": "filter[to]",
             "in": "query",
-            "description": "End of the ledger in ISO8601 format e.g. `2024-03-27T10:59:53.000+08:00`<br>Regex: `/^(\\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])T([01]\\d|2[0-3]):([0-5]\\d):([0-5]\\d)(\\.\\d+)?(?:Z|(?:\\s([+-]?\\d{2}:?\\d{2})))?$/`",
+            "description": "End of the ledger in ISO8601 format (supports up to 6 decimal places / microsecond precision) e.g. `2024-03-27T10:59:53.999999+08:00`<br>Regex: `/^(\\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])T([01]\\d|2[0-3]):([0-5]\\d):([0-5]\\d)(\\.\\d+)?(?:Z|(?:\\s([+-]?\\d{2}:?\\d{2})))?$/`",
             "required": true,
             "schema": {
               "type": "string"
