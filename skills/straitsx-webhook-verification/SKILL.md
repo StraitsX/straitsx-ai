@@ -160,11 +160,16 @@ function verifyCallbackSignature(payload, signature) {
     .update(payload)
     .digest("hex");
 
-  // [SECURITY-CRITICAL: DO NOT MODIFY] — constant-time comparison
-  return crypto.timingSafeEqual(
-    Buffer.from(expected, "utf-8"),
-    Buffer.from(signature, "utf-8")
-  );
+  // [SECURITY-CRITICAL: DO NOT MODIFY] — constant-time comparison, fail-closed
+  try {
+    const expectedBuf = Buffer.from(expected, "utf-8");
+    const signatureBuf = Buffer.from(signature, "utf-8");
+    // timingSafeEqual throws on a length mismatch — guard length first and reject.
+    if (expectedBuf.length !== signatureBuf.length) return false;
+    return crypto.timingSafeEqual(expectedBuf, signatureBuf);
+  } catch (err) {
+    return false;
+  }
 }
 
 module.exports = { verifyCallbackSignature };
