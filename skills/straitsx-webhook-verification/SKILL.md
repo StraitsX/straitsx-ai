@@ -109,6 +109,8 @@ StraitsX signs every callback payload using HMAC-SHA256 with your signing secret
 2. Your server computes the same HMAC over the raw body using your signing secret.
 3. Compare the two values using constant-time comparison.
 
+> **Note — signatures prove authenticity, not freshness.** A valid signature confirms the payload came from StraitsX, but not that it is new. An attacker who captures a genuine signed callback can replay the identical bytes and it will still verify. Signature verification alone does not prevent replay — combine it with deduplication (see the Best Practices section below) so a replayed event is recognized by its `id` and skipped.
+
 ### Golden Code — Python (HMAC-SHA256)
 
 ```python
@@ -238,7 +240,7 @@ POST /webhook-events/{event_type}/resend/{triggerable_id}
 
 1. **Return 2xx quickly** — Acknowledge receipt immediately, then process asynchronously in a background job. The 15-second timeout is generous but don't rely on it.
 
-2. **Idempotent handling** — Use the `id` field in the payload to deduplicate. Store processed callback IDs and skip duplicates.
+2. **Idempotent handling (also your replay defense)** — Use the `id` field in the payload to deduplicate. Store processed callback IDs and skip any `id` you've already handled. Duplicates are expected because callbacks are delivered at-least-once — and because a captured callback can be replayed, this same deduplication is what protects you against replay attacks. Treat it as mandatory, not optional.
 
 3. **Don't rely on ordering** — Always check the `status` field against your local state. Ignore callbacks that would move your state backwards (e.g., receiving `pending` after you've already processed `completed`).
 
