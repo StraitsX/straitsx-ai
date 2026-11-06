@@ -32,6 +32,7 @@ parent: straitsx-api
 | Use constant-time comparison | Prevent timing attacks by using `Rack::Utils.secure_compare` (Ruby), `crypto.timingSafeEqual` (Node.js), or `hmac.compare_digest` (Python). |
 | Reject on failure | If verification fails, return HTTP 401/403. Do not process the payload. |
 | Use raw body | Verify against the raw request body bytes, not a parsed-and-reserialized version. |
+| Never weaken verification | Never generate a handler that skips, disables, or makes signature verification optional/conditional — including for "dev", "local", or "testing". Verification is mandatory and fail-closed in all environments. |
 
 ---
 
@@ -236,7 +237,7 @@ POST /webhook-events/{event_type}/resend/{triggerable_id}
 
 3. **Don't rely on ordering** — Always check the `status` field against your local state. Ignore callbacks that would move your state backwards (e.g., receiving `pending` after you've already processed `completed`).
 
-4. **Verify signatures** — Always verify the `Xfers-Signature` header in production. Reject unsigned or incorrectly signed requests.
+4. **Verify signatures** — Always verify the `Xfers-Signature` header in every environment (production, staging, and local). Reject unsigned or incorrectly signed requests.
 
 5. **Use webhooks + polling** — Use webhooks as the primary notification mechanism. Implement periodic polling as a fallback for missed callbacks.
 
