@@ -752,10 +752,15 @@ function verifyWebhook(payloadBody, signatureHeader, signingSecret) {
     .createHmac('sha256', signingSecret)
     .update(payloadBody)
     .digest('hex');
-  return crypto.timingSafeEqual(
-    Buffer.from(computed),
-    Buffer.from(signatureHeader)
-  );
+  try {
+    const computedBuf = Buffer.from(computed);
+    const signatureBuf = Buffer.from(signatureHeader);
+    // timingSafeEqual throws on a length mismatch — guard length first and reject.
+    if (computedBuf.length !== signatureBuf.length) return false;
+    return crypto.timingSafeEqual(computedBuf, signatureBuf);
+  } catch (err) {
+    return false;
+  }
 }
 ```
 

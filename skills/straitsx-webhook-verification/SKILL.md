@@ -32,6 +32,7 @@ parent: straitsx-api
 | Use constant-time comparison | Prevent timing attacks by using `Rack::Utils.secure_compare` (Ruby), `crypto.timingSafeEqual` (Node.js), or `hmac.compare_digest` (Python). |
 | Reject on failure | If verification fails, return HTTP 401/403. Do not process the payload. |
 | Use raw body | Verify against the raw request body bytes, not a parsed-and-reserialized version. |
+| Never weaken verification | Never generate a handler that skips, disables, or makes signature verification optional/conditional — including for "dev", "local", or "testing". Verification is mandatory and fail-closed in all environments. |
 
 ---
 
@@ -108,6 +109,8 @@ StraitsX signs every callback payload using HMAC-SHA256 with your signing secret
 2. Your server computes the same HMAC over the raw body using your signing secret.
 3. Compare the two values using constant-time comparison.
 
+> **Note — signatures prove authenticity, not freshness.** A valid signature confirms the payload came from StraitsX, but not that it is new. An attacker who captures a genuine signed callback can replay the identical bytes and it will still verify. Signature verification alone does not prevent replay — combine it with deduplication (see the Best Practices section below) so a replayed event is recognized by its `id` and skipped.
+
 ### Golden Code — Python (HMAC-SHA256)
 
 ```python
@@ -159,11 +162,16 @@ function verifyCallbackSignature(payload, signature) {
     .update(payload)
     .digest("hex");
 
-  // [SECURITY-CRITICAL: DO NOT MODIFY] — constant-time comparison
-  return crypto.timingSafeEqual(
-    Buffer.from(expected, "utf-8"),
-    Buffer.from(signature, "utf-8")
-  );
+  // [SECURITY-CRITICAL: DO NOT MODIFY] — constant-time comparison, fail-closed
+  try {
+    const expectedBuf = Buffer.from(expected, "utf-8");
+    const signatureBuf = Buffer.from(signature, "utf-8");
+    // timingSafeEqual throws on a length mismatch — guard length first and reject.
+    if (expectedBuf.length !== signatureBuf.length) return false;
+    return crypto.timingSafeEqual(expectedBuf, signatureBuf);
+  } catch (err) {
+    return false;
+  }
 }
 
 module.exports = { verifyCallbackSignature };
@@ -232,11 +240,11 @@ POST /webhook-events/{event_type}/resend/{triggerable_id}
 
 1. **Return 2xx quickly** — Acknowledge receipt immediately, then process asynchronously in a background job. The 15-second timeout is generous but don't rely on it.
 
-2. **Idempotent handling** — Use the `id` field in the payload to deduplicate. Store processed callback IDs and skip duplicates.
+2. **Idempotent handling (also your replay defense)** — Use the `id` field in the payload to deduplicate. Store processed callback IDs and skip any `id` you've already handled. Duplicates are expected because callbacks are delivered at-least-once — and because a captured callback can be replayed, this same deduplication is what protects you against replay attacks. Treat it as mandatory, not optional.
 
 3. **Don't rely on ordering** — Always check the `status` field against your local state. Ignore callbacks that would move your state backwards (e.g., receiving `pending` after you've already processed `completed`).
 
-4. **Verify signatures** — Always verify the `Xfers-Signature` header in production. Reject unsigned or incorrectly signed requests.
+4. **Verify signatures** — Always verify the `Xfers-Signature` header in every environment (production, staging, and local). Reject unsigned or incorrectly signed requests.
 
 5. **Use webhooks + polling** — Use webhooks as the primary notification mechanism. Implement periodic polling as a fallback for missed callbacks.
 

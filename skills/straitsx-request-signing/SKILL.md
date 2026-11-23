@@ -34,8 +34,8 @@ Each signed request includes four extra headers:
 | Header | Value |
 |---|---|
 | `X-PUBLIC-KEY-ID` | Key ID from the [StraitsX Dashboard](https://biz.straitsx.com) |
-| `X-TIMESTAMP` | Unix timestamp of the request |
-| `X-NONCE` | Unique UUID per request |
+| `X-TIMESTAMP` | Unix timestamp of the request **in seconds**. The server accepts a ±300-second (±5 minute) window; requests outside it are rejected with `STXE-1000` (HTTP 401). |
+| `X-NONCE` | Unique UUID per request. The server rejects a reused nonce as a replay attack with `STXE-1000` (HTTP 401) — generate a fresh UUID for every request. |
 | `X-SIGNATURE` | Base64-encoded Ed25519 signature of the canonical string |
 
 **Canonical string format:**
@@ -46,6 +46,15 @@ METHOD\nPATH\nQUERY\nTIMESTAMP\nNONCE\nBODY
 
 - `QUERY`: URL-encoded key=value pairs sorted alphabetically. Empty string if no query params.
 - `BODY`: Compact JSON (`separators=(",", ":")` in Python, default `JSON.stringify` in JS). Empty string if no body.
+
+## Replay Protection
+
+The timestamp and nonce together defend against replay attacks — a captured, validly-signed request being resent by an attacker:
+
+- **`X-TIMESTAMP`** bounds how long a captured request stays usable. The server only accepts timestamps within ±300 seconds (±5 minutes) of its own clock, so keep your system clock NTP-synced and send the value in **seconds**.
+- **`X-NONCE`** stops replay within that window. The server remembers nonces and rejects any reuse as a replay attack. Use a fresh UUID per request — never reuse or hardcode one.
+
+Both values are part of the signed canonical string, so an attacker cannot alter them without invalidating the signature.
 
 ## Golden Code Examples
 
@@ -79,7 +88,8 @@ The file [`references/signing-vectors.json`](references/signing-vectors.json) co
 |---|---|
 | Signature mismatch | Canonical string construction differs — check query param sorting, body serialization, or newline format |
 | `Invalid signature` from API | Wrong private key, or public key on [StraitsX Dashboard](https://biz.straitsx.com) doesn't match |
-| `Timestamp expired` | Clock skew — ensure system clock is synced (NTP) |
+| `STXE-1000` / `Timestamp expired` (HTTP 401) | Request timestamp is outside the ±5-minute (±300s) window — sync your system clock (NTP) and ensure the timestamp is in **seconds**, not milliseconds |
+| `STXE-1000` / nonce already used (HTTP 401) | The `X-NONCE` was reused — generate a new unique UUID for each request |
 | PEM parse error | Key file is not Ed25519, or is in wrong format (need PKCS8 PEM) |
 
 ## References
